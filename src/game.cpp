@@ -4,6 +4,7 @@
 void Game::Init() {
 	Reset();
 	levelMap.Init();
+	player.Init();
 
 	player.position.x = GetScreenWidth() / 2;
 	player.position.y = GetScreenHeight() / 2;
@@ -24,6 +25,8 @@ void Game::Reset() {
 }
 
 void Game::Update() {
+	Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+
 	levelMap.Update(player.position);
 	waveManager.Update(zombies, levelMap);
 
@@ -31,7 +34,7 @@ void Game::Update() {
 
 	camera.target = player.position;
 
-	player.Update();
+	player.Update(bullets, worldMousePos);
 
 	collisionManager.ResolvePlayerWall(player, levelMap);
 	collisionManager.ResolveBulletZombie(bullets, zombies);
@@ -43,10 +46,6 @@ void Game::Update() {
 		b.Update();
 	}
 
-	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-		Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
-		bullets.emplace_back(player.position, worldMousePos);
-	}
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
 		Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 		zombies.push_back(Zombie{.position = worldMousePos});
@@ -69,6 +68,12 @@ void Game::Render() {
 	}
 
 	EndMode2D();
+
+	if (player.currentWeapon != nullptr) {
+		const char *text = player.currentWeapon->name.c_str();
+
+		DrawText(text, 100, 10, 30, BLUE);
+	}
 
 	DrawFPS(10, 10);
 }
