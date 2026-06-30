@@ -14,6 +14,8 @@ void Game::Init() {
 
 	camera.rotation = 0.0f;
 	camera.zoom = 1.5f;
+
+	waveManager.StartNextWave();
 }
 
 void Game::Reset() {

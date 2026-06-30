@@ -2,20 +2,64 @@
 
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
+#include <algorithm>
 #include <raylib.h>
 #include <vector>
+
 class WaveManager {
   public:
 	int wave = 1;
 	float spawnTimer = 0.0F;
+	float spawnInterval = 2.0F;
+
+	int spawnedZombies = 0;
+	int totalZombiesInWave = 0;
+
+	int MAX_ZOMBIES = 25;
+
+	bool isIntermission = false;
+	float intermissionTimer = 0.0f;
+	const float intermissionDuration = 7.0f;
 
 	void Update(std::vector<Zombie> &zombies, const LevelMap &map) {
-		spawnTimer -= GetFrameTime();
-
-		if (spawnTimer <= 0.0F) {
-			SpawnZombie(zombies, map);
-			spawnTimer = 2.0F;
+		if (isIntermission) {
+			TraceLog(LOG_INFO, "intermission!!!");
+			intermissionTimer -= GetFrameTime();
+			if (intermissionTimer <= 0.0f) {
+				isIntermission = false;
+				wave++;
+				StartNextWave();
+			}
+			return;
 		}
+		spawnTimer += GetFrameTime();
+
+		if (spawnTimer >= spawnInterval && zombies.size() < MAX_ZOMBIES &&
+			spawnedZombies < totalZombiesInWave) {
+			SpawnZombie(zombies, map);
+			spawnedZombies++;
+			spawnTimer = 0.0f;
+		}
+
+		if (spawnedZombies == totalZombiesInWave && zombies.empty()) {
+			isIntermission = true;
+			intermissionTimer = intermissionDuration;
+		}
+	}
+
+	void StartNextWave() {
+		spawnedZombies = 0;
+
+		TraceLog(LOG_INFO, "WAVE INITIALIZED");
+		if (wave <= 5) {
+			totalZombiesInWave = 6 + (wave * 4);
+		} else {
+			totalZombiesInWave = 24 + (wave * 6);
+		}
+
+		spawnInterval = 2.0f - (wave * 0.05);
+
+		spawnInterval = std::max(spawnInterval, 0.3f);
 	}
 
   private:
