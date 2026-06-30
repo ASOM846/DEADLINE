@@ -14,6 +14,8 @@ struct Point {
 enum class TileType {
 	FLOOR,
 	WALL,
+	ZOMBIE_SPAWNER,
+	BLOCKADE
 };
 
 struct LevelMap {
@@ -25,6 +27,8 @@ struct LevelMap {
 
 	std::vector<TileType> tiles;
 	std::vector<int> distanceMap;
+
+	std::vector<int> zombieSpawners;
 
 	void Init() {
 		tiles.resize(width * height, TileType::FLOOR);
@@ -50,6 +54,14 @@ struct LevelMap {
 		}
 
 		inputFile.close();
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				if (tiles[y * width + x] == TileType::ZOMBIE_SPAWNER) {
+					zombieSpawners.push_back(y * width + x);
+				}
+			}
+		}
 	}
 
 	void Update(Vector2 playerPos) { UpdateFloodField(playerPos); }
@@ -117,7 +129,8 @@ struct LevelMap {
 
 					int nIndex = ny * width + nx;
 
-					if (tiles[nIndex] == TileType::FLOOR &&
+					if ((tiles[nIndex] == TileType::FLOOR ||
+						 tiles[nIndex] == TileType::BLOCKADE) &&
 						distanceMap[nIndex] == INF) {
 						distanceMap[nIndex] = currentDist + 1;
 						queue.push({nx, ny});

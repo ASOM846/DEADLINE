@@ -5,6 +5,7 @@
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
+#include "waveManager.hpp"
 #include <raylib.h>
 #include <vector>
 
@@ -21,6 +22,8 @@ class Game {
 
   private:
 	Player player;
+
+	WaveManager waveManager;
 
 	ZombieManager zombieManager;
 	CollisionManager collisionManager;

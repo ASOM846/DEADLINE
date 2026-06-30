@@ -23,6 +23,8 @@ void Game::Reset() {
 
 void Game::Update() {
 	levelMap.Update(player.position);
+	waveManager.Update(zombies, levelMap);
+
 	zombieManager.ResolveZombieCollision(zombies);
 
 	camera.target = player.position;

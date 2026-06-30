@@ -4,7 +4,7 @@
 
 struct Player {
 	Vector2 position;
-	const int radius{10};
+	const int radius{25};
 	const float speed{5.0F};
 
 	Vector2 velocity{0, 0};

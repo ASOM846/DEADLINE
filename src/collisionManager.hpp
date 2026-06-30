@@ -40,7 +40,8 @@ class CollisionManager {
 		for (int y = 0; y < map.height; y++) {
 			for (int x = 0; x < map.width; x++) {
 
-				if (map.tiles[y * map.width + x] == TileType::WALL) {
+				if (map.tiles[y * map.width + x] == TileType::WALL ||
+					map.tiles[y * map.width + x] == TileType::BLOCKADE) {
 
 					Rectangle wallRec = {static_cast<float>(x * map.cellSize),
 										 static_cast<float>(y * map.cellSize),
