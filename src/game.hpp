@@ -3,6 +3,7 @@
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
+#include <raylib.h>
 #include <vector>
 
 class Game {
@@ -24,4 +25,6 @@ class Game {
 	LevelMap levelMap;
 
 	std::vector<Zombie> zombies;
+
+	Camera2D camera;
 };
