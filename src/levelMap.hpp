@@ -11,6 +11,11 @@ struct Point {
 	int y;
 };
 
+enum class TileType {
+	FLOOR,
+	WALL,
+};
+
 struct LevelMap {
 	const int width = 30;
 	const int height = 20;
@@ -18,11 +23,11 @@ struct LevelMap {
 	const std::string filename = "assets/map.txt";
 	const int INF = 9999;
 
-	std::vector<int> tiles;
+	std::vector<TileType> tiles;
 	std::vector<int> distanceMap;
 
 	void Init() {
-		tiles.resize(width * height, 0);
+		tiles.resize(width * height, TileType::FLOOR);
 		distanceMap.resize(width * height, INF);
 
 		LoadMap();
@@ -40,7 +45,7 @@ struct LevelMap {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				inputFile >> c;
-				tiles[y * width + x] = c - '0';
+				tiles[y * width + x] = static_cast<TileType>(c - '0');
 			}
 		}
 
@@ -52,8 +57,17 @@ struct LevelMap {
 	void Render() const {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
+				switch (tiles[y * width + x]) {
+				case TileType::FLOOR:
+					break;
+				case TileType::WALL:
+					DrawRectangle(x * cellSize, y * cellSize, cellSize,
+								  cellSize, YELLOW);
+					break;
+				}
+
 				DrawRectangleLines(x * cellSize, y * cellSize, cellSize,
-								   cellSize, RED);
+								   cellSize, MAGENTA);
 
 				int index = y * width + x;
 				int distance = distanceMap[index];
@@ -103,7 +117,8 @@ struct LevelMap {
 
 					int nIndex = ny * width + nx;
 
-					if (tiles[nIndex] == 0 && distanceMap[nIndex] == INF) {
+					if (tiles[nIndex] == TileType::FLOOR &&
+						distanceMap[nIndex] == INF) {
 						distanceMap[nIndex] = currentDist + 1;
 						queue.push({nx, ny});
 					}
