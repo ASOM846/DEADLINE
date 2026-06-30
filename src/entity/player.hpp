@@ -4,26 +4,30 @@
 
 struct Player {
 	Vector2 position;
-	const int size{20};
-	const int speed{7};
+	const int radius{10};
+	const float speed{5.0F};
+
+	Vector2 velocity{0, 0};
 
 	void Update() {
+		velocity = {.x = 0, .y = 0};
+
 		if (IsKeyDown(KEY_W)) {
-			position.y -= speed;
+			velocity.y -= speed;
 		}
 
 		if (IsKeyDown(KEY_S)) {
-			position.y += speed;
+			velocity.y += speed;
 		}
 
 		if (IsKeyDown(KEY_A)) {
-			position.x -= speed;
+			velocity.x -= speed;
 		}
 
 		if (IsKeyDown(KEY_D)) {
-			position.x += speed;
+			velocity.x += speed;
 		}
 	}
 
-	void Render() const { DrawCircleV(position, size / 2, BLUE); }
+	void Render() const { DrawCircleV(position, radius, BLUE); }
 };

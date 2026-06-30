@@ -1,5 +1,7 @@
 #pragma once
 
+#include "collisionManager.hpp"
+#include "entity/bullet.hpp"
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
@@ -21,10 +23,12 @@ class Game {
 	Player player;
 
 	ZombieManager zombieManager;
+	CollisionManager collisionManager;
 
 	LevelMap levelMap;
 
 	std::vector<Zombie> zombies;
+	std::vector<Bullet> bullets;
 
 	Camera2D camera;
 };

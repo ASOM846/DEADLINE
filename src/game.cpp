@@ -13,11 +13,12 @@ void Game::Init() {
 					 static_cast<float>(GetScreenHeight() / 2)};
 
 	camera.rotation = 0.0f;
-	camera.zoom = 1.0f;
+	camera.zoom = 1.5f;
 }
 
 void Game::Reset() {
 	zombies.clear();
+	bullets.clear();
 }
 
 void Game::Update() {
@@ -28,14 +29,23 @@ void Game::Update() {
 
 	player.Update();
 
-	for (auto &z : zombies) {
-		z.Update(levelMap);
+	collisionManager.ResolvePlayerWall(player, levelMap);
+	collisionManager.ResolveBulletZombie(bullets, zombies);
+
+	zombieManager.UpdateAll(zombies, levelMap);
+
+	for (auto &b : bullets) {
+		b.Update();
 	}
-	BeginMode2D(camera);
+
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-		zombies.push_back(Zombie{.position = GetMousePosition()});
+		Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+		bullets.emplace_back(player.position, worldMousePos);
 	}
-	EndMode2D();
+	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+		Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+		zombies.push_back(Zombie{.position = worldMousePos});
+	}
 }
 
 void Game::Render() {
@@ -49,5 +59,11 @@ void Game::Render() {
 		z.Render();
 	}
 
+	for (auto &b : bullets) {
+		b.Render();
+	}
+
 	EndMode2D();
+
+	DrawFPS(10, 10);
 }

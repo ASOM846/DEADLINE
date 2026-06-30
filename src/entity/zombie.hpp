@@ -1,14 +1,24 @@
+#pragma once
+
 #include "../levelMap.hpp"
 #include "raylib.h"
+#include <algorithm>
 #include <cmath>
 
 struct Zombie {
 	Vector2 position;
 
-	const int width{40};
-	const int speed{5};
+	int width{40};
+	int speed{5};
+
+	int hp{100};
+	bool alive{true};
 
 	void Update(const LevelMap &map) {
+		if (hp <= 0) {
+			alive = false;
+			return;
+		}
 		int zX = static_cast<int>(position.x) / map.cellSize;
 		int zY = static_cast<int>(position.y) / map.cellSize;
 
@@ -53,6 +63,18 @@ struct Zombie {
 
 class ZombieManager {
   public:
+	void UpdateAll(std::vector<Zombie> &zombies, const LevelMap &map) {
+		for (auto &z : zombies) {
+			if (!z.alive)
+				continue;
+			z.Update(map);
+		}
+
+		zombies.erase(std::remove_if(zombies.begin(), zombies.end(),
+									 [](const Zombie &z) { return !z.alive; }),
+					  zombies.end());
+	}
+
 	void ResolveZombieCollision(std::vector<Zombie> &zombies) {
 		for (size_t i = 0; i < zombies.size(); i++) {
 			for (size_t j = 0; j < zombies.size(); j++) {
