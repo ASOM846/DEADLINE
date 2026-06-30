@@ -3,6 +3,8 @@
 
 void Game::Init() {
 	Reset();
+	levelMap.Init();
+
 	player.position.x = GetScreenWidth() / 2;
 	player.position.y = GetScreenHeight() / 2;
 }
@@ -12,10 +14,12 @@ void Game::Reset() {
 }
 
 void Game::Update() {
+	levelMap.Update(player.position);
+	zombieManager.ResolveZombieCollision(zombies);
 	player.Update();
 
 	for (auto &z : zombies) {
-		z.Update(player.position);
+		z.Update(levelMap);
 	}
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -24,6 +28,8 @@ void Game::Update() {
 }
 
 void Game::Render() {
+	levelMap.Render();
+
 	player.Render();
 
 	for (auto &z : zombies) {

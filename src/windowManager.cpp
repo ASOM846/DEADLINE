@@ -6,6 +6,8 @@ void WindowManager::Init() {
 
 	const int targetFPS = 60;
 	SetTargetFPS(targetFPS);
+
+	game.Init();
 }
 
 void WindowManager::Run() {

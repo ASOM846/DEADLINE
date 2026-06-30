@@ -1,3 +1,4 @@
+#include "../levelMap.hpp"
 #include "raylib.h"
 #include <cmath>
 
@@ -7,17 +8,79 @@ struct Zombie {
 	const int width{40};
 	const int speed{5};
 
-	void Update(Vector2 targetPos) {
+	void Update(const LevelMap &map) {
+		int zX = static_cast<int>(position.x) / map.cellSize;
+		int zY = static_cast<int>(position.y) / map.cellSize;
+
+		int bestX = zX;
+		int bestY = zY;
+
+		int minDistance = map.INF;
+
+		int dx[] = {0, 0, -1, 1};
+		int dy[] = {-1, 1, 0, 0};
+
+		for (int i = 0; i < 4; i++) {
+			int nx = zX + dx[i];
+			int ny = zY + dy[i];
+
+			if (nx >= 0 && nx < map.width && ny >= 0 && ny < map.height) {
+				int index = ny * map.width + nx;
+				if (map.distanceMap[index] < minDistance) {
+					minDistance = map.distanceMap[index];
+					bestX = nx;
+					bestY = ny;
+				}
+			}
+		}
+
+		Vector2 targetPos;
+		targetPos.x = bestX * map.cellSize + map.cellSize / 2;
+		targetPos.y = bestY * map.cellSize + map.cellSize / 2;
+
 		float dirX = targetPos.x - position.x;
 		float dirY = targetPos.y - position.y;
-
 		float distance = std::sqrt(dirX * dirX + dirY * dirY);
 
-		if (distance > 0.0F) {
+		if (distance > 2.0f) {
 			position.x += (dirX / distance) * speed;
 			position.y += (dirY / distance) * speed;
 		}
 	}
 
 	void Render() const { DrawCircleV(position, width / 2, GREEN); }
+};
+
+class ZombieManager {
+  public:
+	void ResolveZombieCollision(std::vector<Zombie> &zombies) {
+		for (size_t i = 0; i < zombies.size(); i++) {
+			for (size_t j = 0; j < zombies.size(); j++) {
+				float dx = zombies[j].position.x - zombies[i].position.x;
+				float dy = zombies[j].position.y - zombies[i].position.y;
+				float distance = std::sqrt(dx * dx + dy * dy);
+
+				float minDistance = zombies[i].width;
+
+				if (distance < minDistance) {
+					if (distance == 0.0f) {
+						dx = 1.0f;
+						dy = 0.0f;
+						distance = 1.0f;
+					}
+
+					float overlap = minDistance - distance;
+
+					float nx = dx / distance;
+					float ny = dy / distance;
+
+					zombies[i].position.x -= nx * overlap * 0.5;
+					zombies[i].position.y -= ny * overlap * 0.5;
+
+					zombies[j].position.x += nx * overlap * 0.5;
+					zombies[j].position.y += ny * overlap * 0.5;
+				}
+			}
+		}
+	}
 };

@@ -4,7 +4,7 @@
 
 struct Player {
 	Vector2 position;
-	const int size{50};
+	const int size{20};
 	const int speed{7};
 
 	void Update() {

@@ -2,6 +2,7 @@
 
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
+#include "levelMap.hpp"
 #include <vector>
 
 class Game {
@@ -17,6 +18,10 @@ class Game {
 
   private:
 	Player player;
+
+	ZombieManager zombieManager;
+
+	LevelMap levelMap;
 
 	std::vector<Zombie> zombies;
 };

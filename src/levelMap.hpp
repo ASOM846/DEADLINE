@@ -1,9 +1,92 @@
 #pragma once
 
+#include <queue>
+#include <raylib.h>
+#include <string>
 #include <vector>
+
+struct Point {
+	int x;
+	int y;
+};
+
 struct LevelMap {
 	const int width = 20;
 	const int height = 15;
+	const int cellSize = 40;
+
+	const int INF = 9999;
+
 	std::vector<int> tiles;
 	std::vector<int> distanceMap;
+
+	void Init() {
+		tiles.resize(width * height, 0);
+		distanceMap.resize(width * height, INF);
+	}
+
+	void Update(Vector2 playerPos) { UpdateFloodField(playerPos); }
+
+	void Render() const {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				DrawRectangleLines(x * cellSize, y * cellSize, cellSize,
+								   cellSize, RED);
+
+				int index = y * width + x;
+				int distance = distanceMap[index];
+
+				if (distance != INF) {
+					std::string distStr = std::to_string(distance);
+					int textX = x * cellSize + 12;
+					int textY = y * cellSize + 12;
+
+					DrawText(distStr.c_str(), textX, textY, 16, WHITE);
+				}
+			}
+		}
+	}
+
+	void UpdateFloodField(Vector2 playerPos) {
+		distanceMap.assign(width * height, INF);
+
+		int pGridX = static_cast<int>(playerPos.x / cellSize);
+		int pGridY = static_cast<int>(playerPos.y / cellSize);
+
+		if (pGridX < 0 || pGridX >= width || pGridY < 0 || pGridY >= height) {
+			return;
+		}
+
+		std::queue<Point> queue;
+
+		int playerIndex = pGridY * width + pGridX;
+		distanceMap[playerIndex] = 0;
+		queue.push({pGridX, pGridY});
+
+		int dx[] = {0, 0, -1, 1};
+		int dy[] = {-1, 1, 0, 0};
+
+		while (!queue.empty()) {
+			Point current = queue.front();
+			queue.pop();
+
+			int currentIndex = current.y * width + current.x;
+			int currentDist = distanceMap[currentIndex];
+
+			for (int i = 0; i < 4; i++) {
+				int nx = current.x + dx[i];
+				int ny = current.y + dy[i];
+
+				if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+
+					int nIndex = ny * width + nx;
+
+					if (tiles[nIndex] == 0 && distanceMap[nIndex] == INF) {
+						distanceMap[nIndex] = currentDist + 1;
+						queue.push({nx, ny});
+					}
+				}
+			}
+		}
+	}
 };
