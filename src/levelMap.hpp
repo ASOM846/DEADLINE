@@ -1,5 +1,6 @@
 #pragma once
 
+#include <fstream>
 #include <queue>
 #include <raylib.h>
 #include <string>
@@ -11,10 +12,10 @@ struct Point {
 };
 
 struct LevelMap {
-	const int width = 20;
-	const int height = 15;
+	const int width = 30;
+	const int height = 20;
 	const int cellSize = 40;
-
+	const std::string filename = "assets/map.txt";
 	const int INF = 9999;
 
 	std::vector<int> tiles;
@@ -23,6 +24,27 @@ struct LevelMap {
 	void Init() {
 		tiles.resize(width * height, 0);
 		distanceMap.resize(width * height, INF);
+
+		LoadMap();
+	}
+
+	void LoadMap() {
+		std::ifstream inputFile("assets/map.txt");
+
+		if (!inputFile.is_open()) {
+			TraceLog(LOG_ERROR, "UBALBE TO LOAD FILE");
+		}
+
+		char c;
+
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				inputFile >> c;
+				tiles[y * width + x] = c - '0';
+			}
+		}
+
+		inputFile.close();
 	}
 
 	void Update(Vector2 playerPos) { UpdateFloodField(playerPos); }
