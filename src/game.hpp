@@ -25,6 +25,7 @@ class Game {
 
 	WaveManager waveManager;
 
+	BulletManager bulletManager;
 	ZombieManager zombieManager;
 	CollisionManager collisionManager;
 
@@ -34,4 +35,6 @@ class Game {
 	std::vector<Bullet> bullets;
 
 	Camera2D camera;
+
+	bool isPaused{false};
 };

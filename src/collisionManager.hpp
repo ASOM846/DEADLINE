@@ -15,21 +15,28 @@ class CollisionManager {
 
 	void ResolveBulletZombie(std::vector<Bullet> &bullets,
 							 std::vector<Zombie> &zombies) {
-		for (auto zombie = zombies.begin(); zombie != zombies.end();) {
-			for (auto bullet = bullets.begin(); bullet != bullets.end();) {
-				if (CheckCollisionCircles(zombie->position, zombie->width / 2,
-										  bullet->position, bullet->radius)) {
-					zombie->position.x += bullet->dirX * bullet->knockbackForce;
-					zombie->position.y += bullet->dirY * bullet->knockbackForce;
+		for (auto &z : zombies) {
+			for (auto &b : bullets) {
+				if (!b.alive)
+					continue;
+				if (!z.alive)
+					continue;
 
-					zombie->hp -= bullet->damage;
+				if (CheckCollisionCircles(z.position, z.width / 2, b.position,
+										  b.radius)) {
 
-					bullet = bullets.erase(bullet);
-				} else {
-					bullet++;
+					z.position.x += b.dirX * b.knockbackForce;
+					z.position.y += b.dirY * b.knockbackForce;
+
+					z.hp -= b.damage;
+
+					b.pierce--;
+
+					if (b.pierce < 0) {
+						b.alive = false;
+					}
 				}
 			}
-			zombie++;
 		}
 	}
 

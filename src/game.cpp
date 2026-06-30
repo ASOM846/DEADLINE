@@ -25,6 +25,13 @@ void Game::Reset() {
 }
 
 void Game::Update() {
+	if (IsKeyPressed(KEY_SPACE)) {
+		isPaused = !isPaused;
+	}
+
+	if (isPaused)
+		return;
+
 	Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 
 	levelMap.Update(player.position);
@@ -42,9 +49,7 @@ void Game::Update() {
 
 	zombieManager.UpdateAll(zombies, levelMap);
 
-	for (auto &b : bullets) {
-		b.Update();
-	}
+	bulletManager.UpdateAll(bullets);
 
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
 		Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);

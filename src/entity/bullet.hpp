@@ -1,7 +1,9 @@
 #pragma once
 
+#include <algorithm>
 #include <cmath>
 #include <raylib.h>
+#include <vector>
 
 struct Bullet {
 	Vector2 position;
@@ -12,6 +14,8 @@ struct Bullet {
 	int radius = 5;
 	int knockbackForce = 20;
 	int damage{};
+	int pierce;
+	bool alive{true};
 
 	Bullet(Vector2 startPos, Vector2 targetPos, int damage = 20)
 		: damage(damage) {
@@ -27,9 +31,29 @@ struct Bullet {
 		}
 	}
 
+	Bullet(Vector2 startPos, float dirX, float dirY, int damage = 20,
+		   float pierce = 0)
+		: position(startPos), dirX(dirX), dirY(dirY), damage(damage),
+		  pierce(pierce) {}
+
 	void Update() {
 		position.x += dirX * speed;
 		position.y += dirY * speed;
 	}
 	void Render() const { DrawCircleV(position, radius, RED); }
+};
+
+class BulletManager {
+  public:
+	void UpdateAll(std::vector<Bullet> &bullets) {
+		for (auto &b : bullets) {
+			if (!b.alive)
+				continue;
+			b.Update();
+		}
+
+		bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
+									 [](const Bullet &b) { return !b.alive; }),
+					  bullets.end());
+	}
 };
