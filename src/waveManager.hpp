@@ -23,7 +23,6 @@ class WaveManager {
 
 	void Update(std::vector<Zombie> &zombies, const LevelMap &map) {
 		if (isIntermission) {
-			TraceLog(LOG_INFO, "intermission!!!");
 			intermissionTimer -= GetFrameTime();
 			if (intermissionTimer <= 0.0f) {
 				isIntermission = false;
@@ -50,7 +49,6 @@ class WaveManager {
 	void StartNextWave() {
 		spawnedZombies = 0;
 
-		TraceLog(LOG_INFO, "WAVE INITIALIZED");
 		if (wave <= 5) {
 			totalZombiesInWave = 6 + (wave * 4);
 		} else {

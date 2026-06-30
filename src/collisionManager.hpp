@@ -84,4 +84,32 @@ class CollisionManager {
 			}
 		}
 	}
+
+	void ResolveBulletWall(std::vector<Bullet> &bullets, LevelMap &map) {
+		int index = 0;
+		for (auto &w : map.tiles) {
+			if (w != TileType::WALL) {
+				index++;
+				continue;
+			}
+
+			int gridX = (index % map.width) * map.cellSize;
+			int gridY = (index / map.width) * map.cellSize;
+
+			Rectangle wallRec = {static_cast<float>(gridX),
+								 static_cast<float>(gridY),
+								 static_cast<float>(map.cellSize),
+								 static_cast<float>(map.cellSize)};
+
+			for (auto bullet = bullets.begin(); bullet != bullets.end();) {
+				if (CheckCollisionCircleRec(bullet->position, bullet->radius,
+											wallRec)) {
+					bullet = bullets.erase(bullet);
+				} else {
+					bullet++;
+				}
+			}
+			index++;
+		}
+	}
 };
