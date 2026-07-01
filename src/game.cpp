@@ -52,11 +52,6 @@ void Game::Update() {
 	zombieManager.UpdateAll(zombies, levelMap);
 
 	bulletManager.UpdateAll(bullets);
-
-	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-		Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
-		zombies.push_back(Zombie{.position = worldMousePos});
-	}
 }
 
 void Game::Render() {

@@ -102,25 +102,15 @@ struct Player {
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos) {
 		velocity = {.x = 0, .y = 0};
 
-		if (IsKeyDown(KEY_ONE)) {
-			currentWeaponIndex = 0;
-		}
-
-		if (IsKeyDown(KEY_TWO)) {
-			currentWeaponIndex = 1;
-		}
-
-		if (IsKeyDown(KEY_THREE)) {
-			currentWeaponIndex = 2;
-			;
+		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+			SwitchWeapon(currentWeaponIndex + 1);
+			if (currentWeaponIndex > weapons.size() - 1) {
+				SwitchWeapon(0);
+			}
 		}
 
 		if (IsKeyDown(KEY_R)) {
 			isReloading = true;
-		}
-
-		if (IsKeyDown(KEY_E)) {
-			currentWeaponIndex = 3;
 		}
 
 		if (IsKeyDown(KEY_W)) {
@@ -215,5 +205,13 @@ struct Player {
 								 weapons[currentWeaponIndex].damage,
 								 weapons[currentWeaponIndex].pierce);
 		}
+	}
+
+	void SwitchWeapon(int newIndex) {
+		if (isReloading) {
+			isReloading = false;
+		}
+
+		currentWeaponIndex = newIndex;
 	}
 };
