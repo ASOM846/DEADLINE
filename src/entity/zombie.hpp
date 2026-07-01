@@ -8,10 +8,11 @@
 struct Zombie {
 	Vector2 position;
 
-	int width{40};
+	int radius{20};
 	int speed{3};
 
 	int hp{100};
+	int damage{10};
 	bool alive{true};
 
 	void Update(const LevelMap &map) {
@@ -58,7 +59,7 @@ struct Zombie {
 		}
 	}
 
-	void Render() const { DrawCircleV(position, width / 2, GREEN); }
+	void Render() const { DrawCircleV(position, radius, GREEN); }
 };
 
 class ZombieManager {
@@ -82,7 +83,7 @@ class ZombieManager {
 				float dy = zombies[j].position.y - zombies[i].position.y;
 				float distance = std::sqrt(dx * dx + dy * dy);
 
-				float minDistance = zombies[i].width;
+				float minDistance = zombies[i].radius * 2;
 
 				if (distance < minDistance) {
 					if (distance == 0.0f) {

@@ -2,7 +2,6 @@
 
 #include "bullet.hpp"
 #include <cmath>
-#include <numbers>
 #include <raylib.h>
 #include <string>
 #include <vector>
@@ -31,6 +30,8 @@ struct Player {
 
 	float shootTimer{0.0F};
 	float reloadTimer{0.0F};
+
+	float hp{100};
 
 	bool isReloading{false};
 

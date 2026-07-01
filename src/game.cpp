@@ -8,8 +8,8 @@ void Game::Init() {
 	levelMap.Init();
 	player.Init();
 
-	player.position.x = GetScreenWidth() / 2;
-	player.position.y = GetScreenHeight() / 2;
+	player.position.x = levelMap.width * levelMap.cellSize / 2;
+	player.position.y = levelMap.height * levelMap.cellSize / 2;
 
 	camera.target = player.position;
 	camera.offset = {static_cast<float>(GetScreenWidth() / 2),
@@ -45,6 +45,7 @@ void Game::Update() {
 
 	player.Update(bullets, worldMousePos);
 
+	collisionManager.ResolvePlayerZombie(player, zombies);
 	collisionManager.ResolvePlayerWall(player, levelMap);
 	collisionManager.ResolveBulletZombie(bullets, zombies);
 	collisionManager.ResolveBulletWall(bullets, levelMap);

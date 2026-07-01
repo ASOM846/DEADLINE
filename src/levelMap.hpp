@@ -19,8 +19,8 @@ enum class TileType {
 };
 
 struct LevelMap {
-	const int width = 60;
-	const int height = 40;
+	const int width = 90;
+	const int height = 50;
 	const int cellSize = 40;
 	const std::string filename = "assets/map.txt";
 	const int INF = 9999;

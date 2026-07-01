@@ -22,7 +22,7 @@ class CollisionManager {
 				if (!z.alive)
 					continue;
 
-				if (CheckCollisionCircles(z.position, z.width / 2, b.position,
+				if (CheckCollisionCircles(z.position, z.radius, b.position,
 										  b.radius)) {
 
 					z.position.x += b.dirX * b.knockbackForce;
@@ -117,6 +117,17 @@ class CollisionManager {
 				}
 			}
 			index++;
+		}
+	}
+
+	void ResolvePlayerZombie(Player &player, std::vector<Zombie> &zombies) {
+		for (auto &z : zombies) {
+			if (CheckCollisionCircles(player.position, player.radius,
+									  z.position, z.radius)) {
+				player.hp -= z.damage * GetFrameTime();
+				TraceLog(LOG_INFO,
+						 TextFormat("COLLISION DETECTED    %f", player.hp));
+			}
 		}
 	}
 };
