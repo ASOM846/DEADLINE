@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bullet.hpp"
+#include <cmath>
 #include <numbers>
 #include <raylib.h>
 #include <string>
@@ -67,6 +68,20 @@ struct Player {
 		uzi.pierce = 0;
 		uzi.isAutomatic = true;
 		weapons.push_back(uzi);
+
+		Weapon Ak47;
+		Ak47.name = "AK-47";
+		Ak47.damage = 34;
+		Ak47.bullets = 1;
+		Ak47.ammo = 90;
+		Ak47.maxMagazine = 30;
+		Ak47.currentMagazine = 30;
+		Ak47.reloadTime = 3.0f;
+		Ak47.spread = 4.0f;
+		Ak47.fireRate = 0.15;
+		Ak47.pierce = 1;
+		Ak47.isAutomatic = true;
+		weapons.push_back(Ak47);
 
 		Weapon sniper;
 		sniper.name = "Sniper";
