@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bullet.hpp"
+#include <numbers>
 #include <raylib.h>
 #include <string>
 #include <vector>
@@ -12,6 +13,10 @@ struct Weapon {
 	std::string name;
 	int damage{};
 	int bullets{};
+	int ammo{};
+	int maxMagazine{};
+	int currentMagazine{};
+	float reloadTime{};
 	float spread{};
 	int pierce{};
 	float fireRate{};
@@ -24,6 +29,9 @@ struct Player {
 	const float speed{5.0F};
 
 	float shootTimer{0.0F};
+	float reloadTimer{0.0F};
+
+	bool isReloading{false};
 
 	Vector2 velocity{0, 0};
 
@@ -36,8 +44,12 @@ struct Player {
 		pistol.name = "Pistol";
 		pistol.damage = 20;
 		pistol.bullets = 1;
+		pistol.ammo = 10;
+		pistol.maxMagazine = 7;
+		pistol.currentMagazine = 7;
+		pistol.reloadTime = 1.5f;
 		pistol.spread = 0.0F;
-		pistol.fireRate = 1.0f;
+		pistol.fireRate = 0.5f;
 		pistol.pierce = 0;
 		pistol.isAutomatic = false;
 		weapons.push_back(pistol);
@@ -46,8 +58,12 @@ struct Player {
 		uzi.name = "UZI";
 		uzi.damage = 20;
 		uzi.bullets = 1;
+		uzi.ammo = 90;
+		uzi.maxMagazine = 30;
+		uzi.currentMagazine = 30;
+		uzi.reloadTime = 2.2f;
 		uzi.spread = 10.0;
-		uzi.fireRate = 0.2f;
+		uzi.fireRate = 0.1f;
 		uzi.pierce = 0;
 		uzi.isAutomatic = true;
 		weapons.push_back(uzi);
@@ -55,9 +71,13 @@ struct Player {
 		Weapon sniper;
 		sniper.name = "Sniper";
 		sniper.bullets = 1;
+		sniper.ammo = 20;
+		sniper.maxMagazine = 5;
+		sniper.currentMagazine = 5;
+		sniper.reloadTime = 4.0f;
 		sniper.damage = 100;
 		sniper.spread = 0.0F;
-		sniper.fireRate = 3.0f;
+		sniper.fireRate = 1.5f;
 		sniper.pierce = 3;
 		sniper.isAutomatic = false;
 		weapons.push_back(sniper);
@@ -65,7 +85,11 @@ struct Player {
 		Weapon shotgun;
 		shotgun.name = "Shotgun";
 		shotgun.bullets = 5;
-		shotgun.damage = 50;
+		shotgun.ammo = 25;
+		shotgun.maxMagazine = 5;
+		shotgun.currentMagazine = 5;
+		shotgun.reloadTime = 2.5;
+		shotgun.damage = 25;
 		shotgun.spread = 25.0f;
 		shotgun.fireRate = 1.0f;
 		shotgun.pierce = 2;
@@ -88,6 +112,10 @@ struct Player {
 
 		if (IsKeyDown(KEY_THREE)) {
 			currentWeapon = &weapons[2];
+		}
+
+		if (IsKeyDown(KEY_R)) {
+			isReloading = true;
 		}
 
 		if (IsKeyDown(KEY_E)) {
@@ -113,21 +141,51 @@ struct Player {
 		if (currentWeapon != nullptr) {
 			shootTimer += GetFrameTime();
 
-			TraceLog(LOG_INFO, std::to_string(shootTimer).c_str());
+			if (isReloading) {
+				reloadTimer += GetFrameTime();
+			}
+
+			if (currentWeapon->ammo == 0) {
+				isReloading = false;
+			}
+
+			if (reloadTimer >= currentWeapon->reloadTime) {
+				isReloading = false;
+				int remainingRounds =
+					currentWeapon->maxMagazine - currentWeapon->currentMagazine;
+
+				if (currentWeapon->ammo < remainingRounds) {
+					currentWeapon->currentMagazine += currentWeapon->ammo;
+					currentWeapon->ammo = 0;
+				} else {
+					currentWeapon->currentMagazine += remainingRounds;
+					currentWeapon->ammo -= remainingRounds;
+				}
+				reloadTimer = 0.0F;
+			}
+
 			if (shootTimer < currentWeapon->fireRate) {
 				return;
 			}
 
-			if (currentWeapon->isAutomatic) {
+			if (currentWeapon->isAutomatic && !isReloading &&
+				currentWeapon->currentMagazine > 0) {
 				if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
 					FireWeapon(bullets, position, worldMousePos);
 					shootTimer = 0.0F;
+					currentWeapon->currentMagazine--;
 				}
 			} else {
-				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !isReloading &&
+					currentWeapon->currentMagazine > 0) {
 					FireWeapon(bullets, position, worldMousePos);
 					shootTimer = 0.0F;
+					currentWeapon->currentMagazine--;
 				}
+			}
+
+			if (currentWeapon->currentMagazine == 0) {
+				isReloading = true;
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include <raylib.h>
+#include <string>
 
 void Game::Init() {
 	Reset();
@@ -75,9 +76,16 @@ void Game::Render() {
 	EndMode2D();
 
 	if (player.currentWeapon != nullptr) {
-		const char *text = player.currentWeapon->name.c_str();
+		std::string meassage =
+			player.currentWeapon->name + "     " +
+			std::to_string(player.currentWeapon->currentMagazine) + "/" +
+			std::to_string(player.currentWeapon->maxMagazine) + "      " +
+			std::to_string(player.currentWeapon->ammo) + "     " +
+			(player.isReloading ? "REALODING>>>>>" : "--------");
 
-		DrawText(text, 100, 10, 30, BLUE);
+		const char *text = meassage.c_str();
+
+		DrawText(text, 100, 10, 30, RED);
 	}
 
 	DrawFPS(10, 10);
