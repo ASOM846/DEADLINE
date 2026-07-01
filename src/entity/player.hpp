@@ -37,7 +37,7 @@ struct Player {
 
 	std::vector<Weapon> weapons;
 
-	Weapon *currentWeapon{nullptr};
+	int currentWeaponIndex = 0;
 
 	void Init() {
 		Weapon pistol;
@@ -96,22 +96,23 @@ struct Player {
 		shotgun.isAutomatic = false;
 		weapons.push_back(shotgun);
 
-		currentWeapon = &weapons[0];
+		currentWeaponIndex = 0;
 	}
 
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos) {
 		velocity = {.x = 0, .y = 0};
 
 		if (IsKeyDown(KEY_ONE)) {
-			currentWeapon = &weapons[0];
+			currentWeaponIndex = 0;
 		}
 
 		if (IsKeyDown(KEY_TWO)) {
-			currentWeapon = &weapons[1];
+			currentWeaponIndex = 1;
 		}
 
 		if (IsKeyDown(KEY_THREE)) {
-			currentWeapon = &weapons[2];
+			currentWeaponIndex = 2;
+			;
 		}
 
 		if (IsKeyDown(KEY_R)) {
@@ -119,7 +120,7 @@ struct Player {
 		}
 
 		if (IsKeyDown(KEY_E)) {
-			currentWeapon = &weapons[3];
+			currentWeaponIndex = 3;
 		}
 
 		if (IsKeyDown(KEY_W)) {
@@ -138,53 +139,56 @@ struct Player {
 			velocity.x += speed;
 		}
 
-		if (currentWeapon != nullptr) {
+		if (currentWeaponIndex >= 0) {
 			shootTimer += GetFrameTime();
 
 			if (isReloading) {
 				reloadTimer += GetFrameTime();
 			}
 
-			if (currentWeapon->ammo == 0) {
+			if (weapons[currentWeaponIndex].ammo == 0) {
 				isReloading = false;
 			}
 
-			if (reloadTimer >= currentWeapon->reloadTime) {
+			if (reloadTimer >= weapons[currentWeaponIndex].reloadTime) {
 				isReloading = false;
 				int remainingRounds =
-					currentWeapon->maxMagazine - currentWeapon->currentMagazine;
+					weapons[currentWeaponIndex].maxMagazine -
+					weapons[currentWeaponIndex].currentMagazine;
 
-				if (currentWeapon->ammo < remainingRounds) {
-					currentWeapon->currentMagazine += currentWeapon->ammo;
-					currentWeapon->ammo = 0;
+				if (weapons[currentWeaponIndex].ammo < remainingRounds) {
+					weapons[currentWeaponIndex].currentMagazine +=
+						weapons[currentWeaponIndex].ammo;
+					weapons[currentWeaponIndex].ammo = 0;
 				} else {
-					currentWeapon->currentMagazine += remainingRounds;
-					currentWeapon->ammo -= remainingRounds;
+					weapons[currentWeaponIndex].currentMagazine +=
+						remainingRounds;
+					weapons[currentWeaponIndex].ammo -= remainingRounds;
 				}
 				reloadTimer = 0.0F;
 			}
 
-			if (shootTimer < currentWeapon->fireRate) {
+			if (shootTimer < weapons[currentWeaponIndex].fireRate) {
 				return;
 			}
 
-			if (currentWeapon->isAutomatic && !isReloading &&
-				currentWeapon->currentMagazine > 0) {
+			if (weapons[currentWeaponIndex].isAutomatic && !isReloading &&
+				weapons[currentWeaponIndex].currentMagazine > 0) {
 				if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
 					FireWeapon(bullets, position, worldMousePos);
 					shootTimer = 0.0F;
-					currentWeapon->currentMagazine--;
+					weapons[currentWeaponIndex].currentMagazine--;
 				}
 			} else {
 				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !isReloading &&
-					currentWeapon->currentMagazine > 0) {
+					weapons[currentWeaponIndex].currentMagazine > 0) {
 					FireWeapon(bullets, position, worldMousePos);
 					shootTimer = 0.0F;
-					currentWeapon->currentMagazine--;
+					weapons[currentWeaponIndex].currentMagazine--;
 				}
 			}
 
-			if (currentWeapon->currentMagazine == 0) {
+			if (weapons[currentWeaponIndex].currentMagazine == 0) {
 				isReloading = true;
 			}
 		}
@@ -194,11 +198,11 @@ struct Player {
 
 	void FireWeapon(std::vector<Bullet> &bullets, Vector2 startPos,
 					Vector2 targetPos) const {
-		for (int i = 0; i < currentWeapon->bullets; i++) {
+		for (int i = 0; i < weapons[currentWeaponIndex].bullets; i++) {
 			float angle =
 				atan2f(targetPos.y - startPos.y, targetPos.x - startPos.x);
 
-			float spread = currentWeapon->spread;
+			float spread = weapons[currentWeaponIndex].spread;
 
 			float spreadOffset = GetRandomValue(-100, 100) / 100.0F * spread;
 
@@ -207,8 +211,9 @@ struct Player {
 			float dirX = cosf(angle);
 			float dirY = sinf(angle);
 
-			bullets.emplace_back(startPos, dirX, dirY, currentWeapon->damage,
-								 currentWeapon->pierce);
+			bullets.emplace_back(startPos, dirX, dirY,
+								 weapons[currentWeaponIndex].damage,
+								 weapons[currentWeaponIndex].pierce);
 		}
 	}
 };
