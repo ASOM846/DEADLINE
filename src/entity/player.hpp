@@ -1,45 +1,20 @@
 #pragma once
 
+#include "../weaponManager.hpp"
 #include "bullet.hpp"
-#include <cmath>
 #include <raylib.h>
-#include <string>
 #include <vector>
-
-struct Weapon {
-	Weapon() = default;
-	~Weapon() = default;
-
-	std::string name;
-	int damage{};
-	int bullets{};
-	int ammo{};
-	int maxMagazine{};
-	int currentMagazine{};
-	float reloadTime{};
-	float spread{};
-	int pierce{};
-	float fireRate{};
-	bool isAutomatic{};
-};
 
 struct Player {
 	Vector2 position;
 	const int radius{25};
 	const float speed{5.0F};
 
-	float shootTimer{0.0F};
-	float reloadTimer{0.0F};
-
 	float hp{100};
-
-	bool isReloading{false};
 
 	Vector2 velocity{0, 0};
 
-	std::vector<Weapon> weapons;
-
-	int currentWeaponIndex = 0;
+	WeaponManager weaponManager;
 
 	void Init() {
 		Weapon pistol;
@@ -54,7 +29,7 @@ struct Player {
 		pistol.fireRate = 0.5f;
 		pistol.pierce = 0;
 		pistol.isAutomatic = false;
-		weapons.push_back(pistol);
+		weaponManager.inventory.push_back(pistol);
 
 		Weapon uzi;
 		uzi.name = "UZI";
@@ -68,7 +43,7 @@ struct Player {
 		uzi.fireRate = 0.1f;
 		uzi.pierce = 0;
 		uzi.isAutomatic = true;
-		weapons.push_back(uzi);
+		weaponManager.inventory.push_back(uzi);
 
 		Weapon Ak47;
 		Ak47.name = "AK-47";
@@ -82,7 +57,7 @@ struct Player {
 		Ak47.fireRate = 0.15;
 		Ak47.pierce = 1;
 		Ak47.isAutomatic = true;
-		weapons.push_back(Ak47);
+		weaponManager.inventory.push_back(Ak47);
 
 		Weapon sniper;
 		sniper.name = "Sniper";
@@ -96,7 +71,7 @@ struct Player {
 		sniper.fireRate = 1.5f;
 		sniper.pierce = 3;
 		sniper.isAutomatic = false;
-		weapons.push_back(sniper);
+		weaponManager.inventory.push_back(sniper);
 
 		Weapon shotgun;
 		shotgun.name = "Shotgun";
@@ -110,23 +85,18 @@ struct Player {
 		shotgun.fireRate = 1.0f;
 		shotgun.pierce = 2;
 		shotgun.isAutomatic = false;
-		weapons.push_back(shotgun);
-
-		currentWeaponIndex = 0;
+		weaponManager.inventory.push_back(shotgun);
 	}
 
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos) {
 		velocity = {.x = 0, .y = 0};
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
-			SwitchWeapon(currentWeaponIndex + 1);
-			if (currentWeaponIndex > weapons.size() - 1) {
-				SwitchWeapon(0);
-			}
+			weaponManager.SwitchWeaponNext();
 		}
 
 		if (IsKeyDown(KEY_R)) {
-			isReloading = true;
+			weaponManager.StartReload();
 		}
 
 		if (IsKeyDown(KEY_W)) {
@@ -145,89 +115,8 @@ struct Player {
 			velocity.x += speed;
 		}
 
-		if (currentWeaponIndex >= 0) {
-			shootTimer += GetFrameTime();
-
-			if (isReloading) {
-				reloadTimer += GetFrameTime();
-			}
-
-			if (weapons[currentWeaponIndex].ammo == 0) {
-				isReloading = false;
-			}
-
-			if (reloadTimer >= weapons[currentWeaponIndex].reloadTime) {
-				isReloading = false;
-				int remainingRounds =
-					weapons[currentWeaponIndex].maxMagazine -
-					weapons[currentWeaponIndex].currentMagazine;
-
-				if (weapons[currentWeaponIndex].ammo < remainingRounds) {
-					weapons[currentWeaponIndex].currentMagazine +=
-						weapons[currentWeaponIndex].ammo;
-					weapons[currentWeaponIndex].ammo = 0;
-				} else {
-					weapons[currentWeaponIndex].currentMagazine +=
-						remainingRounds;
-					weapons[currentWeaponIndex].ammo -= remainingRounds;
-				}
-				reloadTimer = 0.0F;
-			}
-
-			if (shootTimer < weapons[currentWeaponIndex].fireRate) {
-				return;
-			}
-
-			if (weapons[currentWeaponIndex].isAutomatic && !isReloading &&
-				weapons[currentWeaponIndex].currentMagazine > 0) {
-				if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-					FireWeapon(bullets, position, worldMousePos);
-					shootTimer = 0.0F;
-					weapons[currentWeaponIndex].currentMagazine--;
-				}
-			} else {
-				if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && !isReloading &&
-					weapons[currentWeaponIndex].currentMagazine > 0) {
-					FireWeapon(bullets, position, worldMousePos);
-					shootTimer = 0.0F;
-					weapons[currentWeaponIndex].currentMagazine--;
-				}
-			}
-
-			if (weapons[currentWeaponIndex].currentMagazine == 0) {
-				isReloading = true;
-			}
-		}
+		weaponManager.Update(bullets, position, worldMousePos);
 	}
 
 	void Render() const { DrawCircleV(position, radius, BLUE); }
-
-	void FireWeapon(std::vector<Bullet> &bullets, Vector2 startPos,
-					Vector2 targetPos) const {
-		for (int i = 0; i < weapons[currentWeaponIndex].bullets; i++) {
-			float angle =
-				atan2f(targetPos.y - startPos.y, targetPos.x - startPos.x);
-
-			float spread = weapons[currentWeaponIndex].spread;
-
-			float spreadOffset = GetRandomValue(-100, 100) / 100.0F * spread;
-
-			angle += spreadOffset * DEG2RAD;
-
-			float dirX = cosf(angle);
-			float dirY = sinf(angle);
-
-			bullets.emplace_back(startPos, dirX, dirY,
-								 weapons[currentWeaponIndex].damage,
-								 weapons[currentWeaponIndex].pierce);
-		}
-	}
-
-	void SwitchWeapon(int newIndex) {
-		if (isReloading) {
-			isReloading = false;
-		}
-
-		currentWeaponIndex = newIndex;
-	}
 };

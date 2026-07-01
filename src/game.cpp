@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include <chrono>
 #include <raylib.h>
 #include <string>
 
@@ -72,21 +71,17 @@ void Game::Render() {
 
 	EndMode2D();
 
-	if (player.currentWeaponIndex >= 0) {
-		std::string meassage =
-			player.weapons[player.currentWeaponIndex].name + "     " +
-			std::to_string(
-				player.weapons[player.currentWeaponIndex].currentMagazine) +
-			"/" +
-			std::to_string(
-				player.weapons[player.currentWeaponIndex].maxMagazine) +
-			"      " +
-			std::to_string(player.weapons[player.currentWeaponIndex].ammo) +
-			"     " + (player.isReloading ? "REALODING>>>>>" : "--------");
+	Weapon *currentWeapon = player.weaponManager.GetCurrentWeapon();
 
-		const char *text = meassage.c_str();
+	if (currentWeapon != nullptr) {
+		std::string message =
+			currentWeapon->name + "     " +
+			std::to_string(currentWeapon->currentMagazine) + "/" +
+			std::to_string(currentWeapon->maxMagazine) + "       " +
+			std::to_string(currentWeapon->ammo) + "    " +
+			(player.weaponManager.isReloading ? "REALODING......" : "");
 
-		DrawText(text, 100, 10, 30, RED);
+		DrawText(message.c_str(), 100, 10, 30, RED);
 	}
 
 	DrawFPS(10, 10);

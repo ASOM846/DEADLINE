@@ -15,7 +15,8 @@ enum class TileType {
 	FLOOR,
 	WALL,
 	ZOMBIE_SPAWNER,
-	BLOCKADE
+	BLOCKADE,
+	WEAPON_SHOP
 };
 
 struct LevelMap {
@@ -76,21 +77,14 @@ struct LevelMap {
 					DrawRectangle(x * cellSize, y * cellSize, cellSize,
 								  cellSize, YELLOW);
 					break;
+				case TileType::WEAPON_SHOP:
+					DrawRectangle(x * cellSize, y * cellSize, cellSize,
+								  cellSize, GREEN);
+					break;
 				}
-
-				DrawRectangleLines(x * cellSize, y * cellSize, cellSize,
-								   cellSize, MAGENTA);
 
 				int index = y * width + x;
 				int distance = distanceMap[index];
-
-				if (distance != INF) {
-					std::string distStr = std::to_string(distance);
-					int textX = x * cellSize + 12;
-					int textY = y * cellSize + 12;
-
-					DrawText(distStr.c_str(), textX, textY, 16, WHITE);
-				}
 			}
 		}
 	}
