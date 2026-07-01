@@ -14,7 +14,7 @@ class CollisionManager {
 	~CollisionManager() = default;
 
 	void ResolveBulletZombie(std::vector<Bullet> &bullets,
-							 std::vector<Zombie> &zombies) {
+							 std::vector<Zombie> &zombies, Player &player) {
 		for (auto &z : zombies) {
 			for (auto &b : bullets) {
 				if (!b.alive)
@@ -31,6 +31,10 @@ class CollisionManager {
 					z.hp -= b.damage;
 
 					b.pierce--;
+
+					if (z.hp <= 0) {
+						player.money += z.value;
+					}
 
 					if (b.pierce < 0) {
 						b.alive = false;

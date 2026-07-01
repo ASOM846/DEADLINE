@@ -46,7 +46,7 @@ void Game::Update() {
 
 	collisionManager.ResolvePlayerZombie(player, zombies);
 	collisionManager.ResolvePlayerWall(player, levelMap);
-	collisionManager.ResolveBulletZombie(bullets, zombies);
+	collisionManager.ResolveBulletZombie(bullets, zombies, player);
 	collisionManager.ResolveBulletWall(bullets, levelMap);
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 
@@ -80,10 +80,12 @@ void Game::Render() {
 			std::to_string(currentWeapon->currentMagazine) + "/" +
 			std::to_string(currentWeapon->maxMagazine) + "       " +
 			std::to_string(currentWeapon->ammo) + "    " +
-			(player.weaponManager.isReloading ? "REALODING......" : "");
+			(player.weaponManager.isReloading ? "REALODING......" : "") +
+			"     " + std::to_string(player.money);
 
 		DrawText(message.c_str(), 100, 10, 30, RED);
 	}
 
+	ui.DrawWeaponShopInfo(player);
 	DrawFPS(10, 10);
 }

@@ -12,6 +12,8 @@ struct Player {
 
 	float hp{100};
 
+	int money = 0;
+
 	Vector2 velocity{0, 0};
 
 	WeaponSpawner *currentSpawner{nullptr};
@@ -30,7 +32,11 @@ struct Player {
 		if (IsKeyPressed(KEY_E) && currentSpawner != nullptr) {
 			Weapon *w = weaponManager.GetCurrentWeapon();
 			if (w != nullptr) {
-				w->ammo += 40;
+				if (currentSpawner->type == w->type) {
+					w->ammo += 40;
+				} else if (currentSpawner->type != w->type) {
+					weaponManager.SwitchWeaponTo(currentSpawner->type);
+				}
 			}
 		}
 

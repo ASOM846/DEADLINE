@@ -13,6 +13,7 @@ struct Zombie {
 
 	int hp{100};
 	int damage{10};
+	int value{20};
 	bool alive{true};
 
 	void Update(const LevelMap &map) {

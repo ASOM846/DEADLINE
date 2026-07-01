@@ -2,6 +2,7 @@
 
 #include "entity/bullet.hpp"
 #include "raylib.h"
+#include <algorithm>
 #include <cmath>
 #include <string>
 #include <vector>
@@ -40,7 +41,9 @@ struct Weapon {
 
 struct WeaponManager {
 	std::vector<Weapon> inventory;
+
 	int currentWeaponIndex = 0;
+	int secondatyWeaponIndex = 3;
 
 	float shootTimer{0.0F};
 	float reloadTimer{0.0F};
@@ -57,13 +60,27 @@ struct WeaponManager {
 	}
 
 	void SwitchWeaponNext() {
-		if (inventory.empty())
-			return;
+		// if (inventory.empty())
+		// 	return;
+		//
+		// isReloading = false;
+		// reloadTimer = 0.0F;
+		//
+		// currentWeaponIndex = (currentWeaponIndex + 1) % inventory.size();
+		int temp = secondatyWeaponIndex;
+		secondatyWeaponIndex = currentWeaponIndex;
+		currentWeaponIndex = temp;
+	}
 
-		isReloading = false;
-		reloadTimer = 0.0F;
-
-		currentWeaponIndex = (currentWeaponIndex + 1) % inventory.size();
+	void SwitchWeaponTo(WeaponType newWeapon) {
+		for (int i = 0; i < inventory.size(); i++) {
+			if (inventory[i].type == newWeapon) {
+				isReloading = false;
+				reloadTimer = 0;
+				currentWeaponIndex = i;
+				return;
+			}
+		}
 	}
 
 	void StartReload() {
