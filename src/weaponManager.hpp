@@ -6,11 +6,26 @@
 #include <string>
 #include <vector>
 
+enum class WeaponType {
+	PISTOL,
+	UZI,
+	AK47,
+	SNIPER,
+	SHOTGUN,
+	COUNT,
+};
+
+struct WeaponSpawner {
+	int pos;
+	WeaponType type;
+};
+
 struct Weapon {
 	Weapon() = default;
 	~Weapon() = default;
 
 	std::string name;
+	WeaponType type;
 	int damage{};
 	int bullets{};
 	int ammo{};
@@ -129,6 +144,7 @@ struct WeaponManager {
 	void InitInventory() {
 		Weapon pistol;
 		pistol.name = "Pistol";
+		pistol.type = WeaponType::PISTOL;
 		pistol.damage = 20;
 		pistol.bullets = 1;
 		pistol.ammo = 10;
@@ -143,6 +159,7 @@ struct WeaponManager {
 
 		Weapon uzi;
 		uzi.name = "UZI";
+		uzi.type = WeaponType::UZI;
 		uzi.damage = 20;
 		uzi.bullets = 1;
 		uzi.ammo = 90;
@@ -157,6 +174,7 @@ struct WeaponManager {
 
 		Weapon Ak47;
 		Ak47.name = "AK-47";
+		Ak47.type = WeaponType::AK47;
 		Ak47.damage = 34;
 		Ak47.bullets = 1;
 		Ak47.ammo = 90;
@@ -171,6 +189,7 @@ struct WeaponManager {
 
 		Weapon sniper;
 		sniper.name = "Sniper";
+		sniper.type = WeaponType::SNIPER;
 		sniper.bullets = 1;
 		sniper.ammo = 20;
 		sniper.maxMagazine = 5;
@@ -185,6 +204,7 @@ struct WeaponManager {
 
 		Weapon shotgun;
 		shotgun.name = "Shotgun";
+		shotgun.type = WeaponType::SHOTGUN;
 		shotgun.bullets = 5;
 		shotgun.ammo = 25;
 		shotgun.maxMagazine = 5;

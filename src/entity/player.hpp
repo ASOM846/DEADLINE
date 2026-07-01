@@ -14,6 +14,8 @@ struct Player {
 
 	Vector2 velocity{0, 0};
 
+	WeaponSpawner *currentSpawner{nullptr};
+
 	WeaponManager weaponManager;
 
 	void Init() { weaponManager.Init(); }
@@ -23,6 +25,13 @@ struct Player {
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
 			weaponManager.SwitchWeaponNext();
+		}
+
+		if (IsKeyPressed(KEY_E) && currentSpawner != nullptr) {
+			Weapon *w = weaponManager.GetCurrentWeapon();
+			if (w != nullptr) {
+				w->ammo += 40;
+			}
 		}
 
 		if (IsKeyDown(KEY_R)) {

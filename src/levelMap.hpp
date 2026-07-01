@@ -1,5 +1,6 @@
 #pragma once
 
+#include "weaponManager.hpp"
 #include <fstream>
 #include <queue>
 #include <raylib.h>
@@ -30,6 +31,7 @@ struct LevelMap {
 	std::vector<int> distanceMap;
 
 	std::vector<int> zombieSpawners;
+	std::vector<WeaponSpawner> weaponSpawners;
 
 	void Init() {
 		tiles.resize(width * height, TileType::FLOOR);
@@ -60,6 +62,14 @@ struct LevelMap {
 			for (int x = 0; x < width; x++) {
 				if (tiles[y * width + x] == TileType::ZOMBIE_SPAWNER) {
 					zombieSpawners.push_back(y * width + x);
+				}
+
+				if (tiles[y * width + x] == TileType::WEAPON_SHOP) {
+					int seed =
+						GetRandomValue(0, static_cast<int>(WeaponType::COUNT));
+					weaponSpawners.push_back(
+						{.pos = (y * width) + x,
+						 .type = static_cast<WeaponType>(seed)});
 				}
 			}
 		}

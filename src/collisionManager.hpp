@@ -92,6 +92,24 @@ class CollisionManager {
 		}
 	}
 
+	void ResolvePlayerWeaponSpawner(Player &player, LevelMap &map) {
+		player.currentSpawner = nullptr;
+
+		for (auto &spawner : map.weaponSpawners) {
+			Rectangle spawnerRec = {
+				static_cast<float>(spawner.pos % map.width * map.cellSize),
+				static_cast<float>(spawner.pos / map.width * map.cellSize),
+				static_cast<float>(map.cellSize),
+				static_cast<float>(map.cellSize)};
+
+			if (CheckCollisionCircleRec(player.position, player.radius,
+										spawnerRec)) {
+				player.currentSpawner = &spawner;
+				break;
+			}
+		}
+	}
+
 	void ResolveBulletWall(std::vector<Bullet> &bullets, LevelMap &map) {
 		int index = 0;
 		for (auto &w : map.tiles) {
