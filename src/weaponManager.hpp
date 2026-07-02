@@ -46,7 +46,7 @@ struct WeaponManager {
 	std::vector<Weapon> inventory;
 
 	int currentWeaponIndex = 0;
-	int secondatyWeaponIndex = 3;
+	int secondatyWeaponIndex = 0;
 
 	float shootTimer{0.0F};
 	float reloadTimer{0.0F};
@@ -166,10 +166,10 @@ struct WeaponManager {
 		Weapon pistol;
 		pistol.name = "Pistol";
 		pistol.type = WeaponType::PISTOL;
-		pistol.damage = 20;
+		pistol.damage = 34;
 		pistol.bullets = 1;
 		pistol.maxAmmo = 70;
-		pistol.ammo = 10;
+		pistol.ammo = pistol.maxAmmo;
 		pistol.maxMagazine = 7;
 		pistol.currentMagazine = 7;
 		pistol.reloadTime = 1.5f;
@@ -188,7 +188,7 @@ struct WeaponManager {
 		uzi.damage = 20;
 		uzi.bullets = 1;
 		uzi.maxAmmo = 180;
-		uzi.ammo = 90;
+		uzi.ammo = uzi.maxAmmo;
 		uzi.maxMagazine = 30;
 		uzi.currentMagazine = 30;
 		uzi.reloadTime = 2.2f;
@@ -207,7 +207,7 @@ struct WeaponManager {
 		Ak47.damage = 34;
 		Ak47.bullets = 1;
 		Ak47.maxAmmo = 120;
-		Ak47.ammo = 90;
+		Ak47.ammo = Ak47.maxAmmo;
 		Ak47.maxMagazine = 30;
 		Ak47.currentMagazine = 30;
 		Ak47.reloadTime = 3.0f;
@@ -225,7 +225,7 @@ struct WeaponManager {
 		sniper.type = WeaponType::SNIPER;
 		sniper.bullets = 1;
 		sniper.maxAmmo = 20;
-		sniper.ammo = 20;
+		sniper.ammo = sniper.maxAmmo;
 		sniper.maxMagazine = 5;
 		sniper.currentMagazine = 5;
 		sniper.reloadTime = 4.0f;
@@ -244,7 +244,7 @@ struct WeaponManager {
 		shotgun.type = WeaponType::SHOTGUN;
 		shotgun.bullets = 5;
 		shotgun.maxAmmo = 30;
-		shotgun.ammo = 25;
+		shotgun.ammo = shotgun.maxAmmo;
 		shotgun.maxMagazine = 5;
 		shotgun.currentMagazine = 5;
 		shotgun.reloadTime = 2.5;

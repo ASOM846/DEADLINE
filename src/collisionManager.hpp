@@ -98,6 +98,7 @@ class CollisionManager {
 
 	void ResolvePlayerWeaponSpawner(Player &player, LevelMap &map) {
 		player.currentSpawner = nullptr;
+		player.spawnerWeapon = nullptr;
 
 		for (auto &spawner : map.weaponSpawners) {
 			Rectangle spawnerRec = {
@@ -109,6 +110,8 @@ class CollisionManager {
 			if (CheckCollisionCircleRec(player.position, player.radius,
 										spawnerRec)) {
 				player.currentSpawner = &spawner;
+				player.spawnerWeapon =
+					player.weaponManager.GetWeapon(spawner.type);
 				break;
 			}
 		}

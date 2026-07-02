@@ -7,7 +7,13 @@
 class UI {
   public:
 	void DrawWeaponShopInfo(Player &player) {
+		if (player.currentSpawner == nullptr ||
+			player.spawnerWeapon == nullptr) {
+			return;
+		}
+
 		WeaponSpawner *ws = player.currentSpawner;
+		Weapon *shopW = player.spawnerWeapon;
 
 		if (ws == nullptr)
 			return;
@@ -38,14 +44,12 @@ class UI {
 		std::string text2;
 		Weapon *w = player.weaponManager.GetCurrentWeapon();
 
-		Weapon *temp = player.weaponManager.GetWeapon(ws->type);
-
 		if (w->type == ws->type) {
-			text2 = "MAG PRICE:   " + std::to_string(temp->magazinePrice);
+			text2 = "MAG PRICE:   " + std::to_string(shopW->magazinePrice);
 		}
 
 		if (w->type != ws->type) {
-			text2 = "WEAPON PRICE:   " + std::to_string(temp->price);
+			text2 = "WEAPON PRICE:   " + std::to_string(shopW->price);
 		}
 
 		text += text2;
