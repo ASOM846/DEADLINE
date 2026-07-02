@@ -2,7 +2,6 @@
 
 #include "entity/bullet.hpp"
 #include "raylib.h"
-#include <algorithm>
 #include <cmath>
 #include <string>
 #include <vector>
@@ -60,13 +59,6 @@ struct WeaponManager {
 	}
 
 	void SwitchWeaponNext() {
-		// if (inventory.empty())
-		// 	return;
-		//
-		// isReloading = false;
-		// reloadTimer = 0.0F;
-		//
-		// currentWeaponIndex = (currentWeaponIndex + 1) % inventory.size();
 		int temp = secondatyWeaponIndex;
 		secondatyWeaponIndex = currentWeaponIndex;
 		currentWeaponIndex = temp;

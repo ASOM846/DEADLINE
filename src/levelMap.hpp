@@ -17,7 +17,11 @@ enum class TileType {
 	WALL,
 	ZOMBIE_SPAWNER,
 	BLOCKADE,
-	WEAPON_SHOP
+
+	WEAPON_UZI,
+	WEAPON_AK47,
+	WEAPON_SNIPER,
+	WEAPON_SHOTGUN,
 };
 
 struct LevelMap {
@@ -60,16 +64,30 @@ struct LevelMap {
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				if (tiles[y * width + x] == TileType::ZOMBIE_SPAWNER) {
+				auto &tile = tiles[y * width + x];
+
+				if (tile == TileType::ZOMBIE_SPAWNER) {
 					zombieSpawners.push_back(y * width + x);
 				}
 
-				if (tiles[y * width + x] == TileType::WEAPON_SHOP) {
-					int seed =
-						GetRandomValue(0, static_cast<int>(WeaponType::COUNT));
+				if (tile == TileType::WEAPON_UZI) {
 					weaponSpawners.push_back(
-						{.pos = (y * width) + x,
-						 .type = static_cast<WeaponType>(seed)});
+						{.pos = (y * width) + x, .type = WeaponType::UZI});
+				}
+
+				if (tile == TileType::WEAPON_AK47) {
+					weaponSpawners.push_back(
+						{.pos = (y * width) + x, .type = WeaponType::AK47});
+				}
+
+				if (tile == TileType::WEAPON_SNIPER) {
+					weaponSpawners.push_back(
+						{.pos = (y * width) + x, .type = WeaponType::SNIPER});
+				}
+
+				if (tile == TileType::WEAPON_SHOTGUN) {
+					weaponSpawners.push_back(
+						{.pos = (y * width) + x, .type = WeaponType::SHOTGUN});
 				}
 			}
 		}
@@ -87,7 +105,19 @@ struct LevelMap {
 					DrawRectangle(x * cellSize, y * cellSize, cellSize,
 								  cellSize, YELLOW);
 					break;
-				case TileType::WEAPON_SHOP:
+				case TileType::WEAPON_UZI:
+					DrawRectangle(x * cellSize, y * cellSize, cellSize,
+								  cellSize, GREEN);
+					break;
+				case TileType::WEAPON_AK47:
+					DrawRectangle(x * cellSize, y * cellSize, cellSize,
+								  cellSize, GREEN);
+					break;
+				case TileType::WEAPON_SNIPER:
+					DrawRectangle(x * cellSize, y * cellSize, cellSize,
+								  cellSize, GREEN);
+					break;
+				case TileType::WEAPON_SHOTGUN:
 					DrawRectangle(x * cellSize, y * cellSize, cellSize,
 								  cellSize, GREEN);
 					break;
