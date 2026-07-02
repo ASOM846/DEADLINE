@@ -17,6 +17,7 @@ enum class TileType {
 	WALL,
 	ZOMBIE_SPAWNER,
 	BLOCKADE,
+	DOOR,
 
 	WEAPON_UZI,
 	WEAPON_AK47,
@@ -36,6 +37,7 @@ struct LevelMap {
 
 	std::vector<int> zombieSpawners;
 	std::vector<WeaponSpawner> weaponSpawners;
+	std::vector<int> doors;
 
 	void Init() {
 		tiles.resize(width * height, TileType::FLOOR);
@@ -68,6 +70,10 @@ struct LevelMap {
 
 				if (tile == TileType::ZOMBIE_SPAWNER) {
 					zombieSpawners.push_back(y * width + x);
+				}
+
+				if (tile == TileType::DOOR) {
+					doors.push_back(y * width + x);
 				}
 
 				if (tile == TileType::WEAPON_UZI) {
@@ -104,6 +110,10 @@ struct LevelMap {
 				case TileType::WALL:
 					DrawRectangle(x * cellSize, y * cellSize, cellSize,
 								  cellSize, YELLOW);
+					break;
+				case TileType::DOOR:
+					DrawRectangle(x * cellSize, y * cellSize, cellSize,
+								  cellSize, ORANGE);
 					break;
 				case TileType::WEAPON_UZI:
 					DrawRectangle(x * cellSize, y * cellSize, cellSize,
