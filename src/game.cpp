@@ -7,8 +7,7 @@ void Game::Init() {
 	levelMap.Init();
 	player.Init();
 
-	player.position.x = levelMap.width * levelMap.cellSize / 2;
-	player.position.y = levelMap.height * levelMap.cellSize / 2;
+	player.position = levelMap.playerSpawnPos;
 
 	camera.target = player.position;
 	camera.offset = {static_cast<float>(GetScreenWidth() / 2),
@@ -28,27 +27,45 @@ void Game::Reset() {
 void Game::Update() {
 	if (IsKeyPressed(KEY_SPACE)) {
 		isPaused = !isPaused;
+		isFreeCam = !isFreeCam;
 	}
-
-	if (isPaused)
-		return;
 
 	Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
 
 	levelMap.Update(player.position);
 	waveManager.Update(zombies, levelMap);
 
-	zombieManager.ResolveZombieCollision(zombies);
+	if (!isPaused)
+		zombieManager.ResolveZombieCollision(zombies);
 
-	camera.target = player.position;
+	if (!isFreeCam) {
+		camera.zoom = 1.5;
+		camera.target = player.position;
+	} else {
+		camera.zoom = 0.5;
+		camera.target = freeCamPos;
+	}
 
-	player.Update(bullets, worldMousePos);
+	if (IsKeyDown(KEY_RIGHT))
+		freeCamPos.x += 10;
+
+	if (IsKeyDown(KEY_LEFT))
+		freeCamPos.x -= 10;
+
+	if (IsKeyDown(KEY_UP))
+		freeCamPos.y -= 10;
+
+	if (IsKeyDown(KEY_DOWN))
+		freeCamPos.y += 10;
+
+	player.Update(bullets, worldMousePos, levelMap);
 
 	collisionManager.ResolvePlayerZombie(player, zombies);
 	collisionManager.ResolvePlayerWall(player, levelMap);
 	collisionManager.ResolveBulletZombie(bullets, zombies, player);
 	collisionManager.ResolveBulletWall(bullets, levelMap);
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
+	collisionManager.ResolvePlayerDoor(player, levelMap);
 
 	zombieManager.UpdateAll(zombies, levelMap);
 
@@ -56,6 +73,7 @@ void Game::Update() {
 }
 
 void Game::Render() {
+
 	BeginMode2D(camera);
 
 	levelMap.Render();
@@ -83,8 +101,12 @@ void Game::Render() {
 			(player.weaponManager.isReloading ? "REALODING......" : "") +
 			"     " + std::to_string(player.money);
 
-		DrawText(message.c_str(), 100, 10, 30, RED);
+		DrawText(message.c_str(), 100, 10, 30, BLACK);
 	}
+
+	std::string text = std::to_string(zombies.size());
+
+	DrawText(text.c_str(), 100, GetScreenHeight() - 100, 30, BLACK);
 
 	ui.DrawWeaponShopInfo(player);
 	DrawFPS(10, 10);

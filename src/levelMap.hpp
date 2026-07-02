@@ -12,17 +12,34 @@ struct Point {
 	int y;
 };
 
+struct Door {
+	int pos{};
+	int price{};
+	bool open{false};
+};
+
 enum class TileType {
 	FLOOR,
 	WALL,
 	ZOMBIE_SPAWNER,
 	BLOCKADE,
-	DOOR,
+
+	PLAYER_SPAWN,
+
+	DOOR_500,
+	DOOR_750,
+	DOOR_1000,
+	DOOR_1250,
+	DOOR_1500,
+	DOOR_1750,
+	DOOR_2000,
 
 	WEAPON_UZI,
 	WEAPON_AK47,
 	WEAPON_SNIPER,
 	WEAPON_SHOTGUN,
+
+	COUNT
 };
 
 struct LevelMap {
@@ -35,9 +52,16 @@ struct LevelMap {
 	std::vector<TileType> tiles;
 	std::vector<int> distanceMap;
 
+	Vector2 playerSpawnPos;
+
 	std::vector<int> zombieSpawners;
 	std::vector<WeaponSpawner> weaponSpawners;
-	std::vector<int> doors;
+	std::vector<Door> doors;
+
+  public:
+	static bool IsDoor(TileType type) {
+		return (type >= TileType::DOOR_500 && type <= TileType::DOOR_2000);
+	}
 
 	void Init() {
 		tiles.resize(width * height, TileType::FLOOR);
@@ -53,27 +77,40 @@ struct LevelMap {
 			TraceLog(LOG_ERROR, "UBALBE TO LOAD FILE");
 		}
 
-		char c;
+		int tileValue;
 
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				inputFile >> c;
-				tiles[y * width + x] = static_cast<TileType>(c - '0');
+				if (inputFile >> tileValue) {
+					tiles[y * width + x] = static_cast<TileType>(tileValue);
+				}
 			}
 		}
 
 		inputFile.close();
 
+		zombieSpawners.clear();
+		doors.clear();
+		weaponSpawners.clear();
+
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				auto &tile = tiles[y * width + x];
+				int index = y * width + x;
+
+				if (tile == TileType::PLAYER_SPAWN) {
+					playerSpawnPos = {.x = static_cast<float>(x * cellSize),
+									  .y = static_cast<float>(y * cellSize)};
+				}
 
 				if (tile == TileType::ZOMBIE_SPAWNER) {
 					zombieSpawners.push_back(y * width + x);
 				}
 
-				if (tile == TileType::DOOR) {
-					doors.push_back(y * width + x);
+				if (IsDoor(tile)) {
+					doors.push_back(Door{.pos = index,
+										 .price = GetDoorPrice(tile),
+										 .open = false});
 				}
 
 				if (tile == TileType::WEAPON_UZI) {
@@ -104,41 +141,17 @@ struct LevelMap {
 	void Render() const {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
-				switch (tiles[y * width + x]) {
-				case TileType::FLOOR:
-					break;
-				case TileType::WALL:
-					DrawRectangle(x * cellSize, y * cellSize, cellSize,
-								  cellSize, YELLOW);
-					break;
-				case TileType::DOOR:
-					DrawRectangle(x * cellSize, y * cellSize, cellSize,
-								  cellSize, ORANGE);
-					break;
-				case TileType::WEAPON_UZI:
-					DrawRectangle(x * cellSize, y * cellSize, cellSize,
-								  cellSize, GREEN);
-					break;
-				case TileType::WEAPON_AK47:
-					DrawRectangle(x * cellSize, y * cellSize, cellSize,
-								  cellSize, GREEN);
-					break;
-				case TileType::WEAPON_SNIPER:
-					DrawRectangle(x * cellSize, y * cellSize, cellSize,
-								  cellSize, GREEN);
-					break;
-				case TileType::WEAPON_SHOTGUN:
-					DrawRectangle(x * cellSize, y * cellSize, cellSize,
-								  cellSize, GREEN);
-					break;
-				}
+				TileType type = tiles[y * width + x];
 
-				int index = y * width + x;
-				int distance = distanceMap[index];
+				if (type != TileType::FLOOR) {
+					DrawRectangle(x * cellSize, y * cellSize, cellSize,
+								  cellSize, GetTileColor(type));
+				}
 			}
 		}
 	}
 
+  private:
 	void UpdateFloodField(Vector2 playerPos) {
 		distanceMap.assign(width * height, INF);
 
@@ -182,5 +195,68 @@ struct LevelMap {
 				}
 			}
 		}
+	}
+
+  private:
+	static int GetDoorPrice(TileType type) {
+		switch (type) {
+		case TileType::DOOR_500:
+			return 500;
+		case TileType::DOOR_750:
+			return 750;
+		case TileType::DOOR_1000:
+			return 1000;
+		case TileType::DOOR_1250:
+			return 1250;
+		case TileType::DOOR_1500:
+			return 1500;
+		case TileType::DOOR_1750:
+			return 1750;
+		case TileType::DOOR_2000:
+			return 2000;
+			break;
+		}
+	}
+
+	static Color GetTileColor(TileType type) {
+		switch (type) {
+		case TileType::FLOOR:
+			return RAYWHITE;
+		case TileType::WALL:
+			return RED;
+		case TileType::ZOMBIE_SPAWNER:
+			return GREEN;
+		case TileType::BLOCKADE:
+			return YELLOW;
+		case TileType::PLAYER_SPAWN:
+			return GRAY;
+		case TileType::DOOR_500:
+			return ORANGE;
+		case TileType::DOOR_750:
+			return GOLD;
+		case TileType::DOOR_1000:
+			return ColorAlpha(ORANGE, 0.5);
+		case TileType::DOOR_1250:
+			return BROWN;
+		case TileType::DOOR_1500:
+			return DARKBROWN;
+		case TileType::DOOR_1750:
+			return BEIGE;
+		case TileType::DOOR_2000:
+			return PURPLE;
+		case TileType::WEAPON_UZI:
+			return MAGENTA;
+		case TileType::WEAPON_AK47:
+			return MAROON;
+		case TileType::WEAPON_SNIPER:
+			return PINK;
+		case TileType::WEAPON_SHOTGUN:
+			return SKYBLUE;
+		case TileType::COUNT:
+			break;
+		default:
+			return BLACK;
+		}
+		return BLACK;
 	}
 };

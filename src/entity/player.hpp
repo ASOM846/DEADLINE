@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../levelMap.hpp"
 #include "../weaponManager.hpp"
 #include "bullet.hpp"
 #include <algorithm>
@@ -13,7 +14,7 @@ struct Player {
 
 	float hp{100};
 
-	int money = 100000;
+	int money = 0;
 
 	Vector2 velocity{0, 0};
 
@@ -22,9 +23,12 @@ struct Player {
 
 	WeaponManager weaponManager;
 
+	Door *currentDoor{nullptr};
+
 	void Init() { weaponManager.Init(); }
 
-	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos) {
+	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
+				LevelMap &map) {
 		velocity = {.x = 0, .y = 0};
 
 		if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
@@ -49,6 +53,22 @@ struct Player {
 					money -= spawnerWeapon->price;
 				}
 			}
+		}
+
+		if (IsKeyPressed(KEY_E) && currentDoor != nullptr &&
+			money >= currentDoor->price) {
+			int doorTileIndex = currentDoor->pos;
+			money -= currentDoor->price;
+
+			map.tiles[doorTileIndex] = TileType::FLOOR;
+
+			map.doors.erase(std::remove_if(map.doors.begin(), map.doors.end(),
+										   [doorTileIndex](const Door &d) {
+											   return d.pos == doorTileIndex;
+										   }),
+							map.doors.end());
+
+			currentDoor = nullptr;
 		}
 
 		if (IsKeyDown(KEY_R)) {

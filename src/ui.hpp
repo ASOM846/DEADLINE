@@ -58,6 +58,6 @@ class UI {
 		int textWidth = MeasureText(text.c_str(), fontSize);
 
 		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
-				 GetScreenHeight() / 2, fontSize, RED);
+				 GetScreenHeight() / 2, fontSize, BLACK);
 	}
 };

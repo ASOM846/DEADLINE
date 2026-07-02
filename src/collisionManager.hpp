@@ -52,7 +52,8 @@ class CollisionManager {
 			for (int x = 0; x < map.width; x++) {
 
 				if (map.tiles[y * map.width + x] == TileType::WALL ||
-					map.tiles[y * map.width + x] == TileType::BLOCKADE) {
+					map.tiles[y * map.width + x] == TileType::BLOCKADE ||
+					map.IsDoor(map.tiles[y * map.width + x])) {
 
 					Rectangle wallRec = {static_cast<float>(x * map.cellSize),
 										 static_cast<float>(y * map.cellSize),
@@ -112,6 +113,28 @@ class CollisionManager {
 				player.currentSpawner = &spawner;
 				player.spawnerWeapon =
 					player.weaponManager.GetWeapon(spawner.type);
+				break;
+			}
+		}
+	}
+
+	void ResolvePlayerDoor(Player &player, LevelMap &map) {
+		player.currentDoor = nullptr;
+
+		int interactionOffset = 10;
+
+		for (auto &door : map.doors) {
+			Rectangle doorRec = {
+				static_cast<float>((door.pos % map.width) * map.cellSize -
+								   interactionOffset),
+				static_cast<float>((door.pos / map.width) * map.cellSize -
+								   interactionOffset),
+				static_cast<float>(map.cellSize + interactionOffset * 2),
+				static_cast<float>(map.cellSize + interactionOffset * 2)};
+
+			if (CheckCollisionCircleRec(player.position, player.radius,
+										doorRec)) {
+				player.currentDoor = &door;
 				break;
 			}
 		}

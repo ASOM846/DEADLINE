@@ -39,4 +39,7 @@ class Game {
 	Camera2D camera;
 
 	bool isPaused{false};
+
+	Vector2 freeCamPos{0, 0};
+	bool isFreeCam{false};
 };
