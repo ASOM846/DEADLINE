@@ -28,6 +28,7 @@ struct Weapon {
 	WeaponType type;
 	int damage{};
 	int bullets{};
+	int maxAmmo{};
 	int ammo{};
 	int maxMagazine{};
 	int currentMagazine{};
@@ -36,6 +37,9 @@ struct Weapon {
 	int pierce{};
 	float fireRate{};
 	bool isAutomatic{};
+
+	int price{};
+	int magazinePrice{};
 };
 
 struct WeaponManager {
@@ -71,6 +75,14 @@ struct WeaponManager {
 				reloadTimer = 0;
 				currentWeaponIndex = i;
 				return;
+			}
+		}
+	}
+
+	Weapon *GetWeapon(WeaponType weaponType) {
+		for (auto &i : inventory) {
+			if (i.type == weaponType) {
+				return &i;
 			}
 		}
 	}
@@ -156,6 +168,7 @@ struct WeaponManager {
 		pistol.type = WeaponType::PISTOL;
 		pistol.damage = 20;
 		pistol.bullets = 1;
+		pistol.maxAmmo = 70;
 		pistol.ammo = 10;
 		pistol.maxMagazine = 7;
 		pistol.currentMagazine = 7;
@@ -164,6 +177,9 @@ struct WeaponManager {
 		pistol.fireRate = 0.5f;
 		pistol.pierce = 0;
 		pistol.isAutomatic = false;
+
+		pistol.price = 0;
+		pistol.magazinePrice = 5;
 		inventory.push_back(pistol);
 
 		Weapon uzi;
@@ -171,6 +187,7 @@ struct WeaponManager {
 		uzi.type = WeaponType::UZI;
 		uzi.damage = 20;
 		uzi.bullets = 1;
+		uzi.maxAmmo = 180;
 		uzi.ammo = 90;
 		uzi.maxMagazine = 30;
 		uzi.currentMagazine = 30;
@@ -179,6 +196,9 @@ struct WeaponManager {
 		uzi.fireRate = 0.1f;
 		uzi.pierce = 0;
 		uzi.isAutomatic = true;
+
+		uzi.price = 400;
+		uzi.magazinePrice = 20;
 		inventory.push_back(uzi);
 
 		Weapon Ak47;
@@ -186,6 +206,7 @@ struct WeaponManager {
 		Ak47.type = WeaponType::AK47;
 		Ak47.damage = 34;
 		Ak47.bullets = 1;
+		Ak47.maxAmmo = 120;
 		Ak47.ammo = 90;
 		Ak47.maxMagazine = 30;
 		Ak47.currentMagazine = 30;
@@ -194,12 +215,16 @@ struct WeaponManager {
 		Ak47.fireRate = 0.15;
 		Ak47.pierce = 1;
 		Ak47.isAutomatic = true;
+
+		Ak47.price = 1000;
+		Ak47.magazinePrice = 40;
 		inventory.push_back(Ak47);
 
 		Weapon sniper;
 		sniper.name = "Sniper";
 		sniper.type = WeaponType::SNIPER;
 		sniper.bullets = 1;
+		sniper.maxAmmo = 20;
 		sniper.ammo = 20;
 		sniper.maxMagazine = 5;
 		sniper.currentMagazine = 5;
@@ -209,12 +234,16 @@ struct WeaponManager {
 		sniper.fireRate = 1.5f;
 		sniper.pierce = 3;
 		sniper.isAutomatic = false;
+
+		sniper.price = 1600;
+		sniper.magazinePrice = 50;
 		inventory.push_back(sniper);
 
 		Weapon shotgun;
 		shotgun.name = "Shotgun";
 		shotgun.type = WeaponType::SHOTGUN;
 		shotgun.bullets = 5;
+		shotgun.maxAmmo = 30;
 		shotgun.ammo = 25;
 		shotgun.maxMagazine = 5;
 		shotgun.currentMagazine = 5;
@@ -224,6 +253,9 @@ struct WeaponManager {
 		shotgun.fireRate = 1.0f;
 		shotgun.pierce = 2;
 		shotgun.isAutomatic = false;
+
+		shotgun.price = 700;
+		shotgun.magazinePrice = 25;
 		inventory.push_back(shotgun);
 	}
 };

@@ -33,6 +33,23 @@ class UI {
 			break;
 		}
 
+		text += "     ";
+
+		std::string text2;
+		Weapon *w = player.weaponManager.GetCurrentWeapon();
+
+		Weapon *temp = player.weaponManager.GetWeapon(ws->type);
+
+		if (w->type == ws->type) {
+			text2 = "MAG PRICE:   " + std::to_string(temp->magazinePrice);
+		}
+
+		if (w->type != ws->type) {
+			text2 = "WEAPON PRICE:   " + std::to_string(temp->price);
+		}
+
+		text += text2;
+
 		int fontSize = 30;
 		int textWidth = MeasureText(text.c_str(), fontSize);
 
