@@ -6,6 +6,23 @@
 
 class UI {
   public:
+	void DrawDoorInfo(Player &player) {
+		if (player.currentDoor == nullptr)
+			return;
+
+		Door *currentDoor = player.currentDoor;
+
+		std::string text;
+
+		text = "OPEN DOOR:  " + std::to_string(currentDoor->price) + "   $";
+
+		int fontSize = 30;
+		int textWidth = MeasureText(text.c_str(), fontSize);
+
+		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
+				 GetScreenHeight() / 2, fontSize, BLACK);
+	}
+
 	void DrawWeaponShopInfo(Player &player) {
 		if (player.currentSpawner == nullptr ||
 			player.spawnerWeapon == nullptr) {

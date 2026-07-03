@@ -60,6 +60,11 @@ void Game::Update() {
 	if (IsKeyDown(KEY_DOWN))
 		freeCamPos.y += 10;
 
+	if (IsWindowResized()) {
+		camera.offset = {static_cast<float>(GetScreenWidth() / 2),
+						 static_cast<float>(GetScreenHeight() / 2)};
+	}
+
 	player.Update(bullets, worldMousePos, levelMap);
 
 	collisionManager.ResolvePlayerZombie(player, zombies);
@@ -76,7 +81,6 @@ void Game::Update() {
 }
 
 void Game::Render() {
-
 	BeginMode2D(camera);
 
 	levelMap.Render();
@@ -112,5 +116,7 @@ void Game::Render() {
 	DrawText(text.c_str(), 100, GetScreenHeight() - 100, 30, BLACK);
 
 	ui.DrawWeaponShopInfo(player);
+	ui.DrawDoorInfo(player);
+
 	DrawFPS(10, 10);
 }
