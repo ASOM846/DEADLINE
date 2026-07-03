@@ -26,8 +26,11 @@ void Game::Reset() {
 
 void Game::Update() {
 	if (IsKeyPressed(KEY_SPACE)) {
-		isPaused = !isPaused;
 		isFreeCam = !isFreeCam;
+	}
+
+	if (IsKeyPressed(KEY_P)) {
+		isPaused = !isPaused;
 	}
 
 	Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
@@ -35,8 +38,7 @@ void Game::Update() {
 	levelMap.Update(player.position);
 	waveManager.Update(zombies, levelMap);
 
-	if (!isPaused)
-		zombieManager.ResolveZombieCollision(zombies);
+	zombieManager.ResolveZombieCollision(zombies);
 
 	if (!isFreeCam) {
 		camera.zoom = 1.5;
@@ -67,7 +69,8 @@ void Game::Update() {
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerDoor(player, levelMap);
 
-	zombieManager.UpdateAll(zombies, levelMap);
+	if (!isPaused)
+		zombieManager.UpdateAll(zombies, levelMap);
 
 	bulletManager.UpdateAll(bullets);
 }
