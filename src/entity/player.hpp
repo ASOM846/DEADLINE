@@ -60,39 +60,30 @@ struct Player {
 			int doorTileIndex = currentDoor->pos;
 			money -= currentDoor->price;
 
-			bool isUper{false};
-			bool isLower{false};
-			bool isLeft{false};
-			bool isRight{false};
-
-			int upperIdx = doorTileIndex - map.width;
-			int lowerIdx = doorTileIndex + map.width;
-			int leftIdx = doorTileIndex - 1;
-			int rightIdx = doorTileIndex + 1;
+			int upperIdx{doorTileIndex - map.width};
+			int lowerIdx{doorTileIndex + map.width};
+			int leftIdx{doorTileIndex - 1};
+			int rightIdx{doorTileIndex + 1};
 
 			int lastNeighbour{};
 
 			for (auto &d : map.doors) {
 				if (d.pos == upperIdx) {
-					isUper = true;
 					lastNeighbour = upperIdx;
 					break;
 				}
 
 				if (d.pos == lowerIdx) {
-					isLower = true;
 					lastNeighbour = lowerIdx;
 					break;
 				}
 
 				if (d.pos == leftIdx) {
-					isLeft = true;
 					lastNeighbour = leftIdx;
 					break;
 				}
 
 				if (d.pos == rightIdx) {
-					isRight = true;
 					lastNeighbour = rightIdx;
 					break;
 				}
