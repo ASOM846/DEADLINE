@@ -4,17 +4,13 @@
 
 void Game::Init() {
 	Reset();
+
 	levelMap.Init();
 	player.Init();
 
+	cameraManager.Init();
+
 	player.position = levelMap.playerSpawnPos;
-
-	camera.target = player.position;
-	camera.offset = {static_cast<float>(GetScreenWidth() / 2),
-					 static_cast<float>(GetScreenHeight() / 2)};
-
-	camera.rotation = 0.0f;
-	camera.zoom = 1.5f;
 
 	waveManager.StartNextWave();
 }
@@ -25,45 +21,14 @@ void Game::Reset() {
 }
 
 void Game::Update() {
-	if (IsKeyPressed(KEY_SPACE)) {
-		isFreeCam = !isFreeCam;
-	}
 
-	if (IsKeyPressed(KEY_P)) {
-		isPaused = !isPaused;
-	}
-
-	Vector2 worldMousePos = GetScreenToWorld2D(GetMousePosition(), camera);
+	Vector2 worldMousePos =
+		GetScreenToWorld2D(GetMousePosition(), cameraManager.GetCamera());
 
 	levelMap.Update(player.position);
 	waveManager.Update(zombies, levelMap);
 
 	zombieManager.ResolveZombieCollision(zombies);
-
-	if (!isFreeCam) {
-		camera.zoom = 1.5;
-		camera.target = player.position;
-	} else {
-		camera.zoom = 0.5;
-		camera.target = freeCamPos;
-	}
-
-	if (IsKeyDown(KEY_RIGHT))
-		freeCamPos.x += 10;
-
-	if (IsKeyDown(KEY_LEFT))
-		freeCamPos.x -= 10;
-
-	if (IsKeyDown(KEY_UP))
-		freeCamPos.y -= 10;
-
-	if (IsKeyDown(KEY_DOWN))
-		freeCamPos.y += 10;
-
-	if (IsWindowResized()) {
-		camera.offset = {static_cast<float>(GetScreenWidth() / 2),
-						 static_cast<float>(GetScreenHeight() / 2)};
-	}
 
 	player.Update(bullets, worldMousePos, levelMap);
 
@@ -74,14 +39,15 @@ void Game::Update() {
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerDoor(player, levelMap);
 
-	if (!isPaused)
-		zombieManager.UpdateAll(zombies, levelMap);
+	zombieManager.UpdateAll(zombies, levelMap);
 
 	bulletManager.UpdateAll(bullets);
+
+	cameraManager.Update(player.position);
 }
 
 void Game::Render() {
-	BeginMode2D(camera);
+	BeginMode2D(cameraManager.GetCamera());
 
 	levelMap.Render();
 

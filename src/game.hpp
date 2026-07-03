@@ -1,5 +1,6 @@
 #pragma once
 
+#include "cameraManager.hpp"
 #include "collisionManager.hpp"
 #include "entity/bullet.hpp"
 #include "entity/player.hpp"
@@ -26,6 +27,8 @@ class Game {
 
 	WaveManager waveManager;
 
+	CameraManager cameraManager;
+
 	UI ui;
 	BulletManager bulletManager;
 	ZombieManager zombieManager;
@@ -35,11 +38,4 @@ class Game {
 
 	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
-
-	Camera2D camera;
-
-	bool isPaused{false};
-
-	Vector2 freeCamPos{0, 0};
-	bool isFreeCam{false};
 };
