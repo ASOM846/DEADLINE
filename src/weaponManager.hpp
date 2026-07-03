@@ -66,6 +66,9 @@ struct WeaponManager {
 		int temp = secondatyWeaponIndex;
 		secondatyWeaponIndex = currentWeaponIndex;
 		currentWeaponIndex = temp;
+
+		isReloading = false;
+		reloadTimer = 0;
 	}
 
 	void SwitchWeaponTo(WeaponType newWeapon) {
