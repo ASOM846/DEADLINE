@@ -6,7 +6,9 @@
 #include "levelMap.hpp"
 #include "raylib.h"
 #include <algorithm>
+#include <filesystem>
 #include <numbers>
+#include <stdexcept>
 #include <vector>
 
 class CollisionManager {
@@ -209,6 +211,50 @@ class CollisionManager {
 			if (CheckCollisionCircles(player.position, player.radius,
 									  z.position, z.radius)) {
 				player.hp -= z.damage * GetFrameTime();
+			}
+		}
+	}
+
+	void ResolveZombieBlockade(std::vector<Zombie> &zombies, LevelMap &map) {
+		for (auto &blockade : map.blockades) {
+			if (blockade.hp <= 0.0F) {
+				continue;
+			}
+
+			int gridX = (blockade.pos % map.width) * map.cellSize;
+			int gridY = (blockade.pos / map.width) * map.cellSize;
+
+			Rectangle blockRec = {static_cast<float>(gridX),
+								  static_cast<float>(gridY),
+								  static_cast<float>(map.cellSize),
+								  static_cast<float>(map.cellSize)};
+
+			for (auto &z : zombies) {
+				if (!z.alive)
+					continue;
+
+				if (CheckCollisionCircleRec(z.position, z.radius, blockRec)) {
+					blockade.hp -= z.damage * GetFrameTime();
+
+					float cloasestX = std::clamp(z.position.x, blockRec.x,
+												 blockRec.x + blockRec.width);
+					float cloasestY = std::clamp(z.position.y, blockRec.y,
+												 blockRec.y + blockRec.height);
+
+					float distX = z.position.x - cloasestX;
+					float distY = z.position.y - cloasestY;
+					float distance = std::sqrt(distX * distX + distY * distY);
+
+					if (distance < z.radius) {
+						if (distance == 0.0f) {
+							z.position.y -= z.radius;
+						} else {
+							float overlap = z.radius - distance;
+							z.position.x += (distX / distance) * overlap;
+							z.position.y += (distY / distance) * overlap;
+						}
+					}
+				}
 			}
 		}
 	}

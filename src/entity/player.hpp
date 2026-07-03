@@ -117,6 +117,7 @@ struct Player {
 			switch (currentPickable->type) {
 			case PickableType::HP:
 				hp = 100;
+				break;
 			case PickableType::AMMO:
 				Weapon *w = weaponManager.GetCurrentWeapon();
 				w->ammo = w->maxAmmo;

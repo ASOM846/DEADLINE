@@ -21,6 +21,7 @@ struct Zombie {
 			alive = false;
 			return;
 		}
+
 		int zX = static_cast<int>(position.x) / map.cellSize;
 		int zY = static_cast<int>(position.y) / map.cellSize;
 

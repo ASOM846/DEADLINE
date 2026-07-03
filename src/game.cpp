@@ -34,6 +34,10 @@ void Game::Update() {
 
 	player.Update(bullets, worldMousePos, levelMap);
 
+	bulletManager.UpdateAll(bullets);
+
+	zombieManager.UpdateAll(zombies, levelMap);
+
 	collisionManager.ResolvePlayerZombie(player, zombies);
 	collisionManager.ResolvePlayerWall(player, levelMap);
 	collisionManager.ResolveBulletZombie(bullets, zombies, player);
@@ -43,9 +47,7 @@ void Game::Update() {
 	collisionManager.ResolvePlayerPickable(player, pickables);
 	collisionManager.ResolvePlayerBlockade(player, levelMap);
 
-	zombieManager.UpdateAll(zombies, levelMap);
-
-	bulletManager.UpdateAll(bullets);
+	collisionManager.ResolveZombieBlockade(zombies, levelMap);
 
 	cameraManager.Update(player.position);
 
