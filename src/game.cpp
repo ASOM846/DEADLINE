@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "entity/pickable.hpp"
 #include <raylib.h>
 #include <string>
 
@@ -18,10 +19,10 @@ void Game::Init() {
 void Game::Reset() {
 	zombies.clear();
 	bullets.clear();
+	pickables.clear();
 }
 
 void Game::Update() {
-
 	Vector2 worldMousePos =
 		GetScreenToWorld2D(GetMousePosition(), cameraManager.GetCamera());
 
@@ -29,6 +30,7 @@ void Game::Update() {
 	waveManager.Update(zombies, levelMap);
 
 	zombieManager.ResolveZombieCollision(zombies);
+	pickableManager.UpdateAll(pickables);
 
 	player.Update(bullets, worldMousePos, levelMap);
 
@@ -44,6 +46,11 @@ void Game::Update() {
 	bulletManager.UpdateAll(bullets);
 
 	cameraManager.Update(player.position);
+
+	if (IsKeyPressed(KEY_P)) {
+		pickables.emplace_back(
+			Pickable{.position = worldMousePos, .type = PickableType::HP});
+	}
 }
 
 void Game::Render() {
@@ -60,6 +67,8 @@ void Game::Render() {
 	for (auto &b : bullets) {
 		b.Render();
 	}
+
+	pickableManager.Render(pickables);
 
 	EndMode2D();
 

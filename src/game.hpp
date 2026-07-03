@@ -3,6 +3,7 @@
 #include "cameraManager.hpp"
 #include "collisionManager.hpp"
 #include "entity/bullet.hpp"
+#include "entity/pickable.hpp"
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
@@ -32,10 +33,12 @@ class Game {
 	UI ui;
 	BulletManager bulletManager;
 	ZombieManager zombieManager;
+	PickableManager pickableManager;
 	CollisionManager collisionManager;
 
 	LevelMap levelMap;
 
 	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
+	std::vector<Pickable> pickables;
 };
