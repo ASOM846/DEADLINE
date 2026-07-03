@@ -41,6 +41,7 @@ void Game::Update() {
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerDoor(player, levelMap);
 	collisionManager.ResolvePlayerPickable(player, pickables);
+	collisionManager.ResolvePlayerBlockade(player, levelMap);
 
 	zombieManager.UpdateAll(zombies, levelMap);
 
@@ -69,7 +70,7 @@ void Game::Render() {
 		b.Render();
 	}
 
-	pickableManager.Render(pickables);
+	PickableManager::Render(pickables);
 
 	EndMode2D();
 
@@ -93,6 +94,7 @@ void Game::Render() {
 
 	ui.DrawWeaponShopInfo(player);
 	ui.DrawDoorInfo(player);
+	ui.DrawBlockadeInfo(player);
 
 	DrawFPS(10, 10);
 }

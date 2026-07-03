@@ -1,5 +1,6 @@
 #pragma once
 
+#include "baricade.hpp"
 #include "weaponManager.hpp"
 #include <fstream>
 #include <queue>
@@ -57,6 +58,7 @@ struct LevelMap {
 	std::vector<int> zombieSpawners;
 	std::vector<WeaponSpawner> weaponSpawners;
 	std::vector<Door> doors;
+	std::vector<Blockade> blockades;
 
   public:
 	static bool IsDoor(TileType type) {
@@ -111,6 +113,10 @@ struct LevelMap {
 					doors.push_back(Door{.pos = index,
 										 .price = GetDoorPrice(tile),
 										 .open = false});
+				}
+
+				if (tile == TileType::BLOCKADE) {
+					blockades.push_back({.pos = y * width + x, .hp = 100});
 				}
 
 				if (tile == TileType::WEAPON_UZI) {

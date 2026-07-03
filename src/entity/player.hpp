@@ -28,6 +28,8 @@ struct Player {
 
 	Pickable *currentPickable{nullptr};
 
+	Blockade *currentBlockade{nullptr};
+
 	void Init() { weaponManager.Init(); }
 
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
@@ -120,6 +122,10 @@ struct Player {
 				w->ammo = w->maxAmmo;
 				break;
 			}
+		}
+
+		if (currentBlockade != nullptr && IsKeyDown(KEY_E)) {
+			currentBlockade->hp += 10 * GetFrameTime();
 		}
 
 		if (IsKeyDown(KEY_R)) {

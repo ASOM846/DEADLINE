@@ -1,8 +1,10 @@
 #pragma once
 
+#include "baricade.hpp"
 #include "entity/player.hpp"
 #include "weaponManager.hpp"
 #include <raylib.h>
+#include <string>
 
 class UI {
   public:
@@ -15,6 +17,25 @@ class UI {
 		std::string text;
 
 		text = "OPEN DOOR:  " + std::to_string(currentDoor->price) + "   $";
+
+		int fontSize = 30;
+		int textWidth = MeasureText(text.c_str(), fontSize);
+
+		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
+				 GetScreenHeight() / 2, fontSize, BLACK);
+	}
+
+	void DrawBlockadeInfo(Player &player) {
+		if (player.currentBlockade == nullptr)
+			return;
+
+		Blockade *current = player.currentBlockade;
+
+		std::string text;
+
+		int hp = static_cast<int>(current->hp);
+
+		text = "BLOCKADE HP:  " + std::to_string(hp);
 
 		int fontSize = 30;
 		int textWidth = MeasureText(text.c_str(), fontSize);

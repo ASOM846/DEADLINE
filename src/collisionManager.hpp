@@ -98,6 +98,27 @@ class CollisionManager {
 		}
 	}
 
+	void ResolvePlayerBlockade(Player &player, LevelMap &map) {
+		int interactionOffset = 10;
+
+		player.currentBlockade = nullptr;
+
+		for (auto &b : map.blockades) {
+			Rectangle rec = {
+				static_cast<float>((b.pos % map.width) * map.cellSize -
+								   interactionOffset),
+				static_cast<float>((b.pos / map.width) * map.cellSize -
+								   interactionOffset),
+				static_cast<float>(map.cellSize + interactionOffset * 2),
+				static_cast<float>(map.cellSize + interactionOffset * 2)};
+
+			if (CheckCollisionCircleRec(player.position, player.radius, rec)) {
+				player.currentBlockade = &b;
+				return;
+			}
+		}
+	}
+
 	void ResolvePlayerWeaponSpawner(Player &player, LevelMap &map) {
 		player.currentSpawner = nullptr;
 		player.spawnerWeapon = nullptr;
