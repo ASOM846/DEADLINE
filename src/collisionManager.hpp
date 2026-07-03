@@ -173,8 +173,6 @@ class CollisionManager {
 			if (CheckCollisionCircles(player.position, player.radius,
 									  z.position, z.radius)) {
 				player.hp -= z.damage * GetFrameTime();
-				TraceLog(LOG_INFO,
-						 TextFormat("COLLISION DETECTED    %f", player.hp));
 			}
 		}
 	}

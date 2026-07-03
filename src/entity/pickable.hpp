@@ -11,16 +11,21 @@ enum class PickableType {
 
 struct Pickable {
 	Vector2 position{};
-	int radius{20};
+	int startRadius{20};
+	int currentRadius{};
 	PickableType type{};
 
-	float aliveTime{0.0f};
-	float maxAliveTime{0.0f};
+	float aliveTime{0.0F};
+	float maxAliveTime{5.0F};
 
 	bool alive{true};
 
 	void Update() {
 		aliveTime += GetFrameTime();
+
+		float lifeRemaining = maxAliveTime - aliveTime;
+
+		currentRadius = startRadius * lifeRemaining / maxAliveTime;
 
 		if (aliveTime >= maxAliveTime) {
 			alive = false;
@@ -34,8 +39,9 @@ class PickableManager {
 		for (auto &p : pickables) {
 			if (!p.alive) {
 				continue;
-				p.Update();
 			}
+
+			p.Update();
 		}
 
 		pickables.erase(
@@ -44,9 +50,9 @@ class PickableManager {
 			pickables.end());
 	}
 
-	void Render(std::vector<Pickable> &pickables) {
+	static void Render(std::vector<Pickable> &pickables) {
 		for (auto &p : pickables) {
-			DrawCircleV(p.position, p.radius, GOLD);
+			DrawCircleV(p.position, p.currentRadius, GOLD);
 		}
 	}
 };
