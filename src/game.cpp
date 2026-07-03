@@ -40,6 +40,7 @@ void Game::Update() {
 	collisionManager.ResolveBulletWall(bullets, levelMap);
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerDoor(player, levelMap);
+	collisionManager.ResolvePlayerPickable(player, pickables);
 
 	zombieManager.UpdateAll(zombies, levelMap);
 
@@ -49,7 +50,7 @@ void Game::Update() {
 
 	if (IsKeyPressed(KEY_P)) {
 		pickables.emplace_back(
-			Pickable{.position = worldMousePos, .type = PickableType::HP});
+			Pickable{.position = worldMousePos, .type = PickableType::AMMO});
 	}
 }
 

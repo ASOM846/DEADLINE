@@ -3,6 +3,7 @@
 #include "../levelMap.hpp"
 #include "../weaponManager.hpp"
 #include "bullet.hpp"
+#include "pickable.hpp"
 #include <algorithm>
 #include <raylib.h>
 #include <vector>
@@ -24,6 +25,8 @@ struct Player {
 	WeaponManager weaponManager;
 
 	Door *currentDoor{nullptr};
+
+	Pickable *currentPickable{nullptr};
 
 	void Init() { weaponManager.Init(); }
 
@@ -106,6 +109,17 @@ struct Player {
 							map.doors.end());
 
 			currentDoor = nullptr;
+		}
+
+		if (currentPickable != nullptr) {
+			switch (currentPickable->type) {
+			case PickableType::HP:
+				hp = 100;
+			case PickableType::AMMO:
+				Weapon *w = weaponManager.GetCurrentWeapon();
+				w->ammo = w->maxAmmo;
+				break;
+			}
 		}
 
 		if (IsKeyDown(KEY_R)) {

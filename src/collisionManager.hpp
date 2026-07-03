@@ -6,6 +6,7 @@
 #include "levelMap.hpp"
 #include "raylib.h"
 #include <algorithm>
+#include <numbers>
 #include <vector>
 
 class CollisionManager {
@@ -135,6 +136,20 @@ class CollisionManager {
 			if (CheckCollisionCircleRec(player.position, player.radius,
 										doorRec)) {
 				player.currentDoor = &door;
+				break;
+			}
+		}
+	}
+
+	void ResolvePlayerPickable(Player &player,
+							   std::vector<Pickable> &pickables) {
+		player.currentPickable = nullptr;
+
+		for (auto &pickable : pickables) {
+			if (CheckCollisionCircles(player.position, player.radius,
+									  pickable.position,
+									  pickable.currentRadius)) {
+				player.currentPickable = &pickable;
 				break;
 			}
 		}
