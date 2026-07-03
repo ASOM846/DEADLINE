@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include <raylib.h>
 
 void Player::Init() {
 	weaponManager.Init();
@@ -146,6 +147,6 @@ void Player::HandlePickableActions() {
 
 void Player::HandleBlockadeActions() {
 	if (currentBlockade != nullptr && IsKeyDown(KEY_E)) {
-		currentBlockade->hp += 10 * GetFrameTime();
+		currentBlockade->Heal(10 * GetFrameTime());
 	}
 }

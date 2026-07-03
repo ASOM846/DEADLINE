@@ -1,14 +1,12 @@
 #pragma once
 
 #include "entity/bullet.hpp"
+#include "entity/pickable.hpp"
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
 #include "raylib.h"
 #include <algorithm>
-#include <filesystem>
-#include <numbers>
-#include <stdexcept>
 #include <vector>
 
 class CollisionManager {
@@ -17,7 +15,9 @@ class CollisionManager {
 	~CollisionManager() = default;
 
 	void ResolveBulletZombie(std::vector<Bullet> &bullets,
-							 std::vector<Zombie> &zombies, Player &player) {
+							 std::vector<Zombie> &zombies, Player &player,
+							 std::vector<Pickable> &pickables,
+							 PickableManager &pickableManager) {
 		for (auto &z : zombies) {
 			for (auto &b : bullets) {
 				if (!b.alive)
@@ -37,6 +37,8 @@ class CollisionManager {
 
 					if (z.hp <= 0) {
 						player.money += z.value;
+						pickableManager.TrySpawnDrop(pickables, z.position,
+													 z.dropChance);
 					}
 
 					if (b.pierce < 0) {
@@ -173,6 +175,7 @@ class CollisionManager {
 									  pickable.position,
 									  pickable.currentRadius)) {
 				player.currentPickable = &pickable;
+				pickable.alive = false;
 				break;
 			}
 		}

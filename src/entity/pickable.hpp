@@ -1,12 +1,14 @@
 #pragma once
 
 #include <algorithm>
+#include <ranges>
 #include <raylib.h>
 #include <vector>
 
 enum class PickableType {
 	HP,
-	AMMO
+	AMMO,
+	COUNT
 };
 
 struct Pickable {
@@ -35,6 +37,22 @@ struct Pickable {
 
 class PickableManager {
   public:
+	void TrySpawnDrop(std::vector<Pickable> &pickables, Vector2 position,
+					  int dropChance) {
+		if (GetRandomValue(0, 100) > dropChance)
+			return;
+
+		int type = GetRandomValue(0, static_cast<int>(PickableType::COUNT) - 1);
+		auto pType = static_cast<PickableType>(type);
+
+		pickables.push_back({
+			.position = position,
+			.type = pType,
+		});
+
+		TraceLog(LOG_INFO, "GENERATED");
+	}
+
 	void UpdateAll(std::vector<Pickable> &pickables) {
 		for (auto &p : pickables) {
 			if (!p.alive) {

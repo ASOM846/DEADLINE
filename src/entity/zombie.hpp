@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../levelMap.hpp"
+#include "pickable.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <cmath>
@@ -15,6 +16,8 @@ struct Zombie {
 	int damage{10};
 	int value{20};
 	bool alive{true};
+
+	int dropChance{50}; // from 0% to 100%
 
 	void Update(const LevelMap &map) {
 		if (hp <= 0) {
@@ -67,15 +70,13 @@ struct Zombie {
 class ZombieManager {
   public:
 	void UpdateAll(std::vector<Zombie> &zombies, const LevelMap &map) {
-		for (auto &z : zombies) {
-			if (!z.alive)
-				continue;
-			z.Update(map);
-		}
-
 		zombies.erase(std::remove_if(zombies.begin(), zombies.end(),
 									 [](const Zombie &z) { return !z.alive; }),
 					  zombies.end());
+
+		for (auto &z : zombies) {
+			z.Update(map);
+		}
 	}
 
 	void ResolveZombieCollision(std::vector<Zombie> &zombies) {
