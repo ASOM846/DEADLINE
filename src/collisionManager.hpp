@@ -184,7 +184,7 @@ class CollisionManager {
 	void ResolveBulletWall(std::vector<Bullet> &bullets, LevelMap &map) {
 		int index = 0;
 		for (auto &w : map.tiles) {
-			if (w != TileType::WALL) {
+			if (w != TileType::WALL && !LevelMap::IsDoor(w)) {
 				index++;
 				continue;
 			}
