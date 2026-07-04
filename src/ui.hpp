@@ -40,6 +40,16 @@ class UI {
 
 			DrawText(message.c_str(), 100, 10, 30, BLACK);
 		}
+
+		float hp = player.hp;
+		float maxHp = player.maxHp;
+
+		int barWidth = 200;
+
+		float percnt = hp / maxHp * barWidth;
+
+		DrawRectangleLines(50, GetScreenHeight() - 50, barWidth, 40, LIGHTGRAY);
+		DrawRectangle(50, GetScreenHeight() - 50, percnt, 40, GREEN);
 	}
 
 	void DrawDoorInfo(Door *currentDoor) {

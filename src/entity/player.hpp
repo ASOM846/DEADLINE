@@ -12,11 +12,21 @@ struct Player {
 	const int radius{25};
 	const float speed{5.0F};
 
+	float maxHp{100};
 	float hp{100};
 
 	int money = 100000;
 
 	Vector2 velocity{0, 0};
+
+	float knifeCooldownTimer{0.0f};
+	const float knifeCooldownDuration{0.5f};
+	float knifeVisualTimer{0.0f};
+	Vector2 knifeDir{0, 0};
+	bool knifeTriggered{false};
+
+	const float knifeRange{75.0f};
+	const int knifeDamage{150};
 
 	WeaponManager weaponManager;
 
@@ -35,7 +45,8 @@ struct Player {
 
   private:
 	void HandleMovement();
-	void HandleWeaponActions();
+	void HandleKnifeActions(Vector2 worldMousePos);
+	void HandleWeaponActions(std::vector<Bullet> &bullets);
 	void HandleDoorActions(LevelMap &map);
 	void HandlePickableActions();
 	void HandleBlockadeActions();

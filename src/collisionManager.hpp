@@ -181,6 +181,48 @@ class CollisionManager {
 		}
 	}
 
+	void ResolvePlayerKnife(Player &player, std::vector<Zombie> &zombies,
+							PickableManager &pickableManager,
+							std::vector<Pickable> &pickables) {
+		if (!player.knifeTriggered)
+			return;
+
+		player.knifeTriggered = false;
+
+		for (auto &z : zombies) {
+			if (!z.alive)
+				continue;
+
+			float dx = z.position.x - player.position.x;
+			float dy = z.position.y - player.position.y;
+			float dist = std::sqrt(dx * dx + dy * dy);
+
+			if (dist <= player.knifeRange + z.radius) {
+				if (dist > 0.0f) {
+					float nx = dx / dist;
+					float ny = dy / dist;
+
+					float dotProduct =
+						nx * player.knifeDir.x + ny * player.knifeDir.y;
+
+					if (dotProduct > 0.5f) {
+						z.hp -= player.knifeDamage;
+
+						z.position.x += player.knifeDir.x * 50.0f;
+						z.position.y += player.knifeDir.y * 50.0f;
+
+						if (z.hp <= 0) {
+							z.alive = false;
+							player.money += 130;
+							pickableManager.TrySpawnDrop(pickables, z.position,
+														 z.dropChance);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	void ResolveBulletWall(std::vector<Bullet> &bullets, LevelMap &map) {
 		int index = 0;
 		for (auto &w : map.tiles) {

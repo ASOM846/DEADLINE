@@ -42,6 +42,8 @@ void Game::Update() {
 	collisionManager.ResolvePlayerWall(player, levelMap);
 	collisionManager.ResolveBulletZombie(bullets, zombies, player, pickables,
 										 pickableManager);
+	collisionManager.ResolvePlayerKnife(player, zombies, pickableManager,
+										pickables);
 	collisionManager.ResolveBulletWall(bullets, levelMap);
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerDoor(player, levelMap);

@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <random>
 #include <raylib.h>
 #include <vector>
 
@@ -16,6 +17,9 @@ struct Bullet {
 	int damage{};
 	int pierce;
 	bool alive{true};
+
+	float maxDistance{1000};
+	float distanceTraveled;
 
 	Bullet(Vector2 startPos, Vector2 targetPos, int damage = 20)
 		: damage(damage) {
@@ -39,6 +43,12 @@ struct Bullet {
 	void Update() {
 		position.x += dirX * speed;
 		position.y += dirY * speed;
+
+		distanceTraveled += speed;
+
+		if (distanceTraveled >= maxDistance) {
+			alive = false;
+		}
 	}
 	void Render() const { DrawCircleV(position, radius, RED); }
 };
@@ -46,14 +56,12 @@ struct Bullet {
 class BulletManager {
   public:
 	void UpdateAll(std::vector<Bullet> &bullets) {
-		for (auto &b : bullets) {
-			if (!b.alive)
-				continue;
-			b.Update();
-		}
-
 		bullets.erase(std::remove_if(bullets.begin(), bullets.end(),
 									 [](const Bullet &b) { return !b.alive; }),
 					  bullets.end());
+
+		for (auto &b : bullets) {
+			b.Update();
+		}
 	}
 };

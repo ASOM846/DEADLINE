@@ -17,7 +17,7 @@ struct Zombie {
 	int value{20};
 	bool alive{true};
 
-	int dropChance{50}; // from 0% to 100%
+	int dropChance{10}; // from 0% to 100%
 
 	void Update(const LevelMap &map) {
 		if (hp <= 0) {

@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include "bullet.hpp"
 #include <raylib.h>
 
 void Player::Init() {
@@ -9,7 +10,8 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 					LevelMap &map) {
 	HandleMovement();
 
-	HandleWeaponActions();
+	HandleKnifeActions(worldMousePos);
+	HandleWeaponActions(bullets);
 	HandleDoorActions(map);
 	HandlePickableActions();
 	HandleBlockadeActions();
@@ -19,6 +21,13 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 
 void Player::Render() const {
 	DrawCircleV(position, radius, BLUE);
+
+	if (knifeVisualTimer > 0.0f) {
+		float angle = std::atan2(knifeDir.y, knifeDir.x) * 57.29578f;
+
+		DrawCircleSector(position, knifeRange, angle - 60.0f, angle + 60.0f, 16,
+						 Fade(LIGHTGRAY, 0.6f));
+	}
 }
 
 void Player::HandleMovement() {
@@ -41,7 +50,33 @@ void Player::HandleMovement() {
 	}
 }
 
-void Player::HandleWeaponActions() {
+void Player::HandleKnifeActions(Vector2 worldMousePos) {
+	if (knifeCooldownTimer > 0.0f)
+		knifeCooldownTimer -= GetFrameTime();
+	if (knifeVisualTimer > 0.0f)
+		knifeVisualTimer -= GetFrameTime();
+
+	if (IsKeyPressed(KEY_V) && knifeCooldownTimer <= 0.0f) {
+		knifeTriggered = true;
+		knifeCooldownTimer = knifeCooldownDuration;
+		knifeVisualTimer = 0.1;
+
+		knifeDir.x = worldMousePos.x - position.x;
+		knifeDir.y = worldMousePos.y - position.y;
+
+		float dist =
+			std::sqrt(knifeDir.x * knifeDir.x + knifeDir.y * knifeDir.y);
+
+		if (dist > 0.0f) {
+			knifeDir.x /= dist;
+			knifeDir.y /= dist;
+		} else {
+			knifeDir = {1.0, 0.0f};
+		}
+	}
+}
+
+void Player::HandleWeaponActions(std::vector<Bullet> &bullets) {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
 		weaponManager.SwitchWeaponNext();
 	}
