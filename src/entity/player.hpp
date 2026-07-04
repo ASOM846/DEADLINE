@@ -31,6 +31,7 @@ struct Player {
 	WeaponManager weaponManager;
 
 	WeaponSpawner *currentSpawner{nullptr};
+	RandomWeaponSpawner *currentRandomSpawner{nullptr};
 	Weapon *spawnerWeapon{nullptr};
 	Door *currentDoor{nullptr};
 	Pickable *currentPickable{nullptr};
@@ -47,6 +48,7 @@ struct Player {
 	void HandleMovement();
 	void HandleKnifeActions(Vector2 worldMousePos);
 	void HandleWeaponActions(std::vector<Bullet> &bullets);
+	void HandleRandomSpawnerActions();
 	void HandleDoorActions(LevelMap &map);
 	void HandlePickableActions();
 	void HandleBlockadeActions();

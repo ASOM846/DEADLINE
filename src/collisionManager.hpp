@@ -144,6 +144,23 @@ class CollisionManager {
 		}
 	}
 
+	void ResolvePlayerRandomWeaponSpawner(Player &player, LevelMap &map) {
+		player.currentRandomSpawner = nullptr;
+
+		for (auto &spawner : map.randomWeaponSpawners) {
+			Rectangle spawnerRec = {
+				static_cast<float>(spawner.pos % map.width * map.cellSize),
+				static_cast<float>(spawner.pos / map.width * map.cellSize),
+				static_cast<float>(map.cellSize),
+				static_cast<float>(map.cellSize)};
+
+			if (CheckCollisionCircleRec(player.position, player.radius,
+										spawnerRec)) {
+				player.currentRandomSpawner = &spawner;
+			}
+		}
+	}
+
 	void ResolvePlayerDoor(Player &player, LevelMap &map) {
 		player.currentDoor = nullptr;
 

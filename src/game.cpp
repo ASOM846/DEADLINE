@@ -1,7 +1,6 @@
 #include "game.hpp"
 #include "entity/pickable.hpp"
 #include <raylib.h>
-#include <string>
 
 void Game::Init() {
 	Reset();
@@ -46,6 +45,7 @@ void Game::Update() {
 										pickables);
 	collisionManager.ResolveBulletWall(bullets, levelMap);
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
+	collisionManager.ResolvePlayerRandomWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerDoor(player, levelMap);
 	collisionManager.ResolvePlayerPickable(player, pickables);
 	collisionManager.ResolvePlayerBlockade(player, levelMap);

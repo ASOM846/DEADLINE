@@ -1,6 +1,7 @@
 #pragma once
 
 #include "baricade.hpp"
+#include "randomWeapon.hpp"
 #include "weaponManager.hpp"
 #include <fstream>
 #include <queue>
@@ -40,6 +41,8 @@ enum class TileType {
 	WEAPON_SNIPER,
 	WEAPON_SHOTGUN,
 
+	WEAPON_RANDOM,
+
 	COUNT
 };
 
@@ -57,6 +60,7 @@ struct LevelMap {
 
 	std::vector<int> zombieSpawners;
 	std::vector<WeaponSpawner> weaponSpawners;
+	std::vector<RandomWeaponSpawner> randomWeaponSpawners;
 	std::vector<Door> doors;
 	std::vector<Blockade> blockades;
 
@@ -137,6 +141,11 @@ struct LevelMap {
 				if (tile == TileType::WEAPON_SHOTGUN) {
 					weaponSpawners.push_back(
 						{.pos = (y * width) + x, .type = WeaponType::SHOTGUN});
+				}
+
+				if (tile == TileType::WEAPON_RANDOM) {
+					randomWeaponSpawners.push_back(
+						RandomWeaponSpawner{.pos = (y * width) + x});
 				}
 			}
 		}
@@ -258,6 +267,8 @@ struct LevelMap {
 			return PINK;
 		case TileType::WEAPON_SHOTGUN:
 			return SKYBLUE;
+		case TileType::WEAPON_RANDOM:
+			return BLACK;
 		case TileType::COUNT:
 			break;
 		default:

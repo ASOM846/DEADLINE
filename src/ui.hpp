@@ -2,6 +2,7 @@
 
 #include "baricade.hpp"
 #include "entity/player.hpp"
+#include "randomWeapon.hpp"
 #include "waveManager.hpp"
 #include "weaponManager.hpp"
 #include <raylib.h>
@@ -25,6 +26,10 @@ class UI {
 		if (player.currentSpawner != nullptr &&
 			player.spawnerWeapon != nullptr) {
 			DrawWeaponShopInfo(player);
+		}
+
+		if (player.currentRandomSpawner != nullptr) {
+			DrawRandomWeaponInfo(player.currentRandomSpawner);
 		}
 	}
 
@@ -137,6 +142,45 @@ class UI {
 		}
 
 		text += text2;
+
+		int fontSize = 30;
+		int textWidth = MeasureText(text.c_str(), fontSize);
+
+		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
+				 GetScreenHeight() / 2, fontSize, BLACK);
+	}
+
+	void DrawRandomWeaponInfo(RandomWeaponSpawner *spawner) {
+		if (spawner == nullptr)
+			return;
+
+		std::string text;
+
+		if (spawner->isDrawn) {
+			WeaponType randomType = spawner->drawnType;
+
+			switch (randomType) {
+			case WeaponType::PISTOL:
+				text = "PISTOL";
+				break;
+			case WeaponType::UZI:
+				text = "UZI";
+				break;
+			case WeaponType::AK47:
+				text = "AK47";
+				break;
+			case WeaponType::SNIPER:
+				text = "SNIPER";
+				break;
+			case WeaponType::SHOTGUN:
+				text = "SHOTGUN";
+				break;
+			case WeaponType::COUNT:
+				break;
+			}
+		} else {
+			text = "PRESS E TO DRAW";
+		}
 
 		int fontSize = 30;
 		int textWidth = MeasureText(text.c_str(), fontSize);
