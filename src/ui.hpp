@@ -9,6 +9,8 @@
 class UI {
   public:
 	void Render(Player &player) {
+		DrawPlayerStats(player);
+
 		if (player.currentDoor != nullptr) {
 			DrawDoorInfo(player.currentDoor);
 		}
@@ -24,6 +26,22 @@ class UI {
 	}
 
   private:
+	void DrawPlayerStats(Player &player) {
+		Weapon *currentWeapon = player.weaponManager.GetCurrentWeapon();
+
+		if (currentWeapon != nullptr) {
+			std::string message =
+				currentWeapon->name + "     " +
+				std::to_string(currentWeapon->currentMagazine) + "/" +
+				std::to_string(currentWeapon->maxMagazine) + "       " +
+				std::to_string(currentWeapon->ammo) + "    " +
+				(player.weaponManager.isReloading ? "REALODING......" : "") +
+				"     " + std::to_string(player.money);
+
+			DrawText(message.c_str(), 100, 10, 30, BLACK);
+		}
+	}
+
 	void DrawDoorInfo(Door *currentDoor) {
 		std::string text;
 

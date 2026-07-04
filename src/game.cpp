@@ -77,24 +77,6 @@ void Game::Render() {
 
 	EndMode2D();
 
-	Weapon *currentWeapon = player.weaponManager.GetCurrentWeapon();
-
-	if (currentWeapon != nullptr) {
-		std::string message =
-			currentWeapon->name + "     " +
-			std::to_string(currentWeapon->currentMagazine) + "/" +
-			std::to_string(currentWeapon->maxMagazine) + "       " +
-			std::to_string(currentWeapon->ammo) + "    " +
-			(player.weaponManager.isReloading ? "REALODING......" : "") +
-			"     " + std::to_string(player.money);
-
-		DrawText(message.c_str(), 100, 10, 30, BLACK);
-	}
-
-	std::string text = std::to_string(zombies.size());
-
-	DrawText(text.c_str(), 100, GetScreenHeight() - 100, 30, BLACK);
-
 	ui.Render(player);
 
 	DrawFPS(10, 10);
