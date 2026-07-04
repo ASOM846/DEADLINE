@@ -18,9 +18,6 @@ struct Bullet {
 	int pierce;
 	bool alive{true};
 
-	float maxDistance{1000};
-	float distanceTraveled;
-
 	Bullet(Vector2 startPos, Vector2 targetPos, int damage = 20)
 		: damage(damage) {
 		position = startPos;
@@ -43,12 +40,6 @@ struct Bullet {
 	void Update() {
 		position.x += dirX * speed;
 		position.y += dirY * speed;
-
-		distanceTraveled += speed;
-
-		if (distanceTraveled >= maxDistance) {
-			alive = false;
-		}
 	}
 	void Render() const { DrawCircleV(position, radius, RED); }
 };

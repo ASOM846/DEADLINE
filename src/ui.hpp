@@ -2,14 +2,17 @@
 
 #include "baricade.hpp"
 #include "entity/player.hpp"
+#include "waveManager.hpp"
 #include "weaponManager.hpp"
 #include <raylib.h>
 #include <string>
 
 class UI {
   public:
-	void Render(Player &player) {
+	void Render(Player &player, WaveManager &waveManager) {
 		DrawPlayerStats(player);
+
+		DrawWaveInfo(waveManager);
 
 		if (player.currentDoor != nullptr) {
 			DrawDoorInfo(player.currentDoor);
@@ -50,6 +53,15 @@ class UI {
 
 		DrawRectangleLines(50, GetScreenHeight() - 50, barWidth, 40, LIGHTGRAY);
 		DrawRectangle(50, GetScreenHeight() - 50, percnt, 40, GREEN);
+	}
+
+	void DrawWaveInfo(WaveManager &waveManager) {
+		std::string text;
+
+		text = "WAVE:   " + std::to_string(waveManager.wave) + "   " +
+			   std::to_string(waveManager.currentZombieHp);
+
+		DrawText(text.c_str(), 10, 100, 30, GREEN);
 	}
 
 	void DrawDoorInfo(Door *currentDoor) {

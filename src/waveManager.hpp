@@ -3,6 +3,7 @@
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
 #include <algorithm>
+#include <cstdlib>
 #include <raylib.h>
 #include <vector>
 
@@ -16,6 +17,8 @@ class WaveManager {
 	int totalZombiesInWave = 0;
 
 	int MAX_ZOMBIES = 25;
+
+	float currentZombieHp;
 
 	bool isIntermission = false;
 	float intermissionTimer = 0.0f;
@@ -49,26 +52,33 @@ class WaveManager {
 	void StartNextWave() {
 		spawnedZombies = 0;
 
-		if (wave <= 5) {
-			totalZombiesInWave = 6 + (wave * 4);
-		} else {
-			totalZombiesInWave = 24 + (wave * 6);
-		}
+		totalZombiesInWave =
+			10 + (wave * 2) + static_cast<int>(std::pow(wave, 1.5));
+		currentZombieHp = 100.0f + (wave * 20.0f) * (1.0f + (wave * 0.05));
 
-		spawnInterval = 2.0f - (wave * 0.05);
+		spawnInterval = 1.5f * std::pow(0.9, wave - 1);
+		spawnInterval = std::max(spawnInterval, 0.25f);
 
-		spawnInterval = std::max(spawnInterval, 0.3f);
+		MAX_ZOMBIES = std::min(15 + wave * 2, 60);
 	}
 
   private:
-	static void SpawnZombie(std::vector<Zombie> &zombies, const LevelMap &map) {
+	void SpawnZombie(std::vector<Zombie> &zombies, const LevelMap &map) {
 		int idx = GetRandomValue(0, map.zombieSpawners.size() - 1);
 		int tileIndex = map.zombieSpawners[idx];
 
 		int x = (tileIndex % map.width) * map.cellSize;
 		int y = (tileIndex / map.width) * map.cellSize;
 
-		zombies.push_back(Zombie{
-			.position = Vector2{static_cast<float>(x), static_cast<float>(y)}});
+		float baseSpeed = 2.5 + (wave * 0.05f);
+		float randomMod = GetRandomValue(-50, 50) / 100.0F;
+
+		baseSpeed += randomMod;
+
+		zombies.push_back({
+			.position = {static_cast<float>(x), static_cast<float>(y)},
+			.speed = baseSpeed,
+			.hp = static_cast<int>(currentZombieHp),
+		});
 	}
 };

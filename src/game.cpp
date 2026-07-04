@@ -79,7 +79,7 @@ void Game::Render() {
 
 	EndMode2D();
 
-	ui.Render(player);
+	ui.Render(player, waveManager);
 
 	DrawFPS(10, 10);
 }

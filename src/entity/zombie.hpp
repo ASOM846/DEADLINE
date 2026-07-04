@@ -10,9 +10,9 @@ struct Zombie {
 	Vector2 position;
 
 	int radius{20};
-	int speed{3};
+	float speed{3};
 
-	int hp{100};
+	int hp;
 	int damage{10};
 	int value{20};
 	bool alive{true};

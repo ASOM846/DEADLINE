@@ -15,7 +15,7 @@ struct Player {
 	float maxHp{100};
 	float hp{100};
 
-	int money = 100000;
+	int money = 0;
 
 	Vector2 velocity{0, 0};
 
