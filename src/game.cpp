@@ -95,9 +95,7 @@ void Game::Render() {
 
 	DrawText(text.c_str(), 100, GetScreenHeight() - 100, 30, BLACK);
 
-	ui.DrawWeaponShopInfo(player);
-	ui.DrawDoorInfo(player);
-	ui.DrawBlockadeInfo(player);
+	ui.Render(player);
 
 	DrawFPS(10, 10);
 }

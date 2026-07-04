@@ -8,12 +8,23 @@
 
 class UI {
   public:
-	void DrawDoorInfo(Player &player) {
-		if (player.currentDoor == nullptr)
-			return;
+	void Render(Player &player) {
+		if (player.currentDoor != nullptr) {
+			DrawDoorInfo(player.currentDoor);
+		}
 
-		Door *currentDoor = player.currentDoor;
+		if (player.currentBlockade != nullptr) {
+			DrawBlockadeInfo(player.currentBlockade);
+		}
 
+		if (player.currentSpawner != nullptr &&
+			player.spawnerWeapon != nullptr) {
+			DrawWeaponShopInfo(player);
+		}
+	}
+
+  private:
+	void DrawDoorInfo(Door *currentDoor) {
 		std::string text;
 
 		text = "OPEN DOOR:  " + std::to_string(currentDoor->price) + "   $";
@@ -25,15 +36,10 @@ class UI {
 				 GetScreenHeight() / 2, fontSize, BLACK);
 	}
 
-	void DrawBlockadeInfo(Player &player) {
-		if (player.currentBlockade == nullptr)
-			return;
-
-		Blockade *current = player.currentBlockade;
-
+	void DrawBlockadeInfo(Blockade *currentBlockade) {
 		std::string text;
 
-		int hp = static_cast<int>(current->hp);
+		int hp = static_cast<int>(currentBlockade->hp);
 
 		text = "BLOCKADE HP:  " + std::to_string(hp);
 
