@@ -33,6 +33,21 @@ struct Pickable {
 			alive = false;
 		}
 	}
+
+	void Render() {
+		Color color;
+
+		switch (type) {
+		case PickableType::HP:
+			color = RED;
+			break;
+		case PickableType::AMMO:
+			color = GOLD;
+			break;
+		}
+
+		DrawCircleV(position, currentRadius, color);
+	}
 };
 
 class PickableManager {
@@ -70,7 +85,7 @@ class PickableManager {
 
 	static void Render(std::vector<Pickable> &pickables) {
 		for (auto &p : pickables) {
-			DrawCircleV(p.position, p.currentRadius, GOLD);
+			p.Render();
 		}
 	}
 };
