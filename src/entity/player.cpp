@@ -29,9 +29,6 @@ void Player::Render() const {
 		DrawCircleSector(position, knifeRange, angle - 60.0f, angle + 60.0f, 16,
 						 Fade(LIGHTGRAY, 0.6f));
 	}
-
-	if (currentRandomSpawner != nullptr)
-		TraceLog(LOG_INFO, "COLLISION");
 }
 
 void Player::HandleMovement() {
@@ -121,13 +118,20 @@ void Player::HandleRandomSpawnerActions() {
 
 	RandomWeaponSpawner *ws = currentRandomSpawner;
 
-	if (IsKeyPressed(KEY_E) && !ws->isDrawn) {
-		ws->drawnType = static_cast<WeaponType>(
-			GetRandomValue(0, static_cast<int>(WeaponType::COUNT) - 1));
-		ws->isDrawn = true;
-	} else if (IsKeyPressed(KEY_E) && ws->isDrawn) {
-		weaponManager.SwitchWeaponTo(ws->drawnType);
-		ws->isDrawn = false;
+	switch (ws->state) {
+	case RandomWeaponSpawnerState::IDLE:
+		if (IsKeyPressed(KEY_E))
+			ws->state = RandomWeaponSpawnerState::ROLLING;
+		break;
+	case RandomWeaponSpawnerState::ROLLING:
+		break;
+	case RandomWeaponSpawnerState::DRAWN:
+		if (IsKeyPressed(KEY_E))
+			weaponManager.SwitchWeaponTo(ws->drawnType);
+
+		if (IsKeyPressed(KEY_SPACE))
+			ws->Decline();
+		break;
 	}
 }
 

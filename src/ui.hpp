@@ -156,7 +156,8 @@ class UI {
 
 		std::string text;
 
-		if (spawner->isDrawn) {
+		if (spawner->state == RandomWeaponSpawnerState::ROLLING ||
+			spawner->state == RandomWeaponSpawnerState::DRAWN) {
 			WeaponType randomType = spawner->drawnType;
 
 			switch (randomType) {

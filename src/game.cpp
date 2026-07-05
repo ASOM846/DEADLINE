@@ -25,6 +25,10 @@ void Game::Update() {
 	Vector2 worldMousePos =
 		GetScreenToWorld2D(GetMousePosition(), cameraManager.GetCamera());
 
+	for (auto &rs : levelMap.randomWeaponSpawners) {
+		rs.Update();
+	}
+
 	levelMap.Update(player.position);
 	waveManager.Update(zombies, levelMap);
 
