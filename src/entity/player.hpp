@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../levelMap.hpp"
+#include "../screenShake.hpp"
 #include "../weaponManager.hpp"
 #include "bullet.hpp"
 #include "pickable.hpp"
@@ -15,7 +16,7 @@ struct Player {
 	float maxHp{100};
 	float hp{100};
 
-	int money = 0;
+	int money = 10000;
 
 	Vector2 velocity{0, 0};
 
@@ -40,7 +41,7 @@ struct Player {
 	void Init();
 
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
-				LevelMap &map);
+				LevelMap &map, ScreenShake &screenShake);
 
 	void Render() const;
 

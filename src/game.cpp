@@ -35,7 +35,7 @@ void Game::Update() {
 	zombieManager.ResolveZombieCollision(zombies);
 	pickableManager.UpdateAll(pickables);
 
-	player.Update(bullets, worldMousePos, levelMap);
+	player.Update(bullets, worldMousePos, levelMap, screenShake);
 
 	bulletManager.UpdateAll(bullets);
 

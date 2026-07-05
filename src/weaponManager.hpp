@@ -2,6 +2,7 @@
 
 #include "entity/bullet.hpp"
 #include "raylib.h"
+#include "screenShake.hpp"
 #include <cmath>
 #include <string>
 #include <vector>
@@ -40,6 +41,8 @@ struct Weapon {
 
 	int price{};
 	int magazinePrice{};
+
+	float shakeIntensity{};
 };
 
 struct WeaponManager {
@@ -100,7 +103,7 @@ struct WeaponManager {
 	}
 
 	void Update(std::vector<Bullet> &bullets, Vector2 startPos,
-				Vector2 targetPos) {
+				Vector2 targetPos, ScreenShake &screenShake) {
 		Weapon *w = GetCurrentWeapon();
 		if (w == nullptr) {
 			return;
@@ -140,6 +143,7 @@ struct WeaponManager {
 
 		if (wantsToShoot && w->currentMagazine > 0) {
 			FireWeapon(bullets, startPos, targetPos, w);
+			screenShake.trigger(w->shakeIntensity);
 			shootTimer = 0.0F;
 			w->currentMagazine--;
 		}
@@ -202,6 +206,8 @@ struct WeaponManager {
 
 		pistol.price = 0;
 		pistol.magazinePrice = 5;
+
+		pistol.shakeIntensity = 2.0f;
 		inventory.push_back(pistol);
 
 		Weapon uzi;
@@ -221,6 +227,8 @@ struct WeaponManager {
 
 		uzi.price = 400;
 		uzi.magazinePrice = 20;
+
+		uzi.shakeIntensity = 2.0f;
 		inventory.push_back(uzi);
 
 		Weapon Ak47;
@@ -240,6 +248,8 @@ struct WeaponManager {
 
 		Ak47.price = 1000;
 		Ak47.magazinePrice = 40;
+
+		Ak47.shakeIntensity = 3.0f;
 		inventory.push_back(Ak47);
 
 		Weapon sniper;
@@ -259,6 +269,8 @@ struct WeaponManager {
 
 		sniper.price = 1600;
 		sniper.magazinePrice = 50;
+
+		sniper.shakeIntensity = 4.0f;
 		inventory.push_back(sniper);
 
 		Weapon shotgun;
@@ -278,6 +290,8 @@ struct WeaponManager {
 
 		shotgun.price = 700;
 		shotgun.magazinePrice = 25;
+
+		shotgun.shakeIntensity = 3.5F;
 		inventory.push_back(shotgun);
 	}
 };

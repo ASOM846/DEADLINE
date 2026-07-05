@@ -7,7 +7,7 @@ void Player::Init() {
 }
 
 void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
-					LevelMap &map) {
+					LevelMap &map, ScreenShake &screenShake) {
 	HandleMovement();
 
 	HandleKnifeActions(worldMousePos);
@@ -17,7 +17,7 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	HandlePickableActions();
 	HandleBlockadeActions();
 
-	weaponManager.Update(bullets, position, worldMousePos);
+	weaponManager.Update(bullets, position, worldMousePos, screenShake);
 }
 
 void Player::Render() const {
