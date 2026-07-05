@@ -14,7 +14,7 @@ struct Zombie {
 
 	int hp;
 	int damage{10};
-	int value{20};
+	int value{10};
 	bool alive{true};
 
 	int dropChance{10}; // from 0% to 100%

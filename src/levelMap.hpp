@@ -28,6 +28,7 @@ enum class TileType {
 
 	PLAYER_SPAWN,
 
+	DOOR_200,
 	DOOR_500,
 	DOOR_750,
 	DOOR_1000,
@@ -47,8 +48,8 @@ enum class TileType {
 };
 
 struct LevelMap {
-	const int width = 90;
-	const int height = 50;
+	const int width = 100;
+	const int height = 100;
 	const int cellSize = 40;
 	const std::string filename = "assets/map.txt";
 	const int INF = 9999;
@@ -66,7 +67,7 @@ struct LevelMap {
 
   public:
 	static bool IsDoor(TileType type) {
-		return (type >= TileType::DOOR_500 && type <= TileType::DOOR_2000);
+		return (type >= TileType::DOOR_200 && type <= TileType::DOOR_2000);
 	}
 
 	void Init() {
@@ -215,6 +216,8 @@ struct LevelMap {
   private:
 	static int GetDoorPrice(TileType type) {
 		switch (type) {
+		case TileType::DOOR_200:
+			return 200;
 		case TileType::DOOR_500:
 			return 500;
 		case TileType::DOOR_750:
@@ -245,6 +248,8 @@ struct LevelMap {
 			return YELLOW;
 		case TileType::PLAYER_SPAWN:
 			return GRAY;
+		case TileType::DOOR_200:
+			return DARKGREEN;
 		case TileType::DOOR_500:
 			return ORANGE;
 		case TileType::DOOR_750:

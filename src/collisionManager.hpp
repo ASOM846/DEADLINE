@@ -230,7 +230,7 @@ class CollisionManager {
 
 						if (z.hp <= 0) {
 							z.alive = false;
-							player.money += 130;
+							player.money += 20;
 							pickableManager.TrySpawnDrop(pickables, z.position,
 														 z.dropChance);
 						}

@@ -26,6 +26,9 @@ struct RandomWeaponSpawner {
 	float textFlashTimer{};
 	float textFlashTime{0.25F};
 
+	float resetTimer{};
+	float resetTime{5.0f};
+
 	void Update() {
 		switch (state) {
 		case RandomWeaponSpawnerState::IDLE:
@@ -49,6 +52,11 @@ struct RandomWeaponSpawner {
 			}
 			break;
 		case RandomWeaponSpawnerState::DRAWN:
+			resetTimer += GetFrameTime();
+
+			if (resetTimer >= resetTime) {
+				Decline();
+			}
 			break;
 		}
 	}
@@ -57,5 +65,6 @@ struct RandomWeaponSpawner {
 		state = RandomWeaponSpawnerState::IDLE;
 		rollingTimer = 0.0F;
 		textFlashTimer = 0.0F;
+		resetTimer = 0.0f;
 	}
 };

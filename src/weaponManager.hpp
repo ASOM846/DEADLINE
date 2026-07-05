@@ -145,6 +145,25 @@ struct WeaponManager {
 		}
 	}
 
+	static std::string GetName(WeaponType type) {
+		switch (type) {
+		case WeaponType::PISTOL:
+			return "PISTOL";
+		case WeaponType::UZI:
+			return "UZI";
+		case WeaponType::AK47:
+			return "AK47";
+		case WeaponType::SNIPER:
+			return "SNIPER";
+		case WeaponType::SHOTGUN:
+			return "SHOTGUN";
+		case WeaponType::COUNT:
+			break;
+		}
+
+		return "";
+	}
+
   private:
 	void FireWeapon(std::vector<Bullet> &bullets, Vector2 startPos,
 					Vector2 targetPos, Weapon *w) const {

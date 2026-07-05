@@ -156,31 +156,20 @@ class UI {
 
 		std::string text;
 
-		if (spawner->state == RandomWeaponSpawnerState::ROLLING ||
-			spawner->state == RandomWeaponSpawnerState::DRAWN) {
-			WeaponType randomType = spawner->drawnType;
+		switch (spawner->state) {
+		case RandomWeaponSpawnerState::IDLE:
+			text = "PRESS `E` TO DRAW";
+			break;
+		case RandomWeaponSpawnerState::ROLLING:
+			text = WeaponManager::GetName(spawner->drawnType);
+			break;
+		case RandomWeaponSpawnerState::DRAWN:
+			int remainingTime = spawner->resetTime - spawner->resetTimer;
 
-			switch (randomType) {
-			case WeaponType::PISTOL:
-				text = "PISTOL";
-				break;
-			case WeaponType::UZI:
-				text = "UZI";
-				break;
-			case WeaponType::AK47:
-				text = "AK47";
-				break;
-			case WeaponType::SNIPER:
-				text = "SNIPER";
-				break;
-			case WeaponType::SHOTGUN:
-				text = "SHOTGUN";
-				break;
-			case WeaponType::COUNT:
-				break;
-			}
-		} else {
-			text = "PRESS E TO DRAW";
+			text = WeaponManager::GetName(spawner->drawnType);
+			text += "\n";
+			text += std::to_string(remainingTime);
+			break;
 		}
 
 		int fontSize = 30;

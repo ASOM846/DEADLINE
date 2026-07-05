@@ -126,9 +126,10 @@ void Player::HandleRandomSpawnerActions() {
 	case RandomWeaponSpawnerState::ROLLING:
 		break;
 	case RandomWeaponSpawnerState::DRAWN:
-		if (IsKeyPressed(KEY_E))
+		if (IsKeyPressed(KEY_E)) {
 			weaponManager.SwitchWeaponTo(ws->drawnType);
-
+			ws->Decline();
+		}
 		if (IsKeyPressed(KEY_SPACE))
 			ws->Decline();
 		break;
