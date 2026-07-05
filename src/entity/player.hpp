@@ -53,4 +53,6 @@ struct Player {
 	void HandleDoorActions(LevelMap &map);
 	void HandlePickableActions();
 	void HandleBlockadeActions();
+
+	bool CanBuy(int val);
 };

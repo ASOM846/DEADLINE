@@ -120,7 +120,7 @@ void Player::HandleRandomSpawnerActions() {
 
 	switch (ws->state) {
 	case RandomWeaponSpawnerState::IDLE:
-		if (IsKeyPressed(KEY_E))
+		if (IsKeyPressed(KEY_E) && CanBuy(ws->price))
 			ws->state = RandomWeaponSpawnerState::ROLLING;
 		break;
 	case RandomWeaponSpawnerState::ROLLING:
@@ -210,4 +210,12 @@ void Player::HandleBlockadeActions() {
 	if (currentBlockade != nullptr && IsKeyDown(KEY_E)) {
 		currentBlockade->Heal(10 * GetFrameTime());
 	}
+}
+
+bool Player::CanBuy(int val) {
+	if (money >= val) {
+		money -= val;
+		return true;
+	}
+	return false;
 }

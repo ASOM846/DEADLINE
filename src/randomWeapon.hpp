@@ -13,6 +13,8 @@ struct RandomWeaponSpawner {
   public:
 	int pos{};
 
+	int price{150};
+
 	WeaponType drawnType{};
 	WeaponType tempType{};
 
