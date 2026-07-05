@@ -1,7 +1,8 @@
 #include "weaponManager.hpp"
 
 void WeaponManager::Init() {
-	InitInventory();
+	InitTemplate();
+	GiveWeapon(WeaponType::PISTOL);
 }
 
 Weapon *WeaponManager::GetCurrentWeapon() {
@@ -13,31 +14,40 @@ Weapon *WeaponManager::GetCurrentWeapon() {
 }
 
 void WeaponManager::SwitchWeaponNext() {
-	int temp = secondatyWeaponIndex;
-	secondatyWeaponIndex = currentWeaponIndex;
-	currentWeaponIndex = temp;
+	if (inventory.empty())
+		return;
+
+	currentWeaponIndex = (currentWeaponIndex + 1) % inventory.size();
 
 	isReloading = false;
 	reloadTimer = 0;
 }
 
-void WeaponManager::SwitchWeaponTo(WeaponType newWeapon) {
-	for (int i = 0; i < inventory.size(); i++) {
-		if (inventory[i].type == newWeapon) {
-			isReloading = false;
-			reloadTimer = 0;
-			currentWeaponIndex = i;
-			return;
-		}
+void WeaponManager::GiveWeapon(WeaponType newWeapon) {
+	Weapon *templateWep = GetWeaponTemplate(newWeapon);
+	if (!templateWep)
+		return;
+
+	Weapon weaponCopy = *templateWep;
+
+	if (inventory.size() < maxSlots) {
+		inventory.push_back(weaponCopy);
+		currentWeaponIndex = inventory.size() - 1;
+	} else {
+		inventory[currentWeaponIndex] = weaponCopy;
 	}
+
+	isReloading = false;
+	reloadTimer = 0.0F;
 }
 
-Weapon *WeaponManager::GetWeapon(WeaponType weaponType) {
-	for (auto &i : inventory) {
-		if (i.type == weaponType) {
-			return &i;
+Weapon *WeaponManager::GetWeaponTemplate(WeaponType weaponType) {
+	for (auto &w : templates) {
+		if (w.type == weaponType) {
+			return &w;
 		}
 	}
+	return nullptr;
 }
 
 void WeaponManager::StartReload() {
@@ -140,7 +150,7 @@ void WeaponManager::FireWeapon(std::vector<Bullet> &bullets, Vector2 startPos,
 	}
 }
 
-void WeaponManager::InitInventory() {
+void WeaponManager::InitTemplate() {
 	Weapon pistol;
 	pistol.name = "Pistol";
 	pistol.type = WeaponType::PISTOL;
@@ -160,7 +170,7 @@ void WeaponManager::InitInventory() {
 	pistol.magazinePrice = 5;
 
 	pistol.shakeIntensity = 2.0f;
-	inventory.push_back(pistol);
+	templates.push_back(pistol);
 
 	Weapon uzi;
 	uzi.name = "UZI";
@@ -181,7 +191,7 @@ void WeaponManager::InitInventory() {
 	uzi.magazinePrice = 20;
 
 	uzi.shakeIntensity = 2.0f;
-	inventory.push_back(uzi);
+	templates.push_back(uzi);
 
 	Weapon Ak47;
 	Ak47.name = "AK-47";
@@ -202,7 +212,7 @@ void WeaponManager::InitInventory() {
 	Ak47.magazinePrice = 40;
 
 	Ak47.shakeIntensity = 3.0f;
-	inventory.push_back(Ak47);
+	templates.push_back(Ak47);
 
 	Weapon sniper;
 	sniper.name = "Sniper";
@@ -223,7 +233,7 @@ void WeaponManager::InitInventory() {
 	sniper.magazinePrice = 50;
 
 	sniper.shakeIntensity = 4.0f;
-	inventory.push_back(sniper);
+	templates.push_back(sniper);
 
 	Weapon shotgun;
 	shotgun.name = "Shotgun";
@@ -244,5 +254,5 @@ void WeaponManager::InitInventory() {
 	shotgun.magazinePrice = 25;
 
 	shotgun.shakeIntensity = 3.5F;
-	inventory.push_back(shotgun);
+	templates.push_back(shotgun);
 }

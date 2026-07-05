@@ -138,7 +138,7 @@ class CollisionManager {
 										spawnerRec)) {
 				player.currentSpawner = &spawner;
 				player.spawnerWeapon =
-					player.weaponManager.GetWeapon(spawner.type);
+					player.weaponManager.GetWeaponTemplate(spawner.type);
 				break;
 			}
 		}

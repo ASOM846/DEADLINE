@@ -8,6 +8,11 @@
 #include <raylib.h>
 #include <vector>
 
+struct PlayerBuffs {
+	float SpeedMultiplier{1.0F};
+	float RapidFireMultiplier{1.0f};
+};
+
 struct Player {
 	Vector2 position;
 	const int radius{25};

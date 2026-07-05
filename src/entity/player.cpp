@@ -106,10 +106,14 @@ void Player::HandleWeaponActions(std::vector<Bullet> &bullets) {
 
 		money -= w->magazinePrice;
 
-	} else if (currentSpawner->type != w->type &&
-			   money >= spawnerWeapon->price) {
-		weaponManager.SwitchWeaponTo(currentSpawner->type);
-		money -= spawnerWeapon->price;
+	} else if (currentSpawner->type != w->type) {
+		Weapon *templateWep =
+			weaponManager.GetWeaponTemplate(currentSpawner->type);
+
+		if (templateWep != nullptr && money >= templateWep->price) {
+			weaponManager.GiveWeapon(currentSpawner->type);
+			money -= templateWep->price;
+		}
 	}
 }
 
@@ -129,7 +133,7 @@ void Player::HandleRandomSpawnerActions() {
 		break;
 	case RandomWeaponSpawnerState::DRAWN:
 		if (IsKeyPressed(KEY_E)) {
-			weaponManager.SwitchWeaponTo(ws->drawnType);
+			weaponManager.GiveWeapon(ws->drawnType);
 			ws->Decline();
 		}
 		if (IsKeyPressed(KEY_SPACE))
@@ -240,6 +244,7 @@ void Player::HandlePotionSpawnActions() {
 	case PotionType::THIRD_SLOT:
 		if (hasPotionThirdSlot)
 			return;
+		weaponManager.maxSlots = 3;
 		hasPotionThirdSlot = true;
 		break;
 	case PotionType::RAPID_FIRE:
