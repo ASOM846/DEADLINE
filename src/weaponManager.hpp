@@ -103,7 +103,8 @@ struct WeaponManager {
 	}
 
 	void Update(std::vector<Bullet> &bullets, Vector2 startPos,
-				Vector2 targetPos, ScreenShake &screenShake) {
+				Vector2 targetPos, ScreenShake &screenShake,
+				bool hasPotionRapidFire) {
 		Weapon *w = GetCurrentWeapon();
 		if (w == nullptr) {
 			return;
@@ -134,8 +135,13 @@ struct WeaponManager {
 			return;
 		}
 
-		if (shootTimer < w->fireRate)
-			return;
+		if (!hasPotionRapidFire)
+			if (shootTimer < w->fireRate)
+				return;
+
+		if (hasPotionRapidFire)
+			if (shootTimer < w->fireRate / 2)
+				return;
 
 		bool wantsToShoot = w->isAutomatic
 								? IsMouseButtonDown(MOUSE_BUTTON_LEFT)

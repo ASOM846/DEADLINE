@@ -64,10 +64,21 @@ class UI {
 
 		if (player.hasPotionSpeed) {
 			DrawRectangle(GetScreenWidth() - rectW * 4 - spacing * 4,
-						  GetScreenHeight() - 60, rectW, rectW, RED);
+						  GetScreenHeight() - 60, rectW, rectW, BLUE);
 		}
+
 		if (player.hasPotionThirdSlot) {
 			DrawRectangle(GetScreenWidth() - rectW * 3 - spacing * 3,
+						  GetScreenHeight() - 60, rectW, rectW, GREEN);
+		}
+
+		if (player.hasPotionRapidFire) {
+			DrawRectangle(GetScreenWidth() - rectW * 2 - spacing * 2,
+						  GetScreenHeight() - 60, rectW, rectW, GOLD);
+		}
+
+		if (player.hasPotionHeal) {
+			DrawRectangle(GetScreenWidth() - rectW * 1 - spacing * 1,
 						  GetScreenHeight() - 60, rectW, rectW, RED);
 		}
 	}

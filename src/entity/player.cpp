@@ -18,7 +18,8 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	HandlePickableActions();
 	HandleBlockadeActions();
 
-	weaponManager.Update(bullets, position, worldMousePos, screenShake);
+	weaponManager.Update(bullets, position, worldMousePos, screenShake,
+						 hasPotionRapidFire);
 }
 
 void Player::Render() const {
