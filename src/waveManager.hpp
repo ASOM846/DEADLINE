@@ -54,10 +54,12 @@ class WaveManager {
 
 		totalZombiesInWave =
 			10 + (wave * 2) + static_cast<int>(std::pow(wave, 1.5));
-		currentZombieHp = 100.0f + (wave * 20.0f) * (1.0f + (wave * 0.05));
+
+		currentZombieHp = 100.0f + (wave - 1) * 4.0f;
 
 		spawnInterval = 1.5f * std::pow(0.9, wave - 1);
-		spawnInterval = std::max(spawnInterval, 0.25f);
+
+		spawnInterval = std::max(spawnInterval, 0.8f);
 
 		MAX_ZOMBIES = std::min(15 + wave * 2, 60);
 	}
