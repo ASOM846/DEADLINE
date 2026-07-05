@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../levelMap.hpp"
-#include "pickable.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <cmath>

@@ -7,6 +7,7 @@
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
 #include "levelMap.hpp"
+#include "screenShake.hpp"
 #include "ui.hpp"
 #include "waveManager.hpp"
 #include <raylib.h>
@@ -29,6 +30,7 @@ class Game {
 	WaveManager waveManager;
 
 	CameraManager cameraManager;
+	ScreenShake screenShake;
 
 	UI ui;
 	BulletManager bulletManager;

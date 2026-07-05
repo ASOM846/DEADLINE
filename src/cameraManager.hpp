@@ -21,12 +21,14 @@ class CameraManager {
 	void Init() {
 		camera.rotation = 0.0f;
 		camera.zoom = 1.5f;
-
-		camera.offset = {static_cast<float>(GetScreenWidth() / 2),
-						 static_cast<float>(GetScreenHeight() / 2)};
 	}
 
-	void Update(Vector2 targetPos) {
+	void Update(Vector2 targetPos, Vector2 offset) {
+		camera.offset = {static_cast<float>(GetScreenWidth() / 2),
+						 static_cast<float>(GetScreenHeight() / 2)};
+
+		camera.offset.x += offset.x;
+		camera.offset.y += offset.y;
 
 		if (IsKeyPressed(KEY_UP)) {
 			currentSetting = CameraSetting::TAEGET;

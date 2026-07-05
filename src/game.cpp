@@ -56,7 +56,11 @@ void Game::Update() {
 
 	collisionManager.ResolveZombieBlockade(zombies, levelMap);
 
-	cameraManager.Update(player.position);
+	if (IsKeyPressed(KEY_X))
+		screenShake.trigger();
+
+	screenShake.update(GetFrameTime());
+	cameraManager.Update(player.position, screenShake.offset);
 
 	if (IsKeyPressed(KEY_P)) {
 		pickables.emplace_back(
