@@ -161,6 +161,23 @@ class CollisionManager {
 		}
 	}
 
+	void ResolvePlayerPotionSpawner(Player &player, LevelMap &map) {
+		player.currentPotionSpawn = nullptr;
+
+		for (auto &spawner : map.potionSpawns) {
+			Rectangle rect = {
+				static_cast<float>(spawner.pos % map.width * map.cellSize),
+				static_cast<float>(spawner.pos / map.width * map.cellSize),
+				static_cast<float>(map.cellSize),
+				static_cast<float>(map.cellSize)};
+
+			if (CheckCollisionCircleRec(player.position, player.radius, rect)) {
+				player.currentPotionSpawn = &spawner;
+				return;
+			}
+		}
+	}
+
 	void ResolvePlayerDoor(Player &player, LevelMap &map) {
 		player.currentDoor = nullptr;
 

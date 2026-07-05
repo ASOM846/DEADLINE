@@ -50,6 +50,7 @@ void Game::Update() {
 	collisionManager.ResolveBulletWall(bullets, levelMap);
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerRandomWeaponSpawner(player, levelMap);
+	collisionManager.ResolvePlayerPotionSpawner(player, levelMap);
 	collisionManager.ResolvePlayerDoor(player, levelMap);
 	collisionManager.ResolvePlayerPickable(player, pickables);
 	collisionManager.ResolvePlayerBlockade(player, levelMap);

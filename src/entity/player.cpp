@@ -13,6 +13,7 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	HandleKnifeActions(worldMousePos);
 	HandleWeaponActions(bullets);
 	HandleRandomSpawnerActions();
+	HandlePotionSpawnActions();
 	HandleDoorActions(map);
 	HandlePickableActions();
 	HandleBlockadeActions();
@@ -218,4 +219,37 @@ bool Player::CanBuy(int val) {
 		return true;
 	}
 	return false;
+}
+
+void Player::HandlePotionSpawnActions() {
+	if (currentPotionSpawn == nullptr)
+		return;
+
+	if (!IsKeyPressed(KEY_E)) {
+		return;
+	}
+
+	TraceLog(LOG_INFO, "COLLISION");
+	switch (currentPotionSpawn->type) {
+	case PotionType::SPEED:
+		if (hasPotionSpeed)
+			return;
+		hasPotionSpeed = true;
+		break;
+	case PotionType::THIRD_SLOT:
+		if (hasPotionThirdSlot)
+			return;
+		hasPotionThirdSlot = true;
+		break;
+	case PotionType::RAPID_FIRE:
+		if (hasPotionRapidFire)
+			return;
+		hasPotionRapidFire = true;
+		break;
+	case PotionType::HEAL:
+		if (hasPotionHeal)
+			return;
+		hasPotionHeal = true;
+		break;
+	}
 }

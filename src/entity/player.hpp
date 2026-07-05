@@ -26,6 +26,11 @@ struct Player {
 	Vector2 knifeDir{0, 0};
 	bool knifeTriggered{false};
 
+	bool hasPotionSpeed{false};
+	bool hasPotionThirdSlot{false};
+	bool hasPotionRapidFire{false};
+	bool hasPotionHeal{false};
+
 	const float knifeRange{75.0f};
 	const int knifeDamage{150};
 
@@ -37,6 +42,7 @@ struct Player {
 	Door *currentDoor{nullptr};
 	Pickable *currentPickable{nullptr};
 	Blockade *currentBlockade{nullptr};
+	PotionSpawner *currentPotionSpawn{nullptr};
 
 	void Init();
 
@@ -53,6 +59,7 @@ struct Player {
 	void HandleDoorActions(LevelMap &map);
 	void HandlePickableActions();
 	void HandleBlockadeActions();
+	void HandlePotionSpawnActions();
 
 	bool CanBuy(int val);
 };

@@ -58,6 +58,18 @@ class UI {
 
 		DrawRectangleLines(50, GetScreenHeight() - 50, barWidth, 40, LIGHTGRAY);
 		DrawRectangle(50, GetScreenHeight() - 50, percnt, 40, GREEN);
+
+		int rectW = 40;
+		int spacing = 20;
+
+		if (player.hasPotionSpeed) {
+			DrawRectangle(GetScreenWidth() - rectW * 4 - spacing * 4,
+						  GetScreenHeight() - 60, rectW, rectW, RED);
+		}
+		if (player.hasPotionThirdSlot) {
+			DrawRectangle(GetScreenWidth() - rectW * 3 - spacing * 3,
+						  GetScreenHeight() - 60, rectW, rectW, RED);
+		}
 	}
 
 	void DrawWaveInfo(WaveManager &waveManager) {

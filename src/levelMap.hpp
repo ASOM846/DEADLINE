@@ -1,6 +1,7 @@
 #pragma once
 
 #include "baricade.hpp"
+#include "potion.hpp"
 #include "randomWeapon.hpp"
 #include "weaponManager.hpp"
 #include <fstream>
@@ -37,6 +38,11 @@ enum class TileType {
 	DOOR_1750,
 	DOOR_2000,
 
+	POTION_SPEED,
+	POTION_THIRD_SLOT,
+	POTION_RAPID_FIRE,
+	POTION_HEAL,
+
 	WEAPON_UZI,
 	WEAPON_AK47,
 	WEAPON_SNIPER,
@@ -64,10 +70,16 @@ struct LevelMap {
 	std::vector<RandomWeaponSpawner> randomWeaponSpawners;
 	std::vector<Door> doors;
 	std::vector<Blockade> blockades;
+	std::vector<PotionSpawner> potionSpawns;
 
   public:
 	static bool IsDoor(TileType type) {
 		return (type >= TileType::DOOR_200 && type <= TileType::DOOR_2000);
+	}
+
+	static bool IsPotion(TileType type) {
+		return (type >= TileType::POTION_SPEED &&
+				type <= TileType::POTION_HEAL);
 	}
 
 	void Init() {
@@ -118,6 +130,11 @@ struct LevelMap {
 					doors.push_back(Door{.pos = index,
 										 .price = GetDoorPrice(tile),
 										 .open = false});
+				}
+
+				if (IsPotion(tile)) {
+					potionSpawns.push_back(PotionSpawner{
+						.pos = index, .type = GetPotionType(tile)});
 				}
 
 				if (tile == TileType::BLOCKADE) {
@@ -236,6 +253,19 @@ struct LevelMap {
 		}
 	}
 
+	static PotionType GetPotionType(TileType type) {
+		switch (type) {
+		case TileType::POTION_SPEED:
+			return PotionType::SPEED;
+		case TileType::POTION_THIRD_SLOT:
+			return PotionType::THIRD_SLOT;
+		case TileType::POTION_RAPID_FIRE:
+			return PotionType::RAPID_FIRE;
+		case TileType::POTION_HEAL:
+			return PotionType::HEAL;
+		}
+	}
+
 	static Color GetTileColor(TileType type) {
 		switch (type) {
 		case TileType::FLOOR:
@@ -264,6 +294,14 @@ struct LevelMap {
 			return BEIGE;
 		case TileType::DOOR_2000:
 			return PURPLE;
+		case TileType::POTION_SPEED:
+			return SKYBLUE;
+		case TileType::POTION_THIRD_SLOT:
+			return MAGENTA;
+		case TileType::POTION_RAPID_FIRE:
+			return ORANGE;
+		case TileType::POTION_HEAL:
+			return LIME;
 		case TileType::WEAPON_UZI:
 			return MAGENTA;
 		case TileType::WEAPON_AK47:
