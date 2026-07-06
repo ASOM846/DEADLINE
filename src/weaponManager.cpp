@@ -110,7 +110,7 @@ void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 							? IsMouseButtonDown(MOUSE_BUTTON_LEFT)
 							: IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 
-	float offsetY = 20.0f;
+	float offsetY = 35.0f;
 	float offsetX = 12.0f;
 
 	Vector2 bulletSpawn = {startPos.x + std::cos(angleRad) * offsetY -

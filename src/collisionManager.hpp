@@ -32,6 +32,7 @@ class CollisionManager {
 					z.position.y += b.dirY * b.knockbackForce;
 
 					z.hp -= b.damage;
+					z.damageTaken += b.damage;
 
 					b.pierce--;
 
@@ -242,6 +243,7 @@ class CollisionManager {
 
 					if (dotProduct > 0.5f) {
 						z.hp -= player.knifeDamage;
+						z.damageTaken += player.knifeDamage;
 
 						z.position.x += player.knifeDir.x * 50.0f;
 						z.position.y += player.knifeDir.y * 50.0f;

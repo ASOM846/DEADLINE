@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../floatingText.hpp"
 #include "../levelMap.hpp"
 #include "../screenShake.hpp"
 #include "../textureManager.hpp"
@@ -56,9 +57,10 @@ struct Player {
 	void Reset();
 
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
-				LevelMap &map, ScreenShake &screenShake);
+				LevelMap &map, ScreenShake &screenShake,
+				EffectManager &EffectManager);
 
-	void Render(TextureManager &tm) const;
+	void Render(TextureManager &tm);
 
   private:
 	void HandleMovement();

@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "entity/pickable.hpp"
+#include "floatingText.hpp"
 #include "gameStateManager.hpp"
 #include <raylib.h>
 
@@ -23,6 +24,7 @@ void Game::Reset() {
 	bullets.clear();
 	pickables.clear();
 
+	effectManager.Reset();
 	player.Reset();
 }
 
@@ -58,21 +60,19 @@ void Game::UpdatePlaying() {
 		rs.Update();
 	}
 
-	if (IsKeyPressed(KEY_X)) {
-		gameStateManager.SwitchState(GameState::LOST);
-	}
-
 	levelMap.Update(player.position);
 	waveManager.Update(zombies, levelMap);
+
+	effectManager.Update(GetFrameTime());
 
 	zombieManager.ResolveZombieCollision(zombies);
 	pickableManager.UpdateAll(pickables);
 
-	player.Update(bullets, worldMousePos, levelMap, screenShake);
+	player.Update(bullets, worldMousePos, levelMap, screenShake, effectManager);
 
 	bulletManager.UpdateAll(bullets);
 
-	zombieManager.UpdateAll(zombies, levelMap);
+	zombieManager.UpdateAll(zombies, levelMap, effectManager);
 
 	collisionManager.ResolvePlayerZombie(player, zombies);
 	collisionManager.ResolvePlayerWall(player, levelMap);
@@ -80,6 +80,7 @@ void Game::UpdatePlaying() {
 										 pickableManager);
 	collisionManager.ResolvePlayerKnife(player, zombies, pickableManager,
 										pickables);
+
 	collisionManager.ResolveBulletWall(bullets, levelMap);
 	collisionManager.ResolvePlayerWeaponSpawner(player, levelMap);
 	collisionManager.ResolvePlayerRandomWeaponSpawner(player, levelMap);
@@ -91,7 +92,7 @@ void Game::UpdatePlaying() {
 	collisionManager.ResolveZombieBlockade(zombies, levelMap);
 
 	if (IsKeyPressed(KEY_X))
-		screenShake.trigger();
+		effectManager.SpawnText(worldMousePos, "TEST", RED);
 
 	screenShake.update(GetFrameTime());
 	cameraManager.Update(player.position, screenShake.offset);
@@ -119,7 +120,7 @@ void Game::RenderPlaying() {
 	player.Render(textureManager);
 
 	for (auto &z : zombies) {
-		z.Render();
+		z.Render(textureManager);
 	}
 
 	for (auto &b : bullets) {
@@ -127,6 +128,8 @@ void Game::RenderPlaying() {
 	}
 
 	PickableManager::Render(pickables);
+
+	effectManager.Draw();
 
 	EndMode2D();
 

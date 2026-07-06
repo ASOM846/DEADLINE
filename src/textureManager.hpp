@@ -6,7 +6,12 @@
 #include <unordered_map>
 
 enum class TextureId {
-	PLAYER,
+	PLAYER_PISTOL,
+	PLAYER_RIFLE,
+	PLAYER_SHOTGUN,
+	PLAYER_SMG,
+
+	ZOMBIE,
 	NONE,
 };
 
@@ -23,7 +28,13 @@ class TextureManager {
 		return it->second;
 	}
 
-	void loadAll() { load(TextureId::PLAYER, "assets/player.png"); }
+	void loadAll() {
+		load(TextureId::PLAYER_PISTOL, "assets/survivor_pistol.png");
+		load(TextureId::PLAYER_RIFLE, "assets/survivor_rifle.png");
+		load(TextureId::PLAYER_SHOTGUN, "assets/survivor_shotgun.png");
+		load(TextureId::PLAYER_SMG, "assets/survivor_smg.png");
+		load(TextureId::ZOMBIE, "assets/zombie.png");
+	}
 
 	void load(TextureId id, const char *path) {
 		Texture2D tex = LoadTexture(path);

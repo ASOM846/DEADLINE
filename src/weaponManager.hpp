@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entity/bullet.hpp"
+#include "floatingText.hpp"
 #include "raylib.h"
 #include "screenShake.hpp"
 #include <string>
@@ -59,6 +60,7 @@ struct WeaponManager {
 	void Init();
 	void Reset();
 
+  public:
 	Weapon *GetCurrentWeapon();
 
 	void SwitchWeaponNext();

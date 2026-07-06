@@ -19,7 +19,8 @@ void Player::Reset() {
 }
 
 void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
-					LevelMap &map, ScreenShake &screenShake) {
+					LevelMap &map, ScreenShake &screenShake,
+					EffectManager &effectManager) {
 	float angleRad =
 		std::atan2(worldMousePos.y - position.y, worldMousePos.x - position.x);
 
@@ -39,10 +40,33 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 						 hasPotionRapidFire, angleRad);
 }
 
-void Player::Render(TextureManager &tm) const {
+void Player::Render(TextureManager &tm) {
 	DrawCircleV(position, radius, BLUE);
 
-	Texture2D playerTex = tm.get(TextureId::PLAYER);
+	Weapon temp = *weaponManager.GetCurrentWeapon();
+	WeaponType type = temp.type;
+
+	TextureId playerTexId = TextureId::PLAYER_PISTOL;
+
+	switch (type) {
+	case WeaponType::PISTOL:
+		playerTexId = TextureId::PLAYER_PISTOL;
+		break;
+	case WeaponType::UZI:
+		playerTexId = TextureId::PLAYER_SMG;
+		break;
+	case WeaponType::AK47:
+		playerTexId = TextureId::PLAYER_RIFLE;
+		break;
+	case WeaponType::SNIPER:
+		playerTexId = TextureId::PLAYER_RIFLE;
+		break;
+	case WeaponType::SHOTGUN:
+		playerTexId = TextureId::PLAYER_SHOTGUN;
+		break;
+	case WeaponType::COUNT:
+		break;
+	}
 
 	float localOffsetY = 10.0f;
 
@@ -50,6 +74,8 @@ void Player::Render(TextureManager &tm) const {
 
 	float drawWidth = visualRadius * 2.0f * textureScale;
 	float drawHeight = visualRadius * 2.0f * textureScale;
+
+	Texture2D playerTex = tm.get(playerTexId);
 
 	Rectangle src = {0, 0, static_cast<float>(playerTex.width),
 					 static_cast<float>(playerTex.height)};

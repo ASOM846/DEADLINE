@@ -6,6 +6,7 @@
 #include "entity/pickable.hpp"
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
+#include "floatingText.hpp"
 #include "gameStateManager.hpp"
 #include "levelMap.hpp"
 #include "screenShake.hpp"
@@ -43,6 +44,7 @@ class Game {
 
 	CameraManager cameraManager;
 	ScreenShake screenShake;
+	EffectManager effectManager;
 
 	UI ui;
 	BulletManager bulletManager;

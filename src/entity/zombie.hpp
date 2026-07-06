@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../levelMap.hpp"
+#include "../textureManager.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <cmath>
@@ -9,14 +10,21 @@ struct Zombie {
 	Vector2 position;
 
 	int radius{20};
+	float visualRadius{25};
+
 	float speed{3};
 
 	int hp;
 	int damage{10};
+	int damageTaken{0};
+
 	int value{10};
 	bool alive{true};
 
 	int dropChance{10}; // from 0% to 100%
+
+	float rotation{0.0f};
+	float textureRotation{90.0f};
 
 	void Update(const LevelMap &map) {
 		if (hp <= 0) {
@@ -58,17 +66,51 @@ struct Zombie {
 		float distance = std::sqrt(dirX * dirX + dirY * dirY);
 
 		if (distance > 2.0f) {
+			rotation = std::atan2(dirY, dirX) * 57.29578f;
+
 			position.x += (dirX / distance) * speed;
 			position.y += (dirY / distance) * speed;
 		}
 	}
 
-	void Render() const { DrawCircleV(position, radius, GREEN); }
+	void Render(TextureManager &tm) const {
+
+		DrawCircleV(position, radius, GREEN);
+
+		float localOffsetY = 0.0f;
+
+		float textureScale = 1.3f;
+
+		float drawWidth = visualRadius * 2.0f * textureScale;
+		float drawHeight = visualRadius * 2.0f * textureScale;
+
+		Texture2D zombieTex = tm.get(TextureId::ZOMBIE);
+
+		Rectangle src = {0, 0, static_cast<float>(zombieTex.width),
+						 static_cast<float>(zombieTex.height)};
+
+		Rectangle dstCorrected = {position.x, position.y, drawWidth,
+								  drawHeight};
+
+		Vector2 origin = {drawWidth / 2.0f, (drawHeight / 2.0f) + localOffsetY};
+
+		DrawTexturePro(zombieTex, src, dstCorrected, origin,
+					   rotation + textureRotation, RAYWHITE);
+	}
 };
 
 class ZombieManager {
   public:
-	void UpdateAll(std::vector<Zombie> &zombies, const LevelMap &map) {
+	void UpdateAll(std::vector<Zombie> &zombies, const LevelMap &map,
+				   EffectManager &effectManager) {
+		for (auto &z : zombies) {
+			if (z.damageTaken > 0) {
+				effectManager.SpawnText(z.position,
+										std::to_string(z.damageTaken), RED);
+				z.damageTaken = 0;
+			}
+		}
+
 		zombies.erase(std::remove_if(zombies.begin(), zombies.end(),
 									 [](const Zombie &z) { return !z.alive; }),
 					  zombies.end());
@@ -80,7 +122,7 @@ class ZombieManager {
 
 	void ResolveZombieCollision(std::vector<Zombie> &zombies) {
 		for (size_t i = 0; i < zombies.size(); i++) {
-			for (size_t j = 0; j < zombies.size(); j++) {
+			for (size_t j = i + 1; j < zombies.size(); j++) {
 				float dx = zombies[j].position.x - zombies[i].position.x;
 				float dy = zombies[j].position.y - zombies[i].position.y;
 				float distance = std::sqrt(dx * dx + dy * dy);
