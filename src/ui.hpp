@@ -33,6 +33,27 @@ class UI {
 		}
 	}
 
+	void RenderLost() {
+		int barH = 150;
+		DrawRectangle(0, (GetScreenHeight() - barH) / 2, GetScreenWidth(), barH,
+					  Fade(BLACK, 0.3f));
+
+		std::string text = "LOST";
+		int textSize = 30;
+
+		std::string text2 = "Press SPACE to reset";
+		int textSize2 = 20;
+
+		int textW = MeasureText(text.c_str(), textSize);
+		int text2W = MeasureText(text2.c_str(), textSize2);
+
+		DrawText(text.c_str(), (GetScreenWidth() - textW) / 2,
+				 GetScreenHeight() / 2 - 15, textSize, RED);
+
+		DrawText(text2.c_str(), (GetScreenWidth() - text2W) / 2,
+				 GetScreenHeight() / 2 + 15, textSize2, WHITE);
+	}
+
   private:
 	void DrawPlayerStats(Player &player) {
 		Weapon *currentWeapon = player.weaponManager.GetCurrentWeapon();

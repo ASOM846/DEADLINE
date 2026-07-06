@@ -6,6 +6,7 @@
 #include "entity/pickable.hpp"
 #include "entity/player.hpp"
 #include "entity/zombie.hpp"
+#include "gameStateManager.hpp"
 #include "levelMap.hpp"
 #include "screenShake.hpp"
 #include "ui.hpp"
@@ -25,6 +26,14 @@ class Game {
 	void Render();
 
   private:
+	void UpdatePlaying();
+	void UpdateLost();
+
+	void RenderPlaying();
+	void RenderLost();
+
+	GameStateManager gameStateManager;
+
 	Player player;
 
 	WaveManager waveManager;

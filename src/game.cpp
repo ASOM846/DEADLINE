@@ -1,5 +1,6 @@
 #include "game.hpp"
 #include "entity/pickable.hpp"
+#include "gameStateManager.hpp"
 #include <raylib.h>
 
 void Game::Init() {
@@ -22,11 +23,39 @@ void Game::Reset() {
 }
 
 void Game::Update() {
+	switch (gameStateManager.GetCurrentState()) {
+	case GameState::PLAYING:
+		UpdatePlaying();
+		break;
+	case GameState::PAUSED:
+	case GameState::LOST:
+		UpdateLost();
+		break;
+	}
+}
+
+void Game::Render() {
+	switch (gameStateManager.GetCurrentState()) {
+	case GameState::PLAYING:
+		RenderPlaying();
+		break;
+	case GameState::PAUSED:
+	case GameState::LOST:
+		RenderLost();
+		break;
+	}
+}
+
+void Game::UpdatePlaying() {
 	Vector2 worldMousePos =
 		GetScreenToWorld2D(GetMousePosition(), cameraManager.GetCamera());
 
 	for (auto &rs : levelMap.randomWeaponSpawners) {
 		rs.Update();
+	}
+
+	if (IsKeyPressed(KEY_X)) {
+		gameStateManager.SwitchState(GameState::LOST);
 	}
 
 	levelMap.Update(player.position);
@@ -39,7 +68,7 @@ void Game::Update() {
 
 	bulletManager.UpdateAll(bullets);
 
-	// zombieManager.UpdateAll(zombies, levelMap);
+	zombieManager.UpdateAll(zombies, levelMap);
 
 	collisionManager.ResolvePlayerZombie(player, zombies);
 	collisionManager.ResolvePlayerWall(player, levelMap);
@@ -67,9 +96,18 @@ void Game::Update() {
 		pickables.emplace_back(
 			Pickable{.position = worldMousePos, .type = PickableType::AMMO});
 	}
+
+	gameStateManager.Update(player);
 }
 
-void Game::Render() {
+void Game::UpdateLost() {
+	if (IsKeyPressed(KEY_SPACE)) {
+		Init();
+		gameStateManager.SwitchState(GameState::PLAYING);
+	}
+}
+
+void Game::RenderPlaying() {
 	BeginMode2D(cameraManager.GetCamera());
 
 	levelMap.Render();
@@ -91,4 +129,9 @@ void Game::Render() {
 	ui.Render(player, waveManager);
 
 	DrawFPS(10, 10);
+}
+
+void Game::RenderLost() {
+	RenderPlaying();
+	ui.RenderLost();
 }
