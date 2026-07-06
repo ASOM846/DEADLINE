@@ -11,7 +11,7 @@
 struct Player {
 	Vector2 position;
 	const int radius{25};
-	const float speed{5.0F};
+	float speed{4.0F};
 
 	float maxHp{100};
 	float hp{100};

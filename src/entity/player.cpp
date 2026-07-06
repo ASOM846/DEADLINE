@@ -36,20 +36,24 @@ void Player::Render() const {
 void Player::HandleMovement() {
 	velocity = {.x = 0, .y = 0};
 
+	int buffSpeed = speed;
+	if (hasPotionSpeed)
+		buffSpeed += 1.5f;
+
 	if (IsKeyDown(KEY_W)) {
-		velocity.y -= speed;
+		velocity.y -= buffSpeed;
 	}
 
 	if (IsKeyDown(KEY_S)) {
-		velocity.y += speed;
+		velocity.y += buffSpeed;
 	}
 
 	if (IsKeyDown(KEY_A)) {
-		velocity.x -= speed;
+		velocity.x -= buffSpeed;
 	}
 
 	if (IsKeyDown(KEY_D)) {
-		velocity.x += speed;
+		velocity.x += buffSpeed;
 	}
 }
 
