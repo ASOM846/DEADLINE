@@ -67,7 +67,7 @@ void WeaponManager::StartReload() {
 
 void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 						   Vector2 targetPos, ScreenShake &screenShake,
-						   bool hasPotionRapidFire) {
+						   bool hasPotionRapidFire, float angleRad) {
 	Weapon *w = GetCurrentWeapon();
 	if (w == nullptr) {
 		return;
@@ -110,8 +110,16 @@ void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 							? IsMouseButtonDown(MOUSE_BUTTON_LEFT)
 							: IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 
+	float offsetY = 20.0f;
+	float offsetX = 12.0f;
+
+	Vector2 bulletSpawn = {startPos.x + std::cos(angleRad) * offsetY -
+							   std::sin(angleRad) * offsetX,
+						   startPos.y + std::sin(angleRad) * offsetY +
+							   std::cos(angleRad) * offsetX};
+
 	if (wantsToShoot && w->currentMagazine > 0) {
-		FireWeapon(bullets, startPos, targetPos, w);
+		FireWeapon(bullets, bulletSpawn, targetPos, w);
 		screenShake.trigger(w->shakeIntensity);
 		shootTimer = 0.0F;
 		w->currentMagazine--;

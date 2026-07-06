@@ -68,7 +68,7 @@ struct WeaponManager {
 	void StartReload();
 	void Update(std::vector<Bullet> &bullets, Vector2 startPos,
 				Vector2 targetPos, ScreenShake &screenShake,
-				bool hasPotionRapidFire);
+				bool hasPotionRapidFire, float angleRad);
 
 	static std::string GetName(WeaponType type);
 

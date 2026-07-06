@@ -6,6 +6,8 @@
 void Game::Init() {
 	Reset();
 
+	textureManager.loadAll();
+
 	levelMap.Init();
 	player.Init();
 
@@ -114,7 +116,7 @@ void Game::RenderPlaying() {
 
 	levelMap.Render();
 
-	player.Render();
+	player.Render(textureManager);
 
 	for (auto &z : zombies) {
 		z.Render();

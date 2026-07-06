@@ -9,6 +9,7 @@
 #include "gameStateManager.hpp"
 #include "levelMap.hpp"
 #include "screenShake.hpp"
+#include "textureManager.hpp"
 #include "ui.hpp"
 #include "waveManager.hpp"
 #include <raylib.h>
@@ -33,6 +34,8 @@ class Game {
 	void RenderLost();
 
 	GameStateManager gameStateManager;
+
+	TextureManager textureManager;
 
 	Player player;
 

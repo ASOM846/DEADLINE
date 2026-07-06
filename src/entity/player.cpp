@@ -20,6 +20,11 @@ void Player::Reset() {
 
 void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 					LevelMap &map, ScreenShake &screenShake) {
+	float angleRad =
+		std::atan2(worldMousePos.y - position.y, worldMousePos.x - position.x);
+
+	rotation = angleRad * 57.29578F;
+
 	HandleMovement();
 
 	HandleKnifeActions(worldMousePos);
@@ -31,11 +36,30 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	HandleBlockadeActions();
 
 	weaponManager.Update(bullets, position, worldMousePos, screenShake,
-						 hasPotionRapidFire);
+						 hasPotionRapidFire, angleRad);
 }
 
-void Player::Render() const {
+void Player::Render(TextureManager &tm) const {
 	DrawCircleV(position, radius, BLUE);
+
+	Texture2D playerTex = tm.get(TextureId::PLAYER);
+
+	float localOffsetY = 10.0f;
+
+	float textureScale = 1.3f;
+
+	float drawWidth = visualRadius * 2.0f * textureScale;
+	float drawHeight = visualRadius * 2.0f * textureScale;
+
+	Rectangle src = {0, 0, static_cast<float>(playerTex.width),
+					 static_cast<float>(playerTex.height)};
+
+	Rectangle dstCorrected = {position.x, position.y, drawWidth, drawHeight};
+
+	Vector2 origin = {drawWidth / 2.0f, (drawHeight / 2.0f) + localOffsetY};
+
+	DrawTexturePro(playerTex, src, dstCorrected, origin,
+				   rotation + textureRotation, RAYWHITE);
 
 	if (knifeVisualTimer > 0.0f) {
 		float angle = std::atan2(knifeDir.y, knifeDir.x) * 57.29578f;

@@ -2,6 +2,7 @@
 
 #include "../levelMap.hpp"
 #include "../screenShake.hpp"
+#include "../textureManager.hpp"
 #include "../weaponManager.hpp"
 #include "bullet.hpp"
 #include "pickable.hpp"
@@ -10,8 +11,14 @@
 
 struct Player {
 	Vector2 position;
-	const int radius{25};
+	const int radius{20};
+	const float visualRadius{23.0f};
+
 	float speed{4.0F};
+
+	float rotation{0.0F};
+
+	const float textureRotation{90.0f};
 
 	float maxHp{100};
 	float hp{100};
@@ -51,7 +58,7 @@ struct Player {
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 				LevelMap &map, ScreenShake &screenShake);
 
-	void Render() const;
+	void Render(TextureManager &tm) const;
 
   private:
 	void HandleMovement();
