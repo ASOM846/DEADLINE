@@ -2,6 +2,7 @@
 
 #include "baricade.hpp"
 #include "entity/player.hpp"
+#include "potion.hpp"
 #include "randomWeapon.hpp"
 #include "waveManager.hpp"
 #include "weaponManager.hpp"
@@ -30,6 +31,10 @@ class UI {
 
 		if (player.currentRandomSpawner != nullptr) {
 			DrawRandomWeaponInfo(player.currentRandomSpawner);
+		}
+
+		if (player.currentPotionSpawn != nullptr) {
+			DrawPotionSpawnerInfo(player.currentPotionSpawn);
 		}
 	}
 
@@ -108,7 +113,7 @@ class UI {
 		std::string text;
 
 		text = "WAVE:   " + std::to_string(waveManager.wave) + "   " +
-			   std::to_string(waveManager.currentZombieHp);
+			   std::to_string(static_cast<int>(waveManager.currentZombieHp));
 
 		DrawText(text.c_str(), 10, 100, 30, GREEN);
 	}
@@ -213,6 +218,34 @@ class UI {
 			text = WeaponManager::GetName(spawner->drawnType);
 			text += "\n";
 			text += std::to_string(remainingTime);
+			break;
+		}
+
+		int fontSize = 30;
+		int textWidth = MeasureText(text.c_str(), fontSize);
+
+		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
+				 GetScreenHeight() / 2, fontSize, BLACK);
+	}
+
+	void DrawPotionSpawnerInfo(PotionSpawner *spawner) {
+		if (spawner == nullptr)
+			return;
+
+		std::string text;
+
+		switch (spawner->type) {
+		case PotionType::SPEED:
+			text = "POTION SPEED";
+			break;
+		case PotionType::THIRD_SLOT:
+			text = "THIRD SLOT";
+			break;
+		case PotionType::RAPID_FIRE:
+			text = "RAPID FIRE";
+			break;
+		case PotionType::HEAL:
+			text = "HEAL";
 			break;
 		}
 

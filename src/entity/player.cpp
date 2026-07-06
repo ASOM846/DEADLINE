@@ -234,7 +234,6 @@ void Player::HandlePotionSpawnActions() {
 		return;
 	}
 
-	TraceLog(LOG_INFO, "COLLISION");
 	switch (currentPotionSpawn->type) {
 	case PotionType::SPEED:
 		if (hasPotionSpeed)
