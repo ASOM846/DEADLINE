@@ -4,6 +4,18 @@
 
 void Player::Init() {
 	weaponManager.Init();
+
+	Reset();
+}
+
+void Player::Reset() {
+	hp = maxHp;
+	money = 0;
+
+	hasPotionSpeed = false;
+	hasPotionThirdSlot = false;
+	hasPotionRapidFire = false;
+	hasPotionHeal = false;
 }
 
 void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,

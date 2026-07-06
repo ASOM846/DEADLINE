@@ -57,6 +57,7 @@ struct WeaponManager {
 	bool isReloading{false};
 
 	void Init();
+	void Reset();
 
 	Weapon *GetCurrentWeapon();
 

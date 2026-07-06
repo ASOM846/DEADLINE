@@ -2,6 +2,12 @@
 
 void WeaponManager::Init() {
 	InitTemplate();
+
+	Reset();
+}
+
+void WeaponManager::Reset() {
+	inventory.clear();
 	GiveWeapon(WeaponType::PISTOL);
 }
 

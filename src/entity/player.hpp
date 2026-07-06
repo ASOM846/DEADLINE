@@ -46,6 +46,8 @@ struct Player {
 
 	void Init();
 
+	void Reset();
+
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 				LevelMap &map, ScreenShake &screenShake);
 

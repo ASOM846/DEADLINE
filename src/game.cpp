@@ -20,6 +20,8 @@ void Game::Reset() {
 	zombies.clear();
 	bullets.clear();
 	pickables.clear();
+
+	player.Reset();
 }
 
 void Game::Update() {
