@@ -44,7 +44,6 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
     "${CMAKE_SOURCE_DIR}/src/*.h"
 )
 
-# Zmiana nazwy pliku wykonywalnego na lowercase dla dobrych praktyk systemowych
 add_executable(deadline ${SRC_FILES})
 
 if(FAST_BUILD AND (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24"))
