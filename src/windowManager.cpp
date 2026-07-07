@@ -13,6 +13,10 @@ void WindowManager::Init() {
 
 void WindowManager::Run() {
 	while (!WindowShouldClose()) {
+		if (IsKeyPressed(KEY_F12)) {
+			TakeScreenshot("screenshot.png");
+		}
+
 		Update();
 
 		BeginDrawing();
