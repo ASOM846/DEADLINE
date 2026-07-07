@@ -1,5 +1,6 @@
 #pragma once
 
+#include "weaponManager.hpp"
 #include <raylib.h>
 #include <stdexcept>
 #include <string>
@@ -7,6 +8,7 @@
 
 enum class TextureId {
 	PLAYER_PISTOL,
+	PLAYER_DOUBLE_BARREL,
 	PLAYER_RIFLE,
 	PLAYER_SHOTGUN,
 	PLAYER_SMG,
@@ -59,6 +61,7 @@ class TextureManager {
 
 	void loadAll() {
 		load(TextureId::PLAYER_PISTOL, "assets/survivor_pistol.png");
+		load(TextureId::PLAYER_DOUBLE_BARREL, "assets/survivor_shorty.png");
 		load(TextureId::PLAYER_RIFLE, "assets/survivor_rifle.png");
 		load(TextureId::PLAYER_SHOTGUN, "assets/survivor_shotgun.png");
 		load(TextureId::PLAYER_SMG, "assets/survivor_smg.png");

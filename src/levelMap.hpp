@@ -45,6 +45,7 @@ enum class TileType {
 	POTION_RAPID_FIRE,
 	POTION_HEAL,
 
+	WEAPON_DOUBLE_BARREL,
 	WEAPON_UZI,
 	WEAPON_AK47,
 	WEAPON_SNIPER,
@@ -144,6 +145,12 @@ struct LevelMap {
 
 				if (tile == TileType::BLOCKADE) {
 					blockades.push_back({.pos = y * width + x, .hp = 100});
+				}
+
+				if (tile == TileType::WEAPON_DOUBLE_BARREL) {
+					weaponSpawners.push_back(
+						{.pos = y * width + x,
+						 .type = WeaponType::DOUBLE_BARREL});
 				}
 
 				if (tile == TileType::WEAPON_UZI) {

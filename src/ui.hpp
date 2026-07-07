@@ -161,6 +161,9 @@ class UI {
 		case WeaponType::PISTOL:
 			text = "PISTOL";
 			break;
+		case WeaponType::DOUBLE_BARREL:
+			text = "DOUBLE_BARREL";
+			break;
 		case WeaponType::UZI:
 			text = "UZI";
 			break;

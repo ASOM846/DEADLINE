@@ -130,6 +130,8 @@ std::string WeaponManager::GetName(WeaponType type) {
 	switch (type) {
 	case WeaponType::PISTOL:
 		return "PISTOL";
+	case WeaponType::DOUBLE_BARREL:
+		return "DOUBLE_BARREL";
 	case WeaponType::UZI:
 		return "UZI";
 	case WeaponType::AK47:
@@ -185,6 +187,28 @@ void WeaponManager::InitTemplate() {
 
 	pistol.shakeIntensity = 2.0f;
 	templates.push_back(pistol);
+
+	Weapon doubleBarrel;
+	doubleBarrel.name = "Double barrel";
+	doubleBarrel.type = WeaponType::DOUBLE_BARREL;
+
+	doubleBarrel.damage = 18;
+	doubleBarrel.bullets = 8;
+	doubleBarrel.maxAmmo = 24;
+	doubleBarrel.ammo = doubleBarrel.maxAmmo;
+	doubleBarrel.maxMagazine = 2;
+	doubleBarrel.currentMagazine = 2;
+	doubleBarrel.reloadTime = 1.4f;
+	doubleBarrel.spread = 35.0F;
+	doubleBarrel.fireRate = 0.15f;
+	doubleBarrel.pierce = 0;
+	doubleBarrel.isAutomatic = false;
+
+	doubleBarrel.price = 200;
+	doubleBarrel.magazinePrice = 20;
+
+	doubleBarrel.shakeIntensity = 5.0f;
+	templates.push_back(doubleBarrel);
 
 	Weapon uzi;
 	uzi.name = "UZI";

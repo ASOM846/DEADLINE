@@ -9,6 +9,7 @@
 
 enum class WeaponType {
 	PISTOL,
+	DOUBLE_BARREL,
 	UZI,
 	AK47,
 	SNIPER,
