@@ -52,14 +52,13 @@ class WaveManager {
 	void StartNextWave() {
 		spawnedZombies = 0;
 
-		totalZombiesInWave =
-			10 + (wave * 2) + static_cast<int>(std::pow(wave, 1.5));
+		totalZombiesInWave = 3 + (wave * 3);
 
 		currentZombieHp = 100.0f + (wave - 1) * 4.0f;
 
-		spawnInterval = 1.5f * std::pow(0.9, wave - 1);
+		spawnInterval = 3.0f - (wave * 0.15f);
 
-		spawnInterval = std::max(spawnInterval, 0.8f);
+		spawnInterval = std::max(spawnInterval, 0.9f);
 
 		MAX_ZOMBIES = std::min(15 + wave * 2, 60);
 	}
@@ -72,7 +71,7 @@ class WaveManager {
 		int x = (tileIndex % map.width) * map.cellSize;
 		int y = (tileIndex / map.width) * map.cellSize;
 
-		float baseSpeed = 2.5 + (wave * 0.05f);
+		float baseSpeed = 2.0f + (wave * 0.05f);
 		float randomMod = GetRandomValue(-50, 50) / 100.0F;
 
 		baseSpeed += randomMod;

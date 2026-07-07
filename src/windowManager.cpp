@@ -3,6 +3,7 @@
 
 void WindowManager::Init() {
 	InitWindow(screenWidth, screenHeight, windowTitle.c_str());
+	SetWindowState(FLAG_WINDOW_RESIZABLE);
 
 	const int targetFPS = 60;
 	SetTargetFPS(targetFPS);

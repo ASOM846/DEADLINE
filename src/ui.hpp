@@ -127,7 +127,7 @@ class UI {
 		int textWidth = MeasureText(text.c_str(), fontSize);
 
 		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
-				 GetScreenHeight() / 2, fontSize, BLACK);
+				 GetScreenHeight() / 3, fontSize, BLACK);
 	}
 
 	void DrawBlockadeInfo(Blockade *currentBlockade) {
@@ -141,7 +141,7 @@ class UI {
 		int textWidth = MeasureText(text.c_str(), fontSize);
 
 		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
-				 GetScreenHeight() / 2, fontSize, BLACK);
+				 GetScreenHeight() / 3, fontSize, BLACK);
 	}
 
 	void DrawWeaponShopInfo(Player &player) {
@@ -196,7 +196,7 @@ class UI {
 		int textWidth = MeasureText(text.c_str(), fontSize);
 
 		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
-				 GetScreenHeight() / 2, fontSize, BLACK);
+				 GetScreenHeight() / 3, fontSize, BLACK);
 	}
 
 	void DrawRandomWeaponInfo(RandomWeaponSpawner *spawner) {
@@ -225,7 +225,7 @@ class UI {
 		int textWidth = MeasureText(text.c_str(), fontSize);
 
 		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
-				 GetScreenHeight() / 2, fontSize, BLACK);
+				 GetScreenHeight() / 3, fontSize, BLACK);
 	}
 
 	void DrawPotionSpawnerInfo(PotionSpawner *spawner) {
@@ -253,6 +253,6 @@ class UI {
 		int textWidth = MeasureText(text.c_str(), fontSize);
 
 		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
-				 GetScreenHeight() / 2, fontSize, BLACK);
+				 GetScreenHeight() / 3, fontSize, BLACK);
 	}
 };

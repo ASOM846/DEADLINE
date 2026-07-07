@@ -41,7 +41,7 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 }
 
 void Player::Render(TextureManager &tm) {
-	DrawCircleV(position, radius, BLUE);
+	// DrawCircleV(position, radius, BLUE);
 
 	Weapon temp = *weaponManager.GetCurrentWeapon();
 	WeaponType type = temp.type;
