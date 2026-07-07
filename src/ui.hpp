@@ -69,7 +69,7 @@ class UI {
 				std::to_string(currentWeapon->currentMagazine) + "/" +
 				std::to_string(currentWeapon->maxMagazine) + "       " +
 				std::to_string(currentWeapon->ammo) + "    " +
-				(player.weaponManager.isReloading ? "REALODING......" : "") +
+				(player.weaponManager.isReloading ? "RELOADING......" : "") +
 				"     " + std::to_string(player.money);
 
 			DrawText(message.c_str(), 100, 10, 30, BLACK);
