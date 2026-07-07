@@ -30,9 +30,11 @@ class Game {
   private:
 	void UpdatePlaying();
 	void UpdateLost();
+	void UpdatePaused();
 
 	void RenderPlaying();
 	void RenderLost();
+	void RenderPaused();
 
 	GameStateManager gameStateManager;
 

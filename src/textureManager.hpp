@@ -12,6 +12,27 @@ enum class TextureId {
 	PLAYER_SMG,
 
 	ZOMBIE,
+
+	WALL_STRAIGHT,
+	WALL_SINGLE,
+
+	WALL_END_BOTTOM,
+	WALL_END_LEFT,
+	WALL_END_RIGHT,
+	WALL_END_TOP,
+
+	WALL_JOIN_BOTTOM_TOP,
+	WALL_JOIN_BOTTOM_LEFT,
+	WALL_JOIN_BOTTOM_RIGHT,
+	WALL_JOIN_TOP_RIGHT,
+	WALL_JOIN_TOP_LEFT,
+
+	WALL_JOIN_BOTTOM_RIGHT_TOP,
+	WALL_JOIN_LEFT_TOP_RIGHT,
+	WALL_JOIN_BOTTOM_LEFT_TOP,
+	WALL_JOIN_BOTTOM_LEFT_RIGHT,
+	WALL_ALL,
+
 	NONE,
 };
 
@@ -34,6 +55,29 @@ class TextureManager {
 		load(TextureId::PLAYER_SHOTGUN, "assets/survivor_shotgun.png");
 		load(TextureId::PLAYER_SMG, "assets/survivor_smg.png");
 		load(TextureId::ZOMBIE, "assets/zombie.png");
+
+		load(TextureId::WALL_STRAIGHT, "assets/walls/straight.png");
+		load(TextureId::WALL_SINGLE, "assets/walls/single.png");
+		load(TextureId::WALL_END_BOTTOM, "assets/walls/endDown.png");
+		load(TextureId::WALL_END_LEFT, "assets/walls/endLeft.png");
+		load(TextureId::WALL_END_RIGHT, "assets/walls/endRight.png");
+		load(TextureId::WALL_END_TOP, "assets/walls/endTop.png");
+		load(TextureId::WALL_JOIN_BOTTOM_TOP, "assets/walls/joinBottomTop.png");
+		load(TextureId::WALL_JOIN_BOTTOM_LEFT, "assets/walls/joinLeft.png");
+		load(TextureId::WALL_JOIN_BOTTOM_RIGHT, "assets/walls/joinRight.png");
+		load(TextureId::WALL_JOIN_TOP_RIGHT, "assets/walls/joinTopRight.png");
+		load(TextureId::WALL_JOIN_TOP_LEFT, "assets/walls/joinTopLeft.png");
+
+		load(TextureId::WALL_JOIN_BOTTOM_RIGHT_TOP,
+			 "assets/walls/joinBottomTopRight.png");
+		load(TextureId::WALL_JOIN_LEFT_TOP_RIGHT,
+			 "assets/walls/joinLeftTopRight.png");
+		load(TextureId::WALL_JOIN_BOTTOM_LEFT_TOP,
+			 "assets/walls/joinBottomLeftTop.png");
+		load(TextureId::WALL_JOIN_BOTTOM_LEFT_RIGHT,
+			 "assets/walls/joinLeftBottomRight.png");
+
+		load(TextureId::WALL_ALL, "assets/walls/all.png");
 	}
 
 	void load(TextureId id, const char *path) {

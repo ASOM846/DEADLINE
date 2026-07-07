@@ -3,6 +3,7 @@
 #include "baricade.hpp"
 #include "potion.hpp"
 #include "randomWeapon.hpp"
+#include "textureManager.hpp"
 #include "weaponManager.hpp"
 #include <fstream>
 #include <queue>
@@ -51,6 +52,11 @@ enum class TileType {
 	WEAPON_RANDOM,
 
 	COUNT
+};
+
+struct TextureHelper {
+	TextureId id;
+	float rotation{0.0f};
 };
 
 struct LevelMap {
@@ -171,14 +177,32 @@ struct LevelMap {
 
 	void Update(Vector2 playerPos) { UpdateFloodField(playerPos); }
 
-	void Render() const {
+	void Render(TextureManager &tm) {
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				TileType type = tiles[y * width + x];
 
 				if (type != TileType::FLOOR) {
-					DrawRectangle(x * cellSize, y * cellSize, cellSize,
-								  cellSize, GetTileColor(type));
+					if (type != TileType::WALL) {
+						DrawRectangle(x * cellSize, y * cellSize, cellSize,
+									  cellSize, GetTileColor(type));
+					} else if (type == TileType::WALL) {
+						TextureId id = GetWallTextureId(x, y).id;
+
+						Texture2D walltex = tm.get(id);
+
+						Rectangle dst = {static_cast<float>(x * cellSize),
+										 static_cast<float>(y * cellSize),
+										 static_cast<float>(cellSize),
+										 static_cast<float>(cellSize)};
+
+						Rectangle src = {0, 0,
+										 static_cast<float>(walltex.width),
+										 static_cast<float>(walltex.height)};
+
+						DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f,
+									   RAYWHITE);
+					}
 				}
 			}
 		}
@@ -318,5 +342,84 @@ struct LevelMap {
 			return BLACK;
 		}
 		return BLACK;
+	}
+
+	bool IsWall(int checkX, int checkY) {
+		if (checkX < 0 || checkX >= width || checkY < 0 || checkY >= height)
+			return false;
+
+		return tiles[checkY * width + checkX] == TileType::WALL;
+	}
+
+	TextureHelper GetWallTextureId(int x, int y) {
+		int bitmask = 0;
+
+		if (IsWall(x, y - 1))
+			bitmask += 1;
+		if (IsWall(x + 1, y))
+			bitmask += 2;
+		if (IsWall(x, y + 1))
+			bitmask += 4;
+		if (IsWall(x - 1, y))
+			bitmask += 8;
+
+		TextureHelper resoult;
+
+		//    |   | 1 |   |
+		//    | 8 |pos| 2 |
+		//    |   | 4 |   |
+
+		switch (bitmask) {
+		case 0:
+			resoult.id = TextureId::WALL_SINGLE;
+			break;
+		case 1:
+			resoult.id = TextureId::WALL_END_TOP;
+			break;
+		case 2:
+			resoult.id = TextureId::WALL_END_RIGHT;
+			break;
+		case 3:
+			resoult.id = TextureId::WALL_JOIN_TOP_RIGHT;
+			break;
+		case 4:
+			resoult.id = TextureId::WALL_END_BOTTOM;
+			break;
+		case 5:
+			resoult.id = TextureId::WALL_JOIN_BOTTOM_TOP;
+			break;
+		case 6:
+			resoult.id = TextureId::WALL_JOIN_BOTTOM_RIGHT;
+			break;
+		case 7:
+			resoult.id = TextureId::WALL_JOIN_BOTTOM_RIGHT_TOP;
+			break;
+		case 8:
+			resoult.id = TextureId::WALL_END_LEFT;
+			break;
+		case 9:
+			resoult.id = TextureId::WALL_JOIN_TOP_LEFT;
+			break;
+		case 10:
+			resoult.id = TextureId::WALL_STRAIGHT;
+			break;
+		case 11:
+			resoult.id = TextureId::WALL_JOIN_LEFT_TOP_RIGHT;
+			break;
+		case 12:
+			resoult.id = TextureId::WALL_JOIN_BOTTOM_LEFT;
+			break;
+		case 13:
+			resoult.id = TextureId::WALL_JOIN_BOTTOM_LEFT_TOP;
+			break;
+		case 14:
+			resoult.id = TextureId::WALL_JOIN_BOTTOM_LEFT_RIGHT;
+			break;
+		case 15:
+			resoult.id = TextureId::WALL_ALL;
+			break;
+		}
+
+		return resoult;
 	}
 };

@@ -34,6 +34,8 @@ void Game::Update() {
 		UpdatePlaying();
 		break;
 	case GameState::PAUSED:
+		UpdatePaused();
+		break;
 	case GameState::LOST:
 		UpdateLost();
 		break;
@@ -46,6 +48,8 @@ void Game::Render() {
 		RenderPlaying();
 		break;
 	case GameState::PAUSED:
+		RenderPaused();
+		break;
 	case GameState::LOST:
 		RenderLost();
 		break;
@@ -92,7 +96,7 @@ void Game::UpdatePlaying() {
 	collisionManager.ResolveZombieBlockade(zombies, levelMap);
 
 	if (IsKeyPressed(KEY_X))
-		effectManager.SpawnText(worldMousePos, "TEST", RED);
+		gameStateManager.SwitchState(GameState::PAUSED);
 
 	screenShake.update(GetFrameTime());
 	cameraManager.Update(player.position, screenShake.offset);
@@ -112,10 +116,15 @@ void Game::UpdateLost() {
 	}
 }
 
+void Game::UpdatePaused() {
+	if (IsKeyPressed(KEY_X))
+		gameStateManager.SwitchState(GameState::PLAYING);
+};
+
 void Game::RenderPlaying() {
 	BeginMode2D(cameraManager.GetCamera());
 
-	levelMap.Render();
+	levelMap.Render(textureManager);
 
 	player.Render(textureManager);
 
@@ -141,4 +150,8 @@ void Game::RenderPlaying() {
 void Game::RenderLost() {
 	RenderPlaying();
 	ui.RenderLost();
+}
+
+void Game::RenderPaused() {
+	RenderPlaying();
 }
