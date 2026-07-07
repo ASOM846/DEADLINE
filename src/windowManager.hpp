@@ -11,6 +11,8 @@ class WindowManager {
 
 	void Run();
 
+	void UpdateAndRenderFrame();
+
   private:
 	void Update();
 	void Render();

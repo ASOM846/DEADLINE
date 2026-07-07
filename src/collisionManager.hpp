@@ -54,12 +54,21 @@ class CollisionManager {
 		player.position.x += player.velocity.x;
 		player.position.y += player.velocity.y;
 
-		for (int y = 0; y < map.height; y++) {
-			for (int x = 0; x < map.width; x++) {
+		int playerGridX = static_cast<int>(player.position.x) / map.cellSize;
+		int playerGridY = static_cast<int>(player.position.y) / map.cellSize;
 
-				if (map.tiles[y * map.width + x] == TileType::WALL ||
-					map.tiles[y * map.width + x] == TileType::BLOCKADE ||
-					map.IsDoor(map.tiles[y * map.width + x])) {
+		int startX = std::max(0, playerGridX - 1);
+		int endX = std::min(map.width - 1, playerGridX + 1);
+		int startY = std::max(0, playerGridY - 1);
+		int endY = std::min(map.height - 1, playerGridY + 1);
+
+		for (int y = startY; y <= endY; y++) {
+			for (int x = startX; x <= endX; x++) {
+				TileType currentTile = map.tiles[y * map.width + x];
+
+				if (currentTile == TileType::WALL ||
+					currentTile == TileType::BLOCKADE ||
+					LevelMap::IsDoor(currentTile)) {
 
 					Rectangle wallRec = {static_cast<float>(x * map.cellSize),
 										 static_cast<float>(y * map.cellSize),
@@ -68,21 +77,19 @@ class CollisionManager {
 
 					if (CheckCollisionCircleRec(player.position, player.radius,
 												wallRec)) {
-
 						float closestX =
 							std::clamp(player.position.x, wallRec.x,
 									   wallRec.x + wallRec.width);
+
 						float closestY =
 							std::clamp(player.position.y, wallRec.y,
 									   wallRec.y + wallRec.height);
 
 						float dirX = player.position.x - closestX;
 						float dirY = player.position.y - closestY;
-
 						float distance = std::sqrt(dirX * dirX + dirY * dirY);
 
 						if (distance < player.radius) {
-
 							if (distance == 0.0f) {
 								dirX = 0.0f;
 								dirY = -1.0f;
@@ -91,7 +98,6 @@ class CollisionManager {
 
 							dirX /= distance;
 							dirY /= distance;
-
 							float overlap = player.radius - distance;
 
 							player.position.x += dirX * overlap;
@@ -261,30 +267,21 @@ class CollisionManager {
 	}
 
 	void ResolveBulletWall(std::vector<Bullet> &bullets, LevelMap &map) {
-		int index = 0;
-		for (auto &w : map.tiles) {
-			if (w != TileType::WALL && !LevelMap::IsDoor(w)) {
-				index++;
-				continue;
-			}
+		for (auto bullet = bullets.begin(); bullet != bullets.end();) {
+			int gridX = static_cast<int>(bullet->position.x) / map.cellSize;
+			int gridY = static_cast<int>(bullet->position.y) / map.cellSize;
 
-			int gridX = (index % map.width) * map.cellSize;
-			int gridY = (index / map.width) * map.cellSize;
+			if (gridX >= 0 && gridX < map.width && gridY >= 0 &&
+				gridY < map.height) {
+				int tileIndex = gridY * map.width + gridX;
+				TileType tile = map.tiles[tileIndex];
 
-			Rectangle wallRec = {static_cast<float>(gridX),
-								 static_cast<float>(gridY),
-								 static_cast<float>(map.cellSize),
-								 static_cast<float>(map.cellSize)};
-
-			for (auto bullet = bullets.begin(); bullet != bullets.end();) {
-				if (CheckCollisionCircleRec(bullet->position, bullet->radius,
-											wallRec)) {
+				if (tile == TileType::WALL || LevelMap::IsDoor(tile)) {
 					bullet = bullets.erase(bullet);
-				} else {
-					bullet++;
+					continue;
 				}
 			}
-			index++;
+			bullet++;
 		}
 	}
 

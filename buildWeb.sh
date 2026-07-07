@@ -11,7 +11,6 @@ emcc -o index.html \
   -O3 -Wall \
   -DPLATFORM_WEB \
   -sUSE_GLFW=3 \
-  -sASYNCIFY \
   -sALLOW_MEMORY_GROWTH=1 \
   --shell-file minshell.html \
   --preload-file assets
