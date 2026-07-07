@@ -136,7 +136,7 @@ void Game::RenderPlaying() {
 		b.Render();
 	}
 
-	PickableManager::Render(pickables);
+	PickableManager::Render(pickables, textureManager);
 
 	effectManager.Draw();
 

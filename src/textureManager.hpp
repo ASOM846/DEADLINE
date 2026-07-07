@@ -18,6 +18,9 @@ enum class TextureId {
 	CRANE,
 	BLOCKADE,
 
+	PICKUP_HP,
+	PICKUP_AMMO,
+
 	WALL_STRAIGHT,
 	WALL_SINGLE,
 
@@ -65,6 +68,9 @@ class TextureManager {
 		load(TextureId::FLOOR, "assets/floor.png");
 		load(TextureId::CRANE, "assets/crane.png");
 		load(TextureId::BLOCKADE, "assets/blockade.png");
+
+		load(TextureId::PICKUP_AMMO, "assets/ammo.png");
+		load(TextureId::PICKUP_HP, "assets/hp.png");
 
 		load(TextureId::WALL_STRAIGHT, "assets/walls/straight.png");
 		load(TextureId::WALL_SINGLE, "assets/walls/single.png");

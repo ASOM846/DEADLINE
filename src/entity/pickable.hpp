@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../textureManager.hpp"
+
 #include <algorithm>
 #include <raylib.h>
 #include <vector>
@@ -33,19 +35,31 @@ struct Pickable {
 		}
 	}
 
-	void Render() {
-		Color color;
+	void Render(TextureManager &tm) {
+		TextureId id;
 
 		switch (type) {
 		case PickableType::HP:
-			color = RED;
+			id = TextureId::PICKUP_HP;
 			break;
 		case PickableType::AMMO:
-			color = GOLD;
+			id = TextureId::PICKUP_AMMO;
 			break;
 		}
 
-		DrawCircleV(position, currentRadius, color);
+		// DrawCircleV(position, currentRadius, GREEN);
+
+		Texture2D tex = tm.get(id);
+
+		Rectangle dst = {static_cast<float>(position.x - currentRadius * 1.5),
+						 static_cast<float>(position.y - currentRadius * 1.5),
+						 static_cast<float>(currentRadius * 3),
+						 static_cast<float>(currentRadius * 3)};
+
+		Rectangle src = {0, 0, static_cast<float>(tex.width),
+						 static_cast<float>(tex.height)};
+
+		DrawTexturePro(tex, src, dst, {0, 0}, 0.0f, RAYWHITE);
 	}
 };
 
@@ -82,9 +96,9 @@ class PickableManager {
 			pickables.end());
 	}
 
-	static void Render(std::vector<Pickable> &pickables) {
+	static void Render(std::vector<Pickable> &pickables, TextureManager &tm) {
 		for (auto &p : pickables) {
-			p.Render();
+			p.Render(tm);
 		}
 	}
 };
