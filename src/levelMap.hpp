@@ -23,6 +23,7 @@ struct Door {
 };
 
 enum class TileType {
+	GRASS,
 	FLOOR,
 	WALL,
 	ZOMBIE_SPAWNER,
@@ -250,6 +251,22 @@ struct LevelMap {
 
 					DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f, RAYWHITE);
 				}
+
+				if (type == TileType::GRASS) {
+					TextureId id = TextureId::GRASS;
+
+					Texture2D walltex = tm.get(id);
+
+					Rectangle dst = {static_cast<float>(x * cellSize),
+									 static_cast<float>(y * cellSize),
+									 static_cast<float>(cellSize),
+									 static_cast<float>(cellSize)};
+
+					Rectangle src = {0, 0, static_cast<float>(walltex.width),
+									 static_cast<float>(walltex.height)};
+
+					DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f, RAYWHITE);
+				}
 			}
 		}
 	}
@@ -290,6 +307,7 @@ struct LevelMap {
 					int nIndex = ny * width + nx;
 
 					if ((tiles[nIndex] == TileType::FLOOR ||
+						 tiles[nIndex] == TileType::GRASS ||
 						 tiles[nIndex] == TileType::BLOCKADE) &&
 						distanceMap[nIndex] == INF) {
 						distanceMap[nIndex] = currentDist + 1;

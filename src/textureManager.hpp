@@ -13,6 +13,7 @@ enum class TextureId {
 
 	ZOMBIE,
 
+	GRASS,
 	FLOOR,
 	CRANE,
 	BLOCKADE,
@@ -60,6 +61,7 @@ class TextureManager {
 		load(TextureId::PLAYER_SMG, "assets/survivor_smg.png");
 		load(TextureId::ZOMBIE, "assets/zombie.png");
 
+		load(TextureId::GRASS, "assets/grass.png");
 		load(TextureId::FLOOR, "assets/floor.png");
 		load(TextureId::CRANE, "assets/crane.png");
 		load(TextureId::BLOCKADE, "assets/blockade.png");
