@@ -54,11 +54,6 @@ enum class TileType {
 	COUNT
 };
 
-struct TextureHelper {
-	TextureId id;
-	float rotation{0.0f};
-};
-
 struct LevelMap {
 	const int width = 100;
 	const int height = 100;
@@ -68,6 +63,7 @@ struct LevelMap {
 
 	std::vector<TileType> tiles;
 	std::vector<int> distanceMap;
+	std::vector<int> bitmaskMap;
 
 	Vector2 playerSpawnPos;
 
@@ -91,8 +87,10 @@ struct LevelMap {
 	void Init() {
 		tiles.resize(width * height, TileType::FLOOR);
 		distanceMap.resize(width * height, INF);
+		bitmaskMap.resize(width * height, -1);
 
 		LoadMap();
+		CalculateBitmask();
 	}
 
 	void LoadMap() {
@@ -182,12 +180,28 @@ struct LevelMap {
 			for (int x = 0; x < width; x++) {
 				TileType type = tiles[y * width + x];
 
+				if (type == TileType::FLOOR) {
+					TextureId id = TextureId::FLOOR;
+
+					Texture2D floorTex = tm.get(id);
+
+					Rectangle dst = {static_cast<float>(x * cellSize),
+									 static_cast<float>(y * cellSize),
+									 static_cast<float>(cellSize),
+									 static_cast<float>(cellSize)};
+
+					Rectangle src = {0, 0, static_cast<float>(floorTex.width),
+									 static_cast<float>(floorTex.height)};
+
+					DrawTexturePro(floorTex, src, dst, {0, 0}, 0.0f, RAYWHITE);
+				}
+
 				if (type != TileType::FLOOR) {
 					if (type != TileType::WALL) {
 						DrawRectangle(x * cellSize, y * cellSize, cellSize,
 									  cellSize, GetTileColor(type));
 					} else if (type == TileType::WALL) {
-						TextureId id = GetWallTextureId(x, y).id;
+						TextureId id = GetWallTextureId(x, y);
 
 						Texture2D walltex = tm.get(id);
 
@@ -351,19 +365,33 @@ struct LevelMap {
 		return tiles[checkY * width + checkX] == TileType::WALL;
 	}
 
-	TextureHelper GetWallTextureId(int x, int y) {
-		int bitmask = 0;
+	void CalculateBitmask() {
+		for (int y = 0; y < height; y++) {
+			for (int x = 0; x < width; x++) {
+				int idx = y * width + x;
 
-		if (IsWall(x, y - 1))
-			bitmask += 1;
-		if (IsWall(x + 1, y))
-			bitmask += 2;
-		if (IsWall(x, y + 1))
-			bitmask += 4;
-		if (IsWall(x - 1, y))
-			bitmask += 8;
+				if (IsWall(x, y)) {
+					int bitmask = 0;
 
-		TextureHelper resoult;
+					if (IsWall(x, y - 1))
+						bitmask += 1;
+					if (IsWall(x + 1, y))
+						bitmask += 2;
+					if (IsWall(x, y + 1))
+						bitmask += 4;
+					if (IsWall(x - 1, y))
+						bitmask += 8;
+
+					bitmaskMap[idx] = bitmask;
+				}
+			}
+		}
+	}
+
+	TextureId GetWallTextureId(int x, int y) {
+		int bitmask = bitmaskMap[y * width + x];
+
+		TextureId resoult;
 
 		//    |   | 1 |   |
 		//    | 8 |pos| 2 |
@@ -371,52 +399,52 @@ struct LevelMap {
 
 		switch (bitmask) {
 		case 0:
-			resoult.id = TextureId::WALL_SINGLE;
+			resoult = TextureId::WALL_SINGLE;
 			break;
 		case 1:
-			resoult.id = TextureId::WALL_END_TOP;
+			resoult = TextureId::WALL_END_TOP;
 			break;
 		case 2:
-			resoult.id = TextureId::WALL_END_RIGHT;
+			resoult = TextureId::WALL_END_RIGHT;
 			break;
 		case 3:
-			resoult.id = TextureId::WALL_JOIN_TOP_RIGHT;
+			resoult = TextureId::WALL_JOIN_TOP_RIGHT;
 			break;
 		case 4:
-			resoult.id = TextureId::WALL_END_BOTTOM;
+			resoult = TextureId::WALL_END_BOTTOM;
 			break;
 		case 5:
-			resoult.id = TextureId::WALL_JOIN_BOTTOM_TOP;
+			resoult = TextureId::WALL_JOIN_BOTTOM_TOP;
 			break;
 		case 6:
-			resoult.id = TextureId::WALL_JOIN_BOTTOM_RIGHT;
+			resoult = TextureId::WALL_JOIN_BOTTOM_RIGHT;
 			break;
 		case 7:
-			resoult.id = TextureId::WALL_JOIN_BOTTOM_RIGHT_TOP;
+			resoult = TextureId::WALL_JOIN_BOTTOM_RIGHT_TOP;
 			break;
 		case 8:
-			resoult.id = TextureId::WALL_END_LEFT;
+			resoult = TextureId::WALL_END_LEFT;
 			break;
 		case 9:
-			resoult.id = TextureId::WALL_JOIN_TOP_LEFT;
+			resoult = TextureId::WALL_JOIN_TOP_LEFT;
 			break;
 		case 10:
-			resoult.id = TextureId::WALL_STRAIGHT;
+			resoult = TextureId::WALL_STRAIGHT;
 			break;
 		case 11:
-			resoult.id = TextureId::WALL_JOIN_LEFT_TOP_RIGHT;
+			resoult = TextureId::WALL_JOIN_LEFT_TOP_RIGHT;
 			break;
 		case 12:
-			resoult.id = TextureId::WALL_JOIN_BOTTOM_LEFT;
+			resoult = TextureId::WALL_JOIN_BOTTOM_LEFT;
 			break;
 		case 13:
-			resoult.id = TextureId::WALL_JOIN_BOTTOM_LEFT_TOP;
+			resoult = TextureId::WALL_JOIN_BOTTOM_LEFT_TOP;
 			break;
 		case 14:
-			resoult.id = TextureId::WALL_JOIN_BOTTOM_LEFT_RIGHT;
+			resoult = TextureId::WALL_JOIN_BOTTOM_LEFT_RIGHT;
 			break;
 		case 15:
-			resoult.id = TextureId::WALL_ALL;
+			resoult = TextureId::WALL_ALL;
 			break;
 		}
 
