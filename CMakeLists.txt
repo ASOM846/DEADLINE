@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(dungeoncards VERSION 1.0 LANGUAGES CXX)
+project(DEADLINE VERSION 1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -44,12 +44,13 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
     "${CMAKE_SOURCE_DIR}/src/*.h"
 )
 
-add_executable(dungeoncards ${SRC_FILES})
+# Zmiana nazwy pliku wykonywalnego na lowercase dla dobrych praktyk systemowych
+add_executable(deadline ${SRC_FILES})
 
 if(FAST_BUILD AND (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24"))
   message(STATUS "FAST_BUILD: enabling UNITY_BUILD (merge many translation units)")
-  set_target_properties(dungeoncards PROPERTIES UNITY_BUILD ON)
-  set_target_properties(dungeoncards PROPERTIES UNITY_BUILD_BATCH_SIZE 16)
+  set_target_properties(deadline PROPERTIES UNITY_BUILD ON)
+  set_target_properties(deadline PROPERTIES UNITY_BUILD_BATCH_SIZE 16)
 endif()
 
 set(RAYLIB_TARGET "")
@@ -96,19 +97,20 @@ if(NOT RAYLIB_TARGET)
     )
 endif()
 
-target_link_libraries(dungeoncards PRIVATE ${RAYLIB_TARGET})
+target_link_libraries(deadline PRIVATE ${RAYLIB_TARGET})
+
 add_custom_command(
-    TARGET dungeoncards POST_BUILD
+    TARGET deadline POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_SOURCE_DIR}/assets"
-            "$<TARGET_FILE_DIR:dungeoncards>/assets"
+            "$<TARGET_FILE_DIR:deadline>/assets"
     COMMENT "Kopiowanie folderu assets do katalogu wyjściowego..."
 )
 
 if(MSVC)
-  target_compile_options(dungeoncards PRIVATE /W4)
+  target_compile_options(deadline PRIVATE /W4)
 else()
-  target_compile_options(dungeoncards PRIVATE -Wall -Wextra -Wpedantic)
+  target_compile_options(deadline PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
 message(STATUS "Project: ${PROJECT_NAME}")
