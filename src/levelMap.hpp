@@ -218,6 +218,38 @@ struct LevelMap {
 									   RAYWHITE);
 					}
 				}
+
+				if (IsDoor(type)) {
+					TextureId id = TextureId::CRANE;
+
+					Texture2D walltex = tm.get(id);
+
+					Rectangle dst = {static_cast<float>(x * cellSize),
+									 static_cast<float>(y * cellSize),
+									 static_cast<float>(cellSize),
+									 static_cast<float>(cellSize)};
+
+					Rectangle src = {0, 0, static_cast<float>(walltex.width),
+									 static_cast<float>(walltex.height)};
+
+					DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f, RAYWHITE);
+				}
+
+				if (type == TileType::BLOCKADE) {
+					TextureId id = TextureId::BLOCKADE;
+
+					Texture2D walltex = tm.get(id);
+
+					Rectangle dst = {static_cast<float>(x * cellSize),
+									 static_cast<float>(y * cellSize),
+									 static_cast<float>(cellSize),
+									 static_cast<float>(cellSize)};
+
+					Rectangle src = {0, 0, static_cast<float>(walltex.width),
+									 static_cast<float>(walltex.height)};
+
+					DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f, RAYWHITE);
+				}
 			}
 		}
 	}

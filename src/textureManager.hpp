@@ -14,6 +14,8 @@ enum class TextureId {
 	ZOMBIE,
 
 	FLOOR,
+	CRANE,
+	BLOCKADE,
 
 	WALL_STRAIGHT,
 	WALL_SINGLE,
@@ -59,6 +61,8 @@ class TextureManager {
 		load(TextureId::ZOMBIE, "assets/zombie.png");
 
 		load(TextureId::FLOOR, "assets/floor.png");
+		load(TextureId::CRANE, "assets/crane.png");
+		load(TextureId::BLOCKADE, "assets/blockade.png");
 
 		load(TextureId::WALL_STRAIGHT, "assets/walls/straight.png");
 		load(TextureId::WALL_SINGLE, "assets/walls/single.png");

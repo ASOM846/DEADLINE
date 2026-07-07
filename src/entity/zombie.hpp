@@ -75,7 +75,7 @@ struct Zombie {
 
 	void Render(TextureManager &tm) const {
 
-		DrawCircleV(position, radius, GREEN);
+		// DrawCircleV(position, radius, GREEN);
 
 		float localOffsetY = 0.0f;
 
