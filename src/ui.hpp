@@ -13,9 +13,9 @@
 class UI {
   public:
 	void Render(Player &player, WaveManager &waveManager, TextureManager &tm) {
-		DrawPlayerStats(player);
-
-		DrawWaveInfo(waveManager);
+		// DrawPlayerStats(player);
+		//
+		// DrawWaveInfo(waveManager);
 
 		if (player.currentDoor != nullptr) {
 			DrawDoorInfo(player.currentDoor);
@@ -39,6 +39,7 @@ class UI {
 		}
 
 		DrawHPEffect(player, tm);
+		DrawMinimalHUD(player, waveManager);
 	}
 
 	void RenderLost() {
@@ -147,6 +148,24 @@ class UI {
 		Color tint = Fade(RED, baseAlpha);
 
 		DrawTexturePro(tex, src, dst, {0, 0}, 0.0F, tint);
+	}
+
+	void DrawMinimalHUD(Player &player, WaveManager &waveManager) {
+		int fontSize = 40;
+		std::string waveText = std::to_string(waveManager.wave);
+
+		DrawText(waveText.c_str(), 22, 22, fontSize, Fade(BLACK, 0.5f));
+		DrawText(waveText.c_str(), 20, 20, fontSize, WHITE);
+
+		std::string moneyText = "$" + std::to_string(player.money);
+		int textWidth = MeasureText(moneyText.c_str(), fontSize);
+
+		int posX = GetScreenWidth() - textWidth - 30;
+		int posY = GetScreenHeight() - fontSize - 30;
+
+		DrawText(moneyText.c_str(), posX + 2, posY + 2, fontSize,
+				 Fade(BLACK, 0.5F));
+		DrawText(moneyText.c_str(), posX, posY, fontSize, MAROON);
 	}
 
 	void DrawWaveInfo(WaveManager &waveManager) {
