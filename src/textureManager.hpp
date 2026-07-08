@@ -12,6 +12,7 @@ enum class TextureId {
 	PLAYER_RIFLE,
 	PLAYER_SHOTGUN,
 	PLAYER_SMG,
+	PLAYER_SNIPER,
 
 	ZOMBIE,
 
@@ -65,6 +66,7 @@ class TextureManager {
 		load(TextureId::PLAYER_RIFLE, "assets/survivor_rifle.png");
 		load(TextureId::PLAYER_SHOTGUN, "assets/survivor_shotgun.png");
 		load(TextureId::PLAYER_SMG, "assets/survivor_smg.png");
+		load(TextureId::PLAYER_SNIPER, "assets/survivor_sniper.png");
 		load(TextureId::ZOMBIE, "assets/zombie.png");
 
 		load(TextureId::GRASS, "assets/grass.png");

@@ -10,7 +10,7 @@ void Player::Init() {
 
 void Player::Reset() {
 	hp = maxHp;
-	money = 1000;
+	money = 1000000;
 
 	hasPotionSpeed = false;
 	hasPotionThirdSlot = false;
@@ -62,7 +62,7 @@ void Player::Render(TextureManager &tm) {
 		playerTexId = TextureId::PLAYER_RIFLE;
 		break;
 	case WeaponType::SNIPER:
-		playerTexId = TextureId::PLAYER_RIFLE;
+		playerTexId = TextureId::PLAYER_SNIPER;
 		break;
 	case WeaponType::SHOTGUN:
 		playerTexId = TextureId::PLAYER_SHOTGUN;
