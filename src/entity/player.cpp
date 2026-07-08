@@ -1,4 +1,5 @@
 #include "player.hpp"
+#include "../types.hpp"
 #include "bullet.hpp"
 #include <raylib.h>
 

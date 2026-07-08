@@ -36,6 +36,8 @@ class UI {
 		if (player.currentPotionSpawn != nullptr) {
 			DrawPotionSpawnerInfo(player.currentPotionSpawn);
 		}
+
+		DrawHPEffect(player);
 	}
 
 	void RenderLost() {
@@ -107,6 +109,23 @@ class UI {
 			DrawRectangle(GetScreenWidth() - rectW * 1 - spacing * 1,
 						  GetScreenHeight() - 60, rectW, rectW, RED);
 		}
+	}
+
+	void DrawHPEffect(Player &player) {
+		float hpRatio = player.hp / player.maxHp;
+
+		if (hpRatio >= 1.0f)
+			return;
+
+		float baseAlpha = (1.0f - hpRatio) * 0.4f;
+
+		if (hpRatio < 0.3f) {
+			float pulse = (std::sin(GetTime() * 8.0f) + 1.0f) / 2.0f;
+			baseAlpha += pulse * 0.2;
+		}
+
+		DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(),
+					  Fade(RED, baseAlpha));
 	}
 
 	void DrawWaveInfo(WaveManager &waveManager) {
