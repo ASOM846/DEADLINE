@@ -4,6 +4,7 @@
 #include "entity/player.hpp"
 #include "potion.hpp"
 #include "randomWeapon.hpp"
+#include "textureManager.hpp"
 #include "waveManager.hpp"
 #include "weaponManager.hpp"
 #include <raylib.h>
@@ -11,7 +12,7 @@
 
 class UI {
   public:
-	void Render(Player &player, WaveManager &waveManager) {
+	void Render(Player &player, WaveManager &waveManager, TextureManager &tm) {
 		DrawPlayerStats(player);
 
 		DrawWaveInfo(waveManager);
@@ -37,7 +38,7 @@ class UI {
 			DrawPotionSpawnerInfo(player.currentPotionSpawn);
 		}
 
-		DrawHPEffect(player);
+		DrawHPEffect(player, tm);
 	}
 
 	void RenderLost() {
@@ -111,11 +112,22 @@ class UI {
 		}
 	}
 
-	void DrawHPEffect(Player &player) {
+	void DrawHPEffect(Player &player, TextureManager &tm) {
 		float hpRatio = player.hp / player.maxHp;
 
-		if (hpRatio >= 1.0f)
+		Texture2D tex = tm.get(TextureId::EFFECT_VINETE2);
+
+		Rectangle dst = {0, 0, static_cast<float>(GetScreenWidth()),
+						 static_cast<float>(GetScreenHeight())};
+
+		Rectangle src = {0, 0, static_cast<float>(tex.width),
+						 static_cast<float>(tex.height)};
+
+		DrawTexturePro(tex, src, dst, {0, 0}, 0.0F, RAYWHITE);
+
+		if (hpRatio >= 1.0f) {
 			return;
+		}
 
 		float baseAlpha = (1.0f - hpRatio) * 0.4f;
 
@@ -124,8 +136,17 @@ class UI {
 			baseAlpha += pulse * 0.2;
 		}
 
-		DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(),
-					  Fade(RED, baseAlpha));
+		tex = tm.get(TextureId::EFFECT_VINETE);
+
+		dst = {0, 0, static_cast<float>(GetScreenWidth()),
+			   static_cast<float>(GetScreenHeight())};
+
+		src = {0, 0, static_cast<float>(tex.width),
+			   static_cast<float>(tex.height)};
+
+		Color tint = Fade(RED, baseAlpha);
+
+		DrawTexturePro(tex, src, dst, {0, 0}, 0.0F, tint);
 	}
 
 	void DrawWaveInfo(WaveManager &waveManager) {

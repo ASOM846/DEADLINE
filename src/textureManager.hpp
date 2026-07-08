@@ -44,6 +44,9 @@ enum class TextureId {
 	WALL_JOIN_BOTTOM_LEFT_RIGHT,
 	WALL_ALL,
 
+	EFFECT_VINETE,
+	EFFECT_VINETE2,
+
 	NONE,
 };
 
@@ -99,6 +102,9 @@ class TextureManager {
 			 "assets/walls/joinLeftBottomRight.png");
 
 		load(TextureId::WALL_ALL, "assets/walls/all.png");
+
+		load(TextureId::EFFECT_VINETE, "assets/vinete1.png");
+		load(TextureId::EFFECT_VINETE2, "assets/vinete2.png");
 	}
 
 	void load(TextureId id, const char *path) {

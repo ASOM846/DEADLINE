@@ -95,15 +95,14 @@ void Game::UpdatePlaying() {
 
 	collisionManager.ResolveZombieBlockade(zombies, levelMap);
 
-	if (IsKeyPressed(KEY_X))
-		gameStateManager.SwitchState(GameState::PAUSED);
+	if (IsKeyDown(KEY_X))
+		player.hp -= GetFrameTime() * 10;
 
 	screenShake.update(GetFrameTime());
 	cameraManager.Update(player.position, screenShake.offset);
 
-	if (IsKeyPressed(KEY_P)) {
-		pickables.emplace_back(
-			Pickable{.position = worldMousePos, .type = PickableType::AMMO});
+	if (IsKeyDown(KEY_P)) {
+		player.hp += GetFrameTime() * 10;
 	}
 
 	gameStateManager.Update(player);
@@ -142,7 +141,7 @@ void Game::RenderPlaying() {
 
 	EndMode2D();
 
-	ui.Render(player, waveManager);
+	ui.Render(player, waveManager, textureManager);
 
 	DrawFPS(10, 10);
 }
