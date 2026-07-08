@@ -11,7 +11,7 @@ void Player::Init() {
 
 void Player::Reset() {
 	hp = maxHp;
-	money = 000000;
+	money = 9000000;
 
 	hasPotionSpeed = false;
 	hasPotionThirdSlot = false;

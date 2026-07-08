@@ -40,6 +40,8 @@ class UI {
 
 		DrawHPEffect(player, tm);
 		DrawMinimalHUD(player, waveManager);
+
+		DrawPotionsHUD(player);
 	}
 
 	void RenderLost() {
@@ -166,6 +168,36 @@ class UI {
 		DrawText(moneyText.c_str(), posX + 2, posY + 2, fontSize,
 				 Fade(BLACK, 0.5F));
 		DrawText(moneyText.c_str(), posX, posY, fontSize, MAROON);
+	}
+
+	void DrawPotionsHUD(Player &player) {
+		float startX = 30.0f;
+		float boxSize = 24.0f;
+		float spacing = 10.0f;
+		float startY = GetScreenHeight() - boxSize - 30.0f;
+
+		struct PotionData {
+			bool hasIt;
+			Color col;
+		};
+
+		PotionData potionList[] = {{player.hasPotionSpeed, BLUE},
+								   {player.hasPotionThirdSlot, GREEN},
+								   {player.hasPotionRapidFire, GOLD},
+								   {player.hasPotionHeal, RED}};
+
+		for (int i = 0; i < 4; i++) {
+			float currentX = startX + i * (boxSize + spacing);
+			Rectangle rect = {currentX, startY, boxSize, boxSize};
+
+			if (potionList[i].hasIt) {
+				DrawRectangleRec(rect, Fade(potionList[i].col, 0.7f));
+				DrawRectangleLinesEx(rect, 1.5f, WHITE);
+			} else {
+				DrawRectangleRec(rect, Fade(BLACK, 0.15f));
+				DrawRectangleLinesEx(rect, 1.0f, Fade(WHITE, 0.2f));
+			}
+		}
 	}
 
 	void DrawDoorInfo(Door *currentDoor) {
