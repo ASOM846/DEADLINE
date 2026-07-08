@@ -11,7 +11,7 @@ void Player::Init() {
 
 void Player::Reset() {
 	hp = maxHp;
-	money = 1000000;
+	money = 000000;
 
 	hasPotionSpeed = false;
 	hasPotionThirdSlot = false;
@@ -96,6 +96,22 @@ void Player::Render(TextureManager &tm) {
 
 		DrawCircleSector(position, knifeRange, angle - 60.0f, angle + 60.0f, 16,
 						 Fade(LIGHTGRAY, 0.6f));
+	}
+
+	if (weaponManager.isReloading) {
+		float reloadProgress =
+			weaponManager.reloadTimer /
+			weaponManager.inventory[weaponManager.currentWeaponIndex]
+				.reloadTime;
+
+		float barWidth = 50.0f;
+		float barHeight = 4.0f;
+
+		Vector2 barPos{position.x - barWidth / 2,
+					   position.y + visualRadius + 20.0f};
+
+		DrawRectangleV(barPos, {barWidth, barHeight}, Fade(BLACK, 0.5f));
+		DrawRectangleV(barPos, {barWidth * reloadProgress, barHeight}, WHITE);
 	}
 }
 
