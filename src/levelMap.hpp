@@ -4,6 +4,7 @@
 #include "potion.hpp"
 #include "randomWeapon.hpp"
 #include "textureManager.hpp"
+#include "types.hpp"
 #include "weaponManager.hpp"
 #include <fstream>
 #include <queue>
@@ -188,91 +189,45 @@ struct LevelMap {
 			for (int x = 0; x < width; x++) {
 				TileType type = tiles[y * width + x];
 
-				if (type == TileType::FLOOR) {
-					TextureId id = TextureId::FLOOR;
+				Color color = Fade(GetTileColor(type), nightVisibility);
 
-					Texture2D floorTex = tm.get(id);
+				DrawRectangle(x * cellSize, y * cellSize, cellSize, cellSize,
+							  color);
 
-					Rectangle dst = {static_cast<float>(x * cellSize),
-									 static_cast<float>(y * cellSize),
-									 static_cast<float>(cellSize),
-									 static_cast<float>(cellSize)};
+				TextureId id = TextureId::NONE;
 
-					Rectangle src = {0, 0, static_cast<float>(floorTex.width),
-									 static_cast<float>(floorTex.height)};
-
-					DrawTexturePro(floorTex, src, dst, {0, 0}, 0.0f, RAYWHITE);
-				}
-
-				if (type != TileType::FLOOR) {
-					if (type != TileType::WALL) {
-						DrawRectangle(x * cellSize, y * cellSize, cellSize,
-									  cellSize, GetTileColor(type));
-					} else if (type == TileType::WALL) {
-						TextureId id = GetWallTextureId(x, y);
-
-						Texture2D walltex = tm.get(id);
-
-						Rectangle dst = {static_cast<float>(x * cellSize),
-										 static_cast<float>(y * cellSize),
-										 static_cast<float>(cellSize),
-										 static_cast<float>(cellSize)};
-
-						Rectangle src = {0, 0,
-										 static_cast<float>(walltex.width),
-										 static_cast<float>(walltex.height)};
-
-						DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f,
-									   RAYWHITE);
-					}
+				switch (type) {
+				case TileType::GRASS:
+					id = TextureId::GRASS;
+					break;
+				case TileType::FLOOR:
+					id = TextureId::FLOOR;
+					break;
+				case TileType::WALL:
+					id = GetWallTextureId(x, y);
+					break;
+				case TileType::BLOCKADE:
+					id = TextureId::BLOCKADE;
+					break;
 				}
 
 				if (IsDoor(type)) {
-					TextureId id = TextureId::CRANE;
 
-					Texture2D walltex = tm.get(id);
-
-					Rectangle dst = {static_cast<float>(x * cellSize),
-									 static_cast<float>(y * cellSize),
-									 static_cast<float>(cellSize),
-									 static_cast<float>(cellSize)};
-
-					Rectangle src = {0, 0, static_cast<float>(walltex.width),
-									 static_cast<float>(walltex.height)};
-
-					DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f, RAYWHITE);
+					id = TextureId::CRANE;
 				}
 
-				if (type == TileType::BLOCKADE) {
-					TextureId id = TextureId::BLOCKADE;
-
-					Texture2D walltex = tm.get(id);
+				if (id != TextureId::NONE) {
+					Texture2D tex = tm.get(id);
 
 					Rectangle dst = {static_cast<float>(x * cellSize),
 									 static_cast<float>(y * cellSize),
 									 static_cast<float>(cellSize),
 									 static_cast<float>(cellSize)};
 
-					Rectangle src = {0, 0, static_cast<float>(walltex.width),
-									 static_cast<float>(walltex.height)};
+					Rectangle src = {0, 0, static_cast<float>(tex.width),
+									 static_cast<float>(tex.height)};
 
-					DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f, RAYWHITE);
-				}
-
-				if (type == TileType::GRASS) {
-					TextureId id = TextureId::GRASS;
-
-					Texture2D walltex = tm.get(id);
-
-					Rectangle dst = {static_cast<float>(x * cellSize),
-									 static_cast<float>(y * cellSize),
-									 static_cast<float>(cellSize),
-									 static_cast<float>(cellSize)};
-
-					Rectangle src = {0, 0, static_cast<float>(walltex.width),
-									 static_cast<float>(walltex.height)};
-
-					DrawTexturePro(walltex, src, dst, {0, 0}, 0.0f, RAYWHITE);
+					DrawTexturePro(tex, src, dst, {0, 0}, 0.0F, nightTint);
 				}
 			}
 		}
