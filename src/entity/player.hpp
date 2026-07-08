@@ -28,6 +28,8 @@ struct Player {
 
 	Vector2 velocity{0, 0};
 
+	float ammoVisibliltyTimer = 0.0f;
+
 	float knifeCooldownTimer{0.0f};
 	const float knifeCooldownDuration{0.5f};
 	float knifeVisualTimer{0.0f};
@@ -63,6 +65,8 @@ struct Player {
 	void Render(TextureManager &tm);
 
   private:
+	void DrawAmmo(float timer = 2.0f) { ammoVisibliltyTimer = timer; }
+
 	void HandleMovement();
 	void HandleKnifeActions(Vector2 worldMousePos);
 	void HandleWeaponActions(std::vector<Bullet> &bullets);

@@ -27,6 +27,9 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 
 	rotation = angleRad * 57.29578F;
 
+	if (ammoVisibliltyTimer >= 0.0f)
+		ammoVisibliltyTimer -= GetFrameTime();
+
 	HandleMovement();
 
 	HandleKnifeActions(worldMousePos);
@@ -38,7 +41,7 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	HandleBlockadeActions();
 
 	weaponManager.Update(bullets, position, worldMousePos, screenShake,
-						 hasPotionRapidFire, angleRad);
+						 hasPotionRapidFire, angleRad, ammoVisibliltyTimer);
 }
 
 void Player::Render(TextureManager &tm) {
@@ -86,7 +89,7 @@ void Player::Render(TextureManager &tm) {
 
 	Rectangle dstCorrected = {position.x, position.y, drawWidth, drawHeight};
 
-	Vector2 origin = {drawWidth / 2.0f, (drawHeight / 2.0f) + localOffsetY};
+	Vector2 origin = {drawWidth / 2.0F, (drawHeight / 2.0F) + localOffsetY};
 
 	DrawTexturePro(playerTex, src, dstCorrected, origin,
 				   rotation + textureRotation, RAYWHITE);
@@ -112,6 +115,25 @@ void Player::Render(TextureManager &tm) {
 
 		DrawRectangleV(barPos, {barWidth, barHeight}, Fade(BLACK, 0.5f));
 		DrawRectangleV(barPos, {barWidth * reloadProgress, barHeight}, WHITE);
+	}
+
+	if (ammoVisibliltyTimer > 0.0f && !weaponManager.isReloading) {
+		std::string ammoStr =
+			std::to_string(weaponManager.GetCurrentWeapon()->currentMagazine) +
+			" / " + std::to_string(weaponManager.GetCurrentWeapon()->ammo);
+
+		int fontSize = 20;
+
+		int textW = MeasureText(ammoStr.c_str(), fontSize);
+		Vector2 textPos = {position.x + visualRadius + 10.0f,
+						   position.y - (fontSize / 2.0f)};
+
+		float alpha = std::min(1.0f, ammoVisibliltyTimer * 2.0f);
+
+		DrawText(ammoStr.c_str(), textPos.x + 1, textPos.y + 1, fontSize,
+				 Fade(BLACK, alpha));
+		DrawText(ammoStr.c_str(), textPos.x, textPos.y, fontSize,
+				 Fade(MAROON, alpha));
 	}
 }
 
@@ -168,6 +190,7 @@ void Player::HandleKnifeActions(Vector2 worldMousePos) {
 void Player::HandleWeaponActions(std::vector<Bullet> &bullets) {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
 		weaponManager.SwitchWeaponNext();
+		DrawAmmo();
 	}
 
 	if (IsKeyDown(KEY_R)) {

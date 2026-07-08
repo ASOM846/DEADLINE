@@ -67,7 +67,8 @@ void WeaponManager::StartReload() {
 
 void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 						   Vector2 targetPos, ScreenShake &screenShake,
-						   bool hasPotionRapidFire, float angleRad) {
+						   bool hasPotionRapidFire, float angleRad,
+						   float &ammoDrawingTimer) {
 	Weapon *w = GetCurrentWeapon();
 	if (w == nullptr) {
 		return;
@@ -119,6 +120,7 @@ void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 							   std::cos(angleRad) * offsetX};
 
 	if (wantsToShoot && w->currentMagazine > 0) {
+		ammoDrawingTimer = 2.0f;
 		FireWeapon(bullets, bulletSpawn, targetPos, w);
 		screenShake.trigger(w->shakeIntensity);
 		shootTimer = 0.0F;

@@ -168,15 +168,6 @@ class UI {
 		DrawText(moneyText.c_str(), posX, posY, fontSize, MAROON);
 	}
 
-	void DrawWaveInfo(WaveManager &waveManager) {
-		std::string text;
-
-		text = "WAVE:   " + std::to_string(waveManager.wave) + "   " +
-			   std::to_string(static_cast<int>(waveManager.currentZombieHp));
-
-		DrawText(text.c_str(), 10, 100, 30, GREEN);
-	}
-
 	void DrawDoorInfo(Door *currentDoor) {
 		std::string text;
 
