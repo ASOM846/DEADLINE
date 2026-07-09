@@ -66,55 +66,6 @@ class UI {
 	}
 
   private:
-	void DrawPlayerStats(Player &player) {
-		Weapon *currentWeapon = player.weaponManager.GetCurrentWeapon();
-
-		if (currentWeapon != nullptr) {
-			std::string message =
-				currentWeapon->name + "     " +
-				std::to_string(currentWeapon->currentMagazine) + "/" +
-				std::to_string(currentWeapon->maxMagazine) + "       " +
-				std::to_string(currentWeapon->ammo) + "    " +
-				(player.weaponManager.isReloading ? "RELOADING......" : "") +
-				"     " + std::to_string(player.money);
-
-			DrawText(message.c_str(), 100, 10, 30, BLACK);
-		}
-
-		float hp = player.hp;
-		float maxHp = player.maxHp;
-
-		int barWidth = 200;
-
-		float percnt = hp / maxHp * barWidth;
-
-		DrawRectangleLines(50, GetScreenHeight() - 50, barWidth, 40, LIGHTGRAY);
-		DrawRectangle(50, GetScreenHeight() - 50, percnt, 40, GREEN);
-
-		int rectW = 40;
-		int spacing = 20;
-
-		if (player.hasPotionSpeed) {
-			DrawRectangle(GetScreenWidth() - rectW * 4 - spacing * 4,
-						  GetScreenHeight() - 60, rectW, rectW, BLUE);
-		}
-
-		if (player.hasPotionThirdSlot) {
-			DrawRectangle(GetScreenWidth() - rectW * 3 - spacing * 3,
-						  GetScreenHeight() - 60, rectW, rectW, GREEN);
-		}
-
-		if (player.hasPotionRapidFire) {
-			DrawRectangle(GetScreenWidth() - rectW * 2 - spacing * 2,
-						  GetScreenHeight() - 60, rectW, rectW, GOLD);
-		}
-
-		if (player.hasPotionHeal) {
-			DrawRectangle(GetScreenWidth() - rectW * 1 - spacing * 1,
-						  GetScreenHeight() - 60, rectW, rectW, RED);
-		}
-	}
-
 	void DrawHPEffect(Player &player, TextureManager &tm) {
 		float hpRatio = player.hp / player.maxHp;
 
@@ -213,17 +164,31 @@ class UI {
 	}
 
 	void DrawBlockadeInfo(Blockade *currentBlockade) {
-		std::string text;
+		if (currentBlockade == nullptr)
+			return;
 
-		int hp = static_cast<int>(currentBlockade->hp);
+		float hpRatio = currentBlockade->hp / currentBlockade->maxHp;
 
-		text = "BLOCKADE HP:  " + std::to_string(hp);
+		Vector2 center = {GetScreenWidth() / 2.0f, GetScreenHeight() / 3.0f};
 
-		int fontSize = 30;
-		int textWidth = MeasureText(text.c_str(), fontSize);
+		float radius = 25.0f;
 
-		DrawText(text.c_str(), (GetScreenWidth() - textWidth) / 2,
-				 GetScreenHeight() / 3, fontSize, BLACK);
+		float startAngle = -90.0f;
+		float endAngle = -90 + (360.0f * hpRatio);
+
+		Color circleColor = GREEN;
+		if (hpRatio < 0.25f) {
+			circleColor = RED;
+		} else if (hpRatio < 0.60f) {
+			circleColor = GOLD;
+		}
+
+		DrawCircleV(center, radius, Fade(BLACK, 0.4f));
+
+		DrawCircleSector(center, radius, startAngle, endAngle, 36,
+						 Fade(circleColor, 0.7f));
+
+		DrawCircleLinesV(center, radius, WHITE);
 	}
 
 	void DrawWeaponShopInfo(Player &player) {

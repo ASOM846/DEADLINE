@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../textureManager.hpp"
+#include "../types.hpp"
 
 #include <algorithm>
 #include <raylib.h>
@@ -59,7 +60,7 @@ struct Pickable {
 		Rectangle src = {0, 0, static_cast<float>(tex.width),
 						 static_cast<float>(tex.height)};
 
-		DrawTexturePro(tex, src, dst, {0, 0}, 0.0f, RAYWHITE);
+		DrawTexturePro(tex, src, dst, {0, 0}, 0.0f, nightTint);
 	}
 };
 
