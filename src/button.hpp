@@ -32,7 +32,7 @@ struct Button {
 	}
 
 	void Draw(const Font &font) const {
-		DrawRectangleRec(rect, BLUE);
+		// DrawRectangleRec(rect, BLUE);
 
 		bool hovered = (textOffsetX > 1.0f);
 		Color textColor = hovered ? GOLD : WHITE;

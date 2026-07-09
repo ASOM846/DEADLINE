@@ -1,10 +1,13 @@
 #pragma once
 #include "game.hpp"
+#include "loadingScreen.hpp"
 #include "menu.hpp"
 #include "string"
 
 enum class WindowState {
 	GAME,
+	LOADING,
+	TRANSITION,
 	MENU,
 };
 
@@ -20,11 +23,19 @@ class WindowManager {
 	void UpdateAndRenderFrame();
 
   private:
+	float transitionAlpha = 0.0F;
+	bool fadingToBlack = true;
+
 	void Update();
 	void Render();
 
+	void SwitchState(WindowState newState);
+
+	void ExitProgram();
+
 	Game game;
 	Menu menu;
+	LoadingScreen loadingScreen;
 
 	WindowState currentState;
 

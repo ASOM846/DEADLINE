@@ -15,6 +15,7 @@ class Menu {
 	void Render();
 
 	[[nodiscard]] bool ShouldStartGame() const { return shouldStartGame; }
+	[[nodiscard]] bool ShouldExitGame() const { return shouldExit; }
 
   private:
 	float animationTimer{0.0f};
@@ -28,6 +29,7 @@ class Menu {
 	Vector2 offset{0, 0};
 
 	Button startGame;
+	Button settings;
 	Button exit;
 
 	void InitButtons();

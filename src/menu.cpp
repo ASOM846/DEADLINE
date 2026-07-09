@@ -34,6 +34,7 @@ void Menu::Update(Vector2 mousePos) {
 	}
 
 	startGame.Update(mousePos);
+	settings.Update(mousePos);
 	exit.Update(mousePos);
 }
 
@@ -43,11 +44,13 @@ void Menu::Render() {
 	RenderVersion();
 
 	startGame.Draw(GetFontDefault());
+	settings.Draw(GetFontDefault());
 	exit.Draw(GetFontDefault());
 }
 
 void Menu::InitButtons() {
 	startGame.text = "START";
+	settings.text = "SETTINGS";
 	exit.text = "EXIT";
 }
 
@@ -58,13 +61,20 @@ void Menu::UpdateButtonsPos() {
 	float btnX = 40.0f + offset.x;
 
 	auto exitY = static_cast<float>(GetScreenHeight() - offset.y - btnH - 40);
-	auto startY = static_cast<float>(exitY - btnH - btnSpacing);
+	auto settingsY = static_cast<float>(exitY - btnH - btnSpacing);
+	auto startY = static_cast<float>(settingsY - btnH - btnSpacing);
 
 	startGame.rect = {.x = btnX,
 					  .y = startY,
 					  .width = static_cast<float>(
 						  MeasureText(startGame.text, startGame.fontSize)),
 					  .height = static_cast<float>(startGame.fontSize)};
+
+	settings.rect = {.x = btnX,
+					 .y = settingsY,
+					 .width = static_cast<float>(
+						 MeasureText(settings.text, settings.fontSize)),
+					 .height = static_cast<float>(settings.fontSize)};
 
 	exit.rect = {.x = btnX,
 				 .y = exitY,
