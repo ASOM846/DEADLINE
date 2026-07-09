@@ -15,6 +15,9 @@ void WindowManager::Init() {
 	SetTargetFPS(targetFPS);
 
 	game.Init();
+	menu.Init();
+
+	currentState = WindowState::MENU;
 }
 
 void WindowManager::UpdateAndRenderFrame() {
@@ -51,8 +54,24 @@ void WindowManager::Run() {
 
 void WindowManager::Update() {
 	game.Update();
+	switch (currentState) {
+	case WindowState::GAME:
+		game.Update();
+		break;
+	case WindowState::MENU:
+		menu.Update(GetMousePosition());
+		break;
+	}
 }
 
 void WindowManager::Render() {
 	game.Render();
+	switch (currentState) {
+	case WindowState::GAME:
+		game.Render();
+		break;
+	case WindowState::MENU:
+		menu.Render();
+		break;
+	}
 }

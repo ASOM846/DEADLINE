@@ -1,0 +1,34 @@
+#pragma once
+
+#include "button.hpp"
+#include <raylib.h>
+
+class Menu {
+  public:
+	Menu() = default;
+	~Menu() = default;
+
+	void Init();
+	void Reset();
+
+	void Update(Vector2 mousePos);
+	void Render();
+
+	[[nodiscard]] bool ShouldStartGame() const { return shouldStartGame; }
+
+  private:
+	float animationTimer{0.0f};
+
+	bool shouldStartGame{false};
+	bool shouldExit{false};
+
+	Button startGame;
+	Button exit;
+
+	void InitButtons();
+	void UpdateButtonsPos();
+
+	void RenderBackground();
+	void RenderTitle();
+	void RenderVersion();
+};

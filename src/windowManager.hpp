@@ -1,6 +1,12 @@
 #pragma once
 #include "game.hpp"
+#include "menu.hpp"
 #include "string"
+
+enum class WindowState {
+	GAME,
+	MENU,
+};
 
 class WindowManager {
   public:
@@ -18,6 +24,9 @@ class WindowManager {
 	void Render();
 
 	Game game;
+	Menu menu;
+
+	WindowState currentState;
 
 	int screenWidth{1280};
 	int screenHeight{720};
