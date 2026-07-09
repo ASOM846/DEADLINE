@@ -22,6 +22,11 @@ class Menu {
 	bool shouldStartGame{false};
 	bool shouldExit{false};
 
+	int visualScreenWidth{};
+	int visualScreenHeight{};
+
+	Vector2 offset{0, 0};
+
 	Button startGame;
 	Button exit;
 

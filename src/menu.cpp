@@ -15,6 +15,12 @@ void Menu::Reset() {
 void Menu::Update(Vector2 mousePos) {
 	animationTimer += GetFrameTime() * 0.5f;
 
+	visualScreenWidth = (GetScreenWidth() > 1600) ? 1600 : GetScreenWidth();
+	visualScreenHeight = (GetScreenHeight() > 900) ? 900 : GetScreenHeight();
+
+	offset.x = (GetScreenWidth() - visualScreenWidth) / 2.0f;
+	offset.y = (GetScreenHeight() - visualScreenHeight) / 2.0f;
+
 	if (IsWindowResized()) {
 		UpdateButtonsPos();
 	}
@@ -47,11 +53,11 @@ void Menu::InitButtons() {
 
 void Menu::UpdateButtonsPos() {
 	int btnH{35};
-	int btnSpacing{20};
+	int btnSpacing{30};
 
-	float btnX = 40.0f;
+	float btnX = 40.0f + offset.x;
 
-	auto exitY = static_cast<float>(GetScreenHeight() - btnH - 40);
+	auto exitY = static_cast<float>(GetScreenHeight() - offset.y - btnH - 40);
 	auto startY = static_cast<float>(exitY - btnH - btnSpacing);
 
 	startGame.rect = {.x = btnX,
@@ -93,8 +99,8 @@ void Menu::RenderTitle() {
 
 	std::string mainTitle = "DEADLINE";
 	int titleSize{75};
-	int titleX{btnSpacing};
-	int titleY{100};
+	int titleX{static_cast<int>(btnSpacing + offset.x)};
+	int titleY{static_cast<int>(offset.y + 30)};
 
 	DrawText(mainTitle.c_str(), titleX + 4, titleY + 4, titleSize,
 			 Fade(BLACK, 0.8f));
@@ -117,8 +123,8 @@ void Menu::RenderVersion() {
 
 	int textWidth = MeasureText(versionText, fontSize);
 
-	int posX = GetScreenWidth() - textWidth - margin;
-	int posY = GetScreenHeight() - fontSize - margin;
+	int posX = GetScreenWidth() - textWidth - margin - offset.x;
+	int posY = GetScreenHeight() - fontSize - margin - offset.y;
 
 	DrawText(versionText, posX + 1, posY + 1, fontSize, Fade(BLACK, 0.5f));
 	DrawText(versionText, posX, posY, fontSize, GRAY);
