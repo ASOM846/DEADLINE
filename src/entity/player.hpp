@@ -43,7 +43,7 @@ struct Player {
 	bool hasPotionHeal{false};
 
 	const float knifeRange{75.0f};
-	const int knifeDamage{150};
+	const int knifeDamage{110};
 
 	WeaponManager weaponManager;
 

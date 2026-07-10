@@ -8,10 +8,16 @@ emcc -o index.html \
   -Isrc \
   -I"$HOME/libs/raylib/src" \
   "$HOME/libs/raylib/src/libraylib.web.a" \
-  -O3 -Wall \
+  -O3 \
+  -flto \
+  -Wall \
   -DPLATFORM_WEB \
   -sUSE_GLFW=3 \
   -sALLOW_MEMORY_GROWTH=1 \
+  -sASSERTIONS=0 \
+  -sINITIAL_MEMORY=67108864 \
+  -sSTACK_SIZE=5242880 \
+  --closure 1 \
   --shell-file minshell.html \
   --preload-file assets
 

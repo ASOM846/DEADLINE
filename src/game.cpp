@@ -108,8 +108,8 @@ void Game::UpdatePlaying() {
 
 	collisionManager.ResolveZombieBlockade(zombies, levelMap);
 
-	if (IsKeyDown(KEY_X))
-		player.hp -= GetFrameTime() * 10;
+	if (IsKeyPressed(KEY_X))
+		gameStateManager.SwitchState(GameState::PAUSED);
 
 	screenShake.update(GetFrameTime());
 	cameraManager.Update(player.position, screenShake.offset);

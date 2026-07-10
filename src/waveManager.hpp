@@ -52,15 +52,15 @@ class WaveManager {
 	void StartNextWave() {
 		spawnedZombies = 0;
 
-		totalZombiesInWave = 3 + (wave * 3);
+		totalZombiesInWave = 8 + (wave * 4);
 
 		currentZombieHp = 100.0f + (wave - 1) * 4.0f;
 
-		spawnInterval = 3.0f - (wave * 0.15f);
+		spawnInterval = 2.3f - (wave * 0.15f);
 
 		spawnInterval = std::max(spawnInterval, 0.9f);
 
-		MAX_ZOMBIES = std::min(15 + wave * 2, 60);
+		MAX_ZOMBIES = std::min(20 + wave * 3, 60);
 	}
 
   private:

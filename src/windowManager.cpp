@@ -26,7 +26,10 @@ void WindowManager::Init() {
 
 void WindowManager::UpdateAndRenderFrame() {
 	if (IsKeyPressed(KEY_F12)) {
-		TakeScreenshot("screenshot.png");
+		static int screenshotCount = 0;
+		const char *fileName =
+			TextFormat("screenshot_%d.png", screenshotCount++);
+		TakeScreenshot(fileName);
 	}
 
 	Update();
