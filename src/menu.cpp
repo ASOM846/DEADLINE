@@ -142,7 +142,7 @@ void Menu::RenderTitle() {
 }
 
 void Menu::RenderVersion() {
-	const char *versionText = "DEV BUILD (work in progress)";
+	const char *versionText = "V1.0.0";
 
 	int fontSize = 20;
 	int margin = 40;

@@ -24,6 +24,8 @@ class WaveManager {
 	float intermissionTimer = 0.0f;
 	const float intermissionDuration = 7.0f;
 
+	void Reset() { wave = 1; }
+
 	void Update(std::vector<Zombie> &zombies, const LevelMap &map) {
 		if (isIntermission) {
 			intermissionTimer -= GetFrameTime();

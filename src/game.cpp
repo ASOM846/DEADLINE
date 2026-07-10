@@ -36,6 +36,7 @@ void Game::Reset() {
 
 	effectManager.Reset();
 	player.Reset();
+	waveManager.Reset();
 
 	// audioManager.ResetMusic(MusicId::BCG_MUSIC);
 }
