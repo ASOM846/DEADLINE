@@ -111,12 +111,11 @@ void Game::UpdatePlaying() {
 	if (IsKeyPressed(KEY_X))
 		gameStateManager.SwitchState(GameState::PAUSED);
 
+	if (IsKeyPressed(KEY_M))
+		gameStateManager.SwitchState(GameState::LOST);
+
 	screenShake.update(GetFrameTime());
 	cameraManager.Update(player.position, screenShake.offset);
-
-	if (IsKeyDown(KEY_P)) {
-		player.hp += GetFrameTime() * 10;
-	}
 
 	gameStateManager.Update(player);
 }
@@ -161,7 +160,7 @@ void Game::RenderPlaying() {
 
 void Game::RenderLost() {
 	RenderPlaying();
-	ui.RenderLost();
+	ui.RenderLost(waveManager.wave);
 }
 
 void Game::RenderPaused() {

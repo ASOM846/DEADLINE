@@ -17,9 +17,7 @@ class MapSelection {
 	void Update();
 	void Render();
 
-	[[nodiscard]] LevelMap GetRandomMap() const {
-		return maps[GetRandomValue(0, maps.size() - 1)];
-	}
+	[[nodiscard]] LevelMap GetRandomMap() const { return maps[0]; }
 
 	[[nodiscard]] bool IsSelected() const { return isSelected; }
 	[[nodiscard]] bool ShouldReturn() const { return goBack; }

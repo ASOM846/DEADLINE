@@ -18,7 +18,7 @@ void MapSelection::Init() {
 	map2.filename = "assets/map2.txt";
 	map2.title = "MAP 2 \n BIG ";
 
-#ifndef PLATFORM_WEB
+#ifdef PLATFORM_WEB
 	map2.isLocked = true;
 #endif
 
@@ -31,7 +31,7 @@ void MapSelection::Init() {
 	map3.filename = "assets/map3.txt";
 	map3.title = "MAP 3 \n BIG";
 
-#ifndef PLATFORM_WEB
+#ifdef PLATFORM_WEB
 	map3.isLocked = true;
 #endif
 

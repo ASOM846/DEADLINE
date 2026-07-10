@@ -7,6 +7,7 @@
 #include "textureManager.hpp"
 #include "waveManager.hpp"
 #include "weaponManager.hpp"
+#include <chrono>
 #include <raylib.h>
 #include <string>
 
@@ -44,25 +45,30 @@ class UI {
 		DrawPotionsHUD(player);
 	}
 
-	void RenderLost() {
-		int barH = 150;
+	void RenderLost(int lastWave) {
+		int barH = 220;
 		DrawRectangle(0, (GetScreenHeight() - barH) / 2, GetScreenWidth(), barH,
 					  Fade(BLACK, 0.3f));
 
-		std::string text = "LOST";
-		int textSize = 30;
+		std::string title = "GAME OVER";
+		std::string waveText =
+			"You have reached wave " + std::to_string(lastWave);
+		std::string infoText = "Press SPACE to return to MENU";
 
-		std::string text2 = "Press SPACE to return to MENU";
-		int textSize2 = 20;
+		int titleSize = 50;
+		int titleW = MeasureText(title.c_str(), titleSize);
+		DrawText(title.c_str(), (GetScreenWidth() - titleW) / 2,
+				 GetScreenHeight() / 2 - 70, titleSize, RED);
 
-		int textW = MeasureText(text.c_str(), textSize);
-		int text2W = MeasureText(text2.c_str(), textSize2);
+		int waveSize = 25;
+		int waveW = MeasureText(waveText.c_str(), waveSize);
+		DrawText(waveText.c_str(), (GetScreenWidth() - waveW) / 2,
+				 GetScreenHeight() / 2 + 10, waveSize, GOLD);
 
-		DrawText(text.c_str(), (GetScreenWidth() - textW) / 2,
-				 GetScreenHeight() / 2 - 15, textSize, RED);
-
-		DrawText(text2.c_str(), (GetScreenWidth() - text2W) / 2,
-				 GetScreenHeight() / 2 + 15, textSize2, WHITE);
+		int infoSize = 20;
+		int infoW = MeasureText(infoText.c_str(), infoSize);
+		DrawText(infoText.c_str(), (GetScreenWidth() - infoW) / 2,
+				 GetScreenHeight() / 2 + 50, infoSize, LIGHTGRAY);
 	}
 
   private:
@@ -257,7 +263,8 @@ class UI {
 
 		switch (spawner->state) {
 		case RandomWeaponSpawnerState::IDLE:
-			text = "PRESS `E` TO DRAW";
+			text = "PRESS `E` TO SPIN \n" + std::string("$") +
+				   std::to_string(spawner->price);
 			break;
 		case RandomWeaponSpawnerState::ROLLING:
 			text = WeaponManager::GetName(spawner->drawnType);
