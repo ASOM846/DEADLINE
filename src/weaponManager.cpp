@@ -1,4 +1,6 @@
 #include "weaponManager.hpp"
+#include "audioManager.hpp"
+#include <raylib.h>
 
 void WeaponManager::Init() {
 	InitTemplate();
@@ -56,10 +58,11 @@ Weapon *WeaponManager::GetWeaponTemplate(WeaponType weaponType) {
 	return nullptr;
 }
 
-void WeaponManager::StartReload() {
+void WeaponManager::StartReload(AudioManager &audioManager) {
 	Weapon *w = GetCurrentWeapon();
 	if (w && w->ammo > 0 && w->currentMagazine < w->maxMagazine &&
 		!isReloading) {
+		audioManager.PlaySound2(SoundId::RELOAD);
 		isReloading = true;
 		reloadTimer = 0.0F;
 	}
@@ -68,7 +71,8 @@ void WeaponManager::StartReload() {
 void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 						   Vector2 targetPos, ScreenShake &screenShake,
 						   bool hasPotionRapidFire, float angleRad,
-						   float &ammoDrawingTimer) {
+						   float &ammoDrawingTimer,
+						   AudioManager &audioManager) {
 	Weapon *w = GetCurrentWeapon();
 	if (w == nullptr) {
 		return;
@@ -95,7 +99,7 @@ void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 	}
 
 	if (w->currentMagazine == 0 && w->ammo > 0) {
-		StartReload();
+		StartReload(audioManager);
 		return;
 	}
 
@@ -123,6 +127,7 @@ void WeaponManager::Update(std::vector<Bullet> &bullets, Vector2 startPos,
 		ammoDrawingTimer = 2.0f;
 		FireWeapon(bullets, bulletSpawn, targetPos, w);
 		screenShake.trigger(w->shakeIntensity);
+		audioManager.PlaySound2(SoundId::GUNFIRE);
 		shootTimer = 0.0F;
 		w->currentMagazine--;
 	}

@@ -1,4 +1,5 @@
 #include "game.hpp"
+#include "audioManager.hpp"
 #include "entity/pickable.hpp"
 #include "floatingText.hpp"
 #include "gameStateManager.hpp"
@@ -11,10 +12,13 @@ void Game::Init() {
 	Reset();
 
 	textureManager.loadAll();
+	audioManager.loadAll();
 
 	player.Init();
 
 	cameraManager.Init();
+
+	audioManager.PlayMusic(MusicId::BCG_MUSIC);
 }
 
 void Game::LoadMap(LevelMap map) {
@@ -32,6 +36,8 @@ void Game::Reset() {
 
 	effectManager.Reset();
 	player.Reset();
+
+	// audioManager.ResetMusic(MusicId::BCG_MUSIC);
 }
 
 void Game::Update() {
@@ -78,7 +84,8 @@ void Game::UpdatePlaying() {
 	zombieManager.ResolveZombieCollision(zombies);
 	pickableManager.UpdateAll(pickables);
 
-	player.Update(bullets, worldMousePos, levelMap, screenShake, effectManager);
+	player.Update(bullets, worldMousePos, levelMap, screenShake, effectManager,
+				  audioManager);
 
 	bulletManager.UpdateAll(bullets);
 

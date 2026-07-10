@@ -21,7 +21,7 @@ void Player::Reset() {
 
 void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 					LevelMap &map, ScreenShake &screenShake,
-					EffectManager &effectManager) {
+					EffectManager &effectManager, AudioManager &audioManager) {
 	float angleRad =
 		std::atan2(worldMousePos.y - position.y, worldMousePos.x - position.x);
 
@@ -33,7 +33,7 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	HandleMovement();
 
 	HandleKnifeActions(worldMousePos);
-	HandleWeaponActions(bullets);
+	HandleWeaponActions(bullets, audioManager);
 	HandleRandomSpawnerActions();
 	HandlePotionSpawnActions();
 	HandleDoorActions(map);
@@ -41,7 +41,8 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	HandleBlockadeActions();
 
 	weaponManager.Update(bullets, position, worldMousePos, screenShake,
-						 hasPotionRapidFire, angleRad, ammoVisibliltyTimer);
+						 hasPotionRapidFire, angleRad, ammoVisibliltyTimer,
+						 audioManager);
 }
 
 void Player::Render(TextureManager &tm) {
@@ -187,14 +188,15 @@ void Player::HandleKnifeActions(Vector2 worldMousePos) {
 	}
 }
 
-void Player::HandleWeaponActions(std::vector<Bullet> &bullets) {
+void Player::HandleWeaponActions(std::vector<Bullet> &bullets,
+								 AudioManager &audioManager) {
 	if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
 		weaponManager.SwitchWeaponNext();
 		DrawAmmo();
 	}
 
 	if (IsKeyDown(KEY_R)) {
-		weaponManager.StartReload();
+		weaponManager.StartReload(audioManager);
 	}
 
 	if (!IsKeyPressed(KEY_E) || currentSpawner == nullptr) {

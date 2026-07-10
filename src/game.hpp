@@ -1,5 +1,6 @@
 #pragma once
 
+#include "audioManager.hpp"
 #include "cameraManager.hpp"
 #include "collisionManager.hpp"
 #include "entity/bullet.hpp"
@@ -25,6 +26,8 @@ class Game {
 
 	void LoadMap(LevelMap map);
 
+	AudioManager &GetAudioManager() { return audioManager; }
+
 	void Reset();
 
 	void Update();
@@ -42,6 +45,7 @@ class Game {
 	GameStateManager gameStateManager;
 
 	TextureManager textureManager;
+	AudioManager audioManager;
 
 	Player player;
 

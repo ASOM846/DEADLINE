@@ -1,5 +1,6 @@
 #pragma once
 
+#include "audioManager.hpp"
 #include "entity/bullet.hpp"
 #include "floatingText.hpp"
 #include "raylib.h"
@@ -68,11 +69,11 @@ struct WeaponManager {
 	void GiveWeapon(WeaponType newWeapon);
 	Weapon *GetWeaponTemplate(WeaponType weaponType);
 
-	void StartReload();
+	void StartReload(AudioManager &audioManager);
 	void Update(std::vector<Bullet> &bullets, Vector2 startPos,
 				Vector2 targetPos, ScreenShake &screenShake,
 				bool hasPotionRapidFire, float angleRad,
-				float &ammoDrawingTimer);
+				float &ammoDrawingTimer, AudioManager &audioManager);
 
 	static std::string GetName(WeaponType type);
 

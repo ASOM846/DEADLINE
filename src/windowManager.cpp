@@ -1,4 +1,5 @@
 #include "windowManager.hpp"
+#include "audioManager.hpp"
 #include "gameStateManager.hpp"
 #include "raylib.h"
 
@@ -8,8 +9,9 @@
 
 void WindowManager::Init() {
 	InitWindow(screenWidth, screenHeight, windowTitle.c_str());
-	SetWindowState(FLAG_WINDOW_RESIZABLE);
+	InitAudioDevice();
 
+	SetWindowState(FLAG_WINDOW_RESIZABLE);
 	SetWindowState(FLAG_VSYNC_HINT);
 
 	const int targetFPS = 60;
@@ -55,6 +57,8 @@ void WindowManager::Run() {
 }
 
 void WindowManager::Update() {
+	game.GetAudioManager().UpdateMusic(MusicId::BCG_MUSIC);
+
 	switch (currentState) {
 	case WindowState::GAME:
 		game.Update();
@@ -146,8 +150,10 @@ void WindowManager::Render() {
 }
 
 void WindowManager::SwitchState(WindowState newState) {
-	if (newState == WindowState::MENU)
+	if (newState == WindowState::MENU) {
 		menu.Reset();
+		game.GetAudioManager().ResetMusic(MusicId::BCG_MUSIC);
+	}
 
 	if (newState == WindowState::LEVEL_SELECTION)
 		mapSelection.Reset();
@@ -159,9 +165,11 @@ void WindowManager::SwitchState(WindowState newState) {
 		transitionAlpha = 0.0f;
 		fadingToBlack = true;
 	}
+
 	currentState = newState;
 }
 
 void WindowManager::ExitProgram() {
+	CloseAudioDevice();
 	CloseWindow();
 }

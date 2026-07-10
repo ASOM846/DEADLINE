@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../audioManager.hpp"
 #include "../floatingText.hpp"
 #include "../levelMap.hpp"
 #include "../screenShake.hpp"
@@ -60,7 +61,7 @@ struct Player {
 
 	void Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 				LevelMap &map, ScreenShake &screenShake,
-				EffectManager &EffectManager);
+				EffectManager &EffectManager, AudioManager &audioManager);
 
 	void Render(TextureManager &tm);
 
@@ -69,7 +70,8 @@ struct Player {
 
 	void HandleMovement();
 	void HandleKnifeActions(Vector2 worldMousePos);
-	void HandleWeaponActions(std::vector<Bullet> &bullets);
+	void HandleWeaponActions(std::vector<Bullet> &bullets,
+							 AudioManager &audioManager);
 	void HandleRandomSpawnerActions();
 	void HandleDoorActions(LevelMap &map);
 	void HandlePickableActions();
