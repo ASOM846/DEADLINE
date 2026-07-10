@@ -93,8 +93,10 @@ void WindowManager::Update() {
 		break;
 	case WindowState::MENU:
 		menu.Update(GetMousePosition());
-		if (menu.ShouldStartGame())
+		if (menu.ShouldStartGame()) {
+			game.LoadMap(mapSelection.GetRandomMap());
 			SwitchState(WindowState::LOADING);
+		}
 
 		if (menu.ShouldSelectMap())
 			SwitchState(WindowState::LEVEL_SELECTION);

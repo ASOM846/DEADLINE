@@ -14,6 +14,10 @@ class MapSelection {
 	void Update();
 	void Render();
 
+	[[nodiscard]] LevelMap GetRandomMap() const {
+		return maps[GetRandomValue(0, maps.size() - 1)];
+	}
+
 	[[nodiscard]] bool IsSelected() const { return isSelected; }
 
 	[[nodiscard]] LevelMap GetSelectedMap() const { return maps[hoverIndex]; }

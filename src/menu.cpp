@@ -56,7 +56,7 @@ void Menu::Render() {
 }
 
 void Menu::InitButtons() {
-	startGame.text = "START";
+	startGame.text = "QUICK START";
 	mapSelectionBtn.text = "MAPS";
 	settings.text = "SETTINGS";
 	exit.text = "EXIT";
