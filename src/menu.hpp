@@ -15,6 +15,7 @@ class Menu {
 	void Render();
 
 	[[nodiscard]] bool ShouldStartGame() const { return shouldStartGame; }
+	[[nodiscard]] bool ShouldSelectMap() const { return shouldSelectMap; }
 	[[nodiscard]] bool ShouldExitGame() const { return shouldExit; }
 
 	void RenderBackground();
@@ -24,6 +25,7 @@ class Menu {
 	float animationTimer{0.0f};
 
 	bool shouldStartGame{false};
+	bool shouldSelectMap{false};
 	bool shouldExit{false};
 
 	int visualScreenWidth{};
@@ -32,6 +34,7 @@ class Menu {
 	Vector2 offset{0, 0};
 
 	Button startGame;
+	Button mapSelectionBtn;
 	Button settings;
 	Button exit;
 

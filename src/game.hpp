@@ -22,6 +22,9 @@ class Game {
 	~Game() = default;
 
 	void Init();
+
+	void LoadMap(LevelMap map);
+
 	void Reset();
 
 	void Update();

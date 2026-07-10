@@ -1,11 +1,13 @@
 #pragma once
 #include "game.hpp"
 #include "loadingScreen.hpp"
+#include "mapSelection.hpp"
 #include "menu.hpp"
 #include "string"
 
 enum class WindowState {
 	GAME,
+	LEVEL_SELECTION,
 	LOADING,
 	TRANSITION,
 	MENU,
@@ -34,6 +36,7 @@ class WindowManager {
 	void ExitProgram();
 
 	Game game;
+	MapSelection mapSelection;
 	Menu menu;
 	LoadingScreen loadingScreen;
 

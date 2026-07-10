@@ -58,11 +58,12 @@ enum class TileType {
 };
 
 struct LevelMap {
-	const int width = 100;
-	const int height = 100;
-	const int cellSize = 40;
-	const std::string filename = "assets/map.txt";
-	const int INF = 9999;
+	int width{0};
+	int height{0};
+	int cellSize = 40;
+	std::string filename;
+	std::string title;
+	int INF = 9999;
 
 	std::vector<TileType> tiles;
 	std::vector<int> distanceMap;
@@ -97,7 +98,7 @@ struct LevelMap {
 	}
 
 	void LoadMap() {
-		std::ifstream inputFile("assets/map.txt");
+		std::ifstream inputFile(filename);
 
 		if (!inputFile.is_open()) {
 			TraceLog(LOG_ERROR, "UBALBE TO LOAD FILE");

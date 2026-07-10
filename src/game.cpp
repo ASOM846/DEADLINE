@@ -2,21 +2,27 @@
 #include "entity/pickable.hpp"
 #include "floatingText.hpp"
 #include "gameStateManager.hpp"
+#include "levelMap.hpp"
 #include <raylib.h>
+
+#include <utility>
 
 void Game::Init() {
 	Reset();
 
 	textureManager.loadAll();
 
-	levelMap.Init();
 	player.Init();
 
 	cameraManager.Init();
+}
 
+void Game::LoadMap(LevelMap map) {
+	levelMap = std::move(map);
+	levelMap.Init();
 	player.position = levelMap.playerSpawnPos;
-
 	waveManager.StartNextWave();
+	gameStateManager.SwitchState(GameState::PLAYING);
 }
 
 void Game::Reset() {

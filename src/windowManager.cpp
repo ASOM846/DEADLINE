@@ -17,6 +17,7 @@ void WindowManager::Init() {
 
 	game.Init();
 	menu.Init();
+	mapSelection.Init();
 
 	currentState = WindowState::MENU;
 }
@@ -58,6 +59,13 @@ void WindowManager::Update() {
 	case WindowState::GAME:
 		game.Update();
 		break;
+	case WindowState::LEVEL_SELECTION:
+		mapSelection.Update();
+		if (mapSelection.IsSelected()) {
+			game.LoadMap(mapSelection.GetSelectedMap());
+			SwitchState(WindowState::LOADING);
+		}
+		break;
 	case WindowState::LOADING:
 		loadingScreen.Update();
 		if (loadingScreen.currentState == LoadingState::READY)
@@ -88,6 +96,9 @@ void WindowManager::Update() {
 		if (menu.ShouldStartGame())
 			SwitchState(WindowState::LOADING);
 
+		if (menu.ShouldSelectMap())
+			SwitchState(WindowState::LEVEL_SELECTION);
+
 		if (menu.ShouldExitGame())
 			ExitProgram();
 
@@ -99,6 +110,11 @@ void WindowManager::Render() {
 	switch (currentState) {
 	case WindowState::GAME:
 		game.Render();
+		break;
+	case WindowState::LEVEL_SELECTION:
+		menu.RenderBackground();
+		menu.RenderTitle();
+		mapSelection.Render();
 		break;
 	case WindowState::LOADING:
 		menu.RenderBackground();
