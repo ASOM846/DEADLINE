@@ -20,6 +20,8 @@ local.properties
 /android/
 buildAndroid.sh
 
+web_build.zip
+
 # --- CMake files ---
 CMakeLists.txt.user
 CMakeCache.txt
