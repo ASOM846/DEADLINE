@@ -12,8 +12,11 @@ struct Zombie {
 
 	int radius{20};
 	float visualRadius{25};
+	float wallRadius{radius * 0.8f};
 
 	float speed{3};
+
+	Vector2 pathfinfingOffset{0, 0};
 
 	int hp;
 	int damage{10};
@@ -26,6 +29,11 @@ struct Zombie {
 
 	float rotation{0.0f};
 	float textureRotation{90.0f};
+
+	void InitializeRandomTrails() {
+		pathfinfingOffset.x = static_cast<float>(GetRandomValue(-15, 15));
+		pathfinfingOffset.y = static_cast<float>(GetRandomValue(-15, 15));
+	}
 
 	void Update(const LevelMap &map, Vector2 playerPos) {
 		if (hp <= 0) {
@@ -63,8 +71,10 @@ struct Zombie {
 				}
 			}
 
-			targetPos.x = bestX * map.cellSize + map.cellSize / 2;
-			targetPos.y = bestY * map.cellSize + map.cellSize / 2;
+			targetPos.x =
+				bestX * map.cellSize + (map.cellSize / 2) + pathfinfingOffset.x;
+			targetPos.y =
+				bestY * map.cellSize + (map.cellSize / 2) + pathfinfingOffset.y;
 		}
 		float dirX = targetPos.x - position.x;
 		float dirY = targetPos.y - position.y;
@@ -146,11 +156,13 @@ class ZombieManager {
 					float nx = dx / distance;
 					float ny = dy / distance;
 
-					zombies[i].position.x -= nx * overlap * 0.5;
-					zombies[i].position.y -= ny * overlap * 0.5;
+					float pushFactor = 0.05f;
 
-					zombies[j].position.x += nx * overlap * 0.5;
-					zombies[j].position.y += ny * overlap * 0.5;
+					zombies[i].position.x -= nx * overlap * pushFactor;
+					zombies[i].position.y -= ny * overlap * pushFactor;
+
+					zombies[j].position.x += nx * overlap * pushFactor;
+					zombies[j].position.y += ny * overlap * pushFactor;
 				}
 			}
 		}

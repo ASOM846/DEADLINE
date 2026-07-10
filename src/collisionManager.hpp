@@ -114,7 +114,7 @@ class CollisionManager {
 		for (auto &z : zombies) {
 			if (!z.alive)
 				continue;
-			ResolveEntityWall(z.position, z.radius, map, true);
+			ResolveEntityWall(z.position, z.wallRadius, map, true);
 		}
 	}
 

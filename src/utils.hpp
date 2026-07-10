@@ -1,7 +1,7 @@
 #include "levelMap.hpp"
 #include <raylib.h>
 
-bool CheckLineOfSight(Vector2 start, Vector2 end, const LevelMap &map) {
+inline bool CheckLineOfSight(Vector2 start, Vector2 end, const LevelMap &map) {
 	float dist =
 		std::sqrt(std::pow(end.x - start.x, 2) + std::pow(end.y - start.y, 2));
 	int steps = static_cast<int>(dist / (map.cellSize / 2.0f));
