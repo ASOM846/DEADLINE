@@ -1,5 +1,6 @@
 #pragma once
 
+#include "button.hpp"
 #include "levelMap.hpp"
 #include <raylib.h>
 #include <vector>
@@ -11,6 +12,8 @@ class MapSelection {
 
 	void Init();
 
+	void Reset();
+
 	void Update();
 	void Render();
 
@@ -19,11 +22,15 @@ class MapSelection {
 	}
 
 	[[nodiscard]] bool IsSelected() const { return isSelected; }
+	[[nodiscard]] bool ShouldReturn() const { return goBack; }
 
 	[[nodiscard]] LevelMap GetSelectedMap() const { return maps[hoverIndex]; }
 
   private:
+	Button goBackBtn;
+
 	bool isSelected{false};
+	bool goBack{false};
 
 	int countX{4};
 

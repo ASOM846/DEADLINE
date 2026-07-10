@@ -65,6 +65,9 @@ void WindowManager::Update() {
 			game.LoadMap(mapSelection.GetSelectedMap());
 			SwitchState(WindowState::LOADING);
 		}
+		if (mapSelection.ShouldReturn()) {
+			SwitchState(WindowState::MENU);
+		}
 		break;
 	case WindowState::LOADING:
 		loadingScreen.Update();
@@ -145,6 +148,9 @@ void WindowManager::Render() {
 void WindowManager::SwitchState(WindowState newState) {
 	if (newState == WindowState::MENU)
 		menu.Reset();
+
+	if (newState == WindowState::LEVEL_SELECTION)
+		mapSelection.Reset();
 
 	if (newState == WindowState::LOADING)
 		loadingScreen.Reset();

@@ -12,11 +12,30 @@ void MapSelection::Init() {
 	maps.push_back(map1);
 	maps.push_back(map1);
 	maps.push_back(map1);
+
+	goBackBtn.text = "BACK";
+}
+
+void MapSelection::Reset() {
+	isSelected = false;
+	goBack = false;
 }
 
 void MapSelection::Update() {
 	Vector2 mousePos = GetMousePosition();
 	hoverIndex = -1;
+
+	int btnW = MeasureText(goBackBtn.text, goBackBtn.fontSize);
+	goBackBtn.rect = {.x = static_cast<float>((GetScreenWidth() - btnW) / 2),
+					  .y = static_cast<float>(GetScreenHeight() * 4 / 5),
+					  .width = static_cast<float>(btnW),
+					  .height = static_cast<float>(goBackBtn.fontSize)};
+
+	goBackBtn.Update(mousePos);
+
+	if (goBackBtn.IsClicked(mousePos)) {
+		goBack = true;
+	}
 
 	int countX = static_cast<int>(maps.size());
 	if (countX == 0)
@@ -49,6 +68,8 @@ void MapSelection::Render() {
 
 	int spacing = (GetScreenWidth() - (countX * width)) / (countX + 1);
 	int startY = (GetScreenHeight() - height) / 2;
+
+	goBackBtn.Draw(GetFontDefault());
 
 	for (int i = 0; i < countX; i++) {
 		float cardX = spacing + (i * (spacing + width));
