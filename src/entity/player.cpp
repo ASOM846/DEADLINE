@@ -30,6 +30,10 @@ void Player::Update(std::vector<Bullet> &bullets, Vector2 worldMousePos,
 	if (ammoVisibliltyTimer >= 0.0f)
 		ammoVisibliltyTimer -= GetFrameTime();
 
+	if (hasPotionHeal) {
+		Heal(GetFrameTime() * 2);
+	}
+
 	HandleMovement();
 
 	HandleKnifeActions(worldMousePos);

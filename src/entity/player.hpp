@@ -22,7 +22,7 @@ struct Player {
 
 	const float textureRotation{90.0f};
 
-	float maxHp{100};
+	float maxHp{50};
 	float hp{100};
 
 	int money = 10000;
@@ -79,4 +79,10 @@ struct Player {
 	void HandlePotionSpawnActions();
 
 	bool CanBuy(int val);
+
+	void Heal(float val) {
+		hp += val;
+
+		hp = std::min(hp, maxHp);
+	}
 };

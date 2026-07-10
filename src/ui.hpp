@@ -154,7 +154,7 @@ class UI {
 	void DrawDoorInfo(Door *currentDoor) {
 		std::string text;
 
-		text = "OPEN DOOR:  " + std::to_string(currentDoor->price) + "   $";
+		text = "[E] OPEN DOOR:  " + std::to_string(currentDoor->price) + "   $";
 
 		int fontSize = 30;
 		int textWidth = MeasureText(text.c_str(), fontSize);
