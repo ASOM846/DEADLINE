@@ -65,6 +65,8 @@ struct LevelMap {
 	std::string title;
 	int INF = 9999;
 
+	bool isLocked{false};
+
 	std::vector<TileType> tiles;
 	std::vector<int> distanceMap;
 	std::vector<int> bitmaskMap;

@@ -8,7 +8,7 @@ void MapSelection::Init() {
 	map1.height = 75;
 	map1.cellSize = 40;
 	map1.filename = "assets/map1.txt";
-	map1.title = "MAP 1 \n SMALL \n (FOR WEB BUILD)";
+	map1.title = "MAP 1 \n SMALL";
 	maps.push_back(map1);
 
 	LevelMap map2;
@@ -16,7 +16,12 @@ void MapSelection::Init() {
 	map2.height = 150;
 	map2.cellSize = 40;
 	map2.filename = "assets/map2.txt";
-	map2.title = "MAP 2 \n BIG \n (FOR \n DESKTOP BUILD)";
+	map2.title = "MAP 2 \n BIG ";
+
+#ifndef PLATFORM_WEB
+	map2.isLocked = true;
+#endif
+
 	maps.push_back(map2);
 
 	LevelMap map3;
@@ -24,7 +29,12 @@ void MapSelection::Init() {
 	map3.height = 150;
 	map3.cellSize = 40;
 	map3.filename = "assets/map3.txt";
-	map3.title = "MAP 3 \n BIG \n (FOR  \n DESKTOP BUILD)";
+	map3.title = "MAP 3 \n BIG";
+
+#ifndef PLATFORM_WEB
+	map3.isLocked = true;
+#endif
+
 	maps.push_back(map3);
 
 	goBackBtn.text = "BACK";
@@ -65,7 +75,7 @@ void MapSelection::Update() {
 							  static_cast<float>(width),
 							  static_cast<float>(height)};
 
-		if (CheckCollisionPointRec(mousePos, cardRect)) {
+		if (CheckCollisionPointRec(mousePos, cardRect) && !maps[i].isLocked) {
 			hoverIndex = i;
 
 			if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -90,8 +100,9 @@ void MapSelection::Render() {
 		float cardY = startY;
 
 		bool isHovered = (hoverIndex == i);
+		bool isLocked = maps[i].isLocked;
 
-		if (isHovered)
+		if (isHovered && !isLocked)
 			cardY -= 10.0f;
 
 		Rectangle cardRect = {cardX, cardY, static_cast<float>(width),
@@ -101,28 +112,45 @@ void MapSelection::Render() {
 							  static_cast<float>(height)},
 							 0.05F, 4, Fade(BLACK, 0.4f));
 
-		Color cardColor =
-			isHovered ? Color{40, 40, 45, 255} : Color{25, 25, 28, 255};
+		Color cardColor;
+		if (isLocked) {
+			cardColor = Color{20, 20, 20, 255};
+		} else {
+			cardColor =
+				isHovered ? Color{40, 40, 45, 255} : Color{25, 25, 28, 255};
+		}
+
 		DrawRectangleRounded(cardRect, 0.05f, 4, cardColor);
 
-		Color borderColor = isHovered ? RED : Color{80, 80, 85, 255};
+		Color borderColor =
+			(isHovered && !isLocked) ? RED : Color{80, 80, 85, 255};
 		DrawRectangleRoundedLines(cardRect, 0.05f, 4, borderColor);
 
-		std::string title = maps[i].title;
-		int fontSize = 20;
-		int textWidth = MeasureText(title.c_str(), fontSize);
-		int textX = cardX + (width - textWidth) / 2;
+		if (isLocked) {
+			int lockX = cardX + (width - MeasureText("LOCKED", 20)) / 2;
+			DrawText("LOCKED", lockX, cardY + 60, 20, MAROON);
 
-		DrawText(title.c_str(), textX, cardY + 30, fontSize,
-				 isHovered ? WHITE : LIGHTGRAY);
+			int deskX = cardX + (width - MeasureText("DESKTOP ONLY", 16)) / 2;
+			DrawText("DESKTOP ONLY", deskX, cardY + 90, 16, GRAY);
 
-		std::string info = std::to_string(maps[i].width) + " x " +
-						   std::to_string(maps[i].height);
+		} else {
+			std::string title = maps[i].title;
+			int fontSize = 20;
+			int textWidth = MeasureText(title.c_str(), fontSize);
+			int textX = cardX + (width - textWidth) / 2;
 
-		int infoSize = 16;
-		int infoWidth = MeasureText(info.c_str(), infoSize);
-		int infoX = static_cast<int>(cardX + (width - infoWidth) / 2);
+			DrawText(title.c_str(), textX, cardY + 30, fontSize,
+					 isHovered ? WHITE : LIGHTGRAY);
 
-		DrawText(info.c_str(), infoX, cardY + height - 40, infoSize, MAROON);
+			std::string info = std::to_string(maps[i].width) + " x " +
+							   std::to_string(maps[i].height);
+
+			int infoSize = 16;
+			int infoWidth = MeasureText(info.c_str(), infoSize);
+			int infoX = static_cast<int>(cardX + (width - infoWidth) / 2);
+
+			DrawText(info.c_str(), infoX, cardY + height - 40, infoSize,
+					 MAROON);
+		}
 	}
 }

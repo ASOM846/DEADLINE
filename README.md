@@ -18,7 +18,7 @@ You don't need to compile the project to play it. The game has been compiled to 
 > [!IMPORTANT]
 > **Performance Recommendation:**
 >
-> Due to the game's resource-intensive nature, it is recommended to run the web version on **Map 1** for the best performance. Larger maps contain more assets and may experience frame drops (lag) in browser environments compared to the native desktop build.
+> For the best performance, the web build is limited to Map 1. Access to larger, more resource-intensive maps is exclusive to the desktop version.
 
 **[Play DEADLINE on itch.io](https://asom846.itch.io/deadline)**
 
