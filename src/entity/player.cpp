@@ -57,6 +57,13 @@ void Player::Render(TextureManager &tm) {
 
 	TextureId playerTexId = TextureId::PLAYER_PISTOL;
 
+	if (knifeVisualTimer > 0.0f) {
+		float angle = std::atan2(knifeDir.y, knifeDir.x) * 57.29578f;
+
+		DrawCircleSector(position, knifeRange, angle - 60.0f, angle + 60.0f, 16,
+						 Fade(LIGHTGRAY, 0.6f));
+	}
+
 	switch (type) {
 	case WeaponType::PISTOL:
 		playerTexId = TextureId::PLAYER_PISTOL;
@@ -98,13 +105,6 @@ void Player::Render(TextureManager &tm) {
 
 	DrawTexturePro(playerTex, src, dstCorrected, origin,
 				   rotation + textureRotation, RAYWHITE);
-
-	if (knifeVisualTimer > 0.0f) {
-		float angle = std::atan2(knifeDir.y, knifeDir.x) * 57.29578f;
-
-		DrawCircleSector(position, knifeRange, angle - 60.0f, angle + 60.0f, 16,
-						 Fade(LIGHTGRAY, 0.6f));
-	}
 
 	if (weaponManager.isReloading) {
 		float reloadProgress =
