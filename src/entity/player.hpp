@@ -26,6 +26,7 @@ struct Player {
 	float hp{100};
 
 	int money = 10000;
+	float repairMoneyAccumulator{0.0f};
 
 	Vector2 velocity{0, 0};
 

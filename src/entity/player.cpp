@@ -12,6 +12,7 @@ void Player::Init() {
 void Player::Reset() {
 	hp = maxHp;
 	money = 0;
+	repairMoneyAccumulator = 0.0f;
 
 	hasPotionSpeed = false;
 	hasPotionThirdSlot = false;
@@ -329,7 +330,18 @@ void Player::HandlePickableActions() {
 
 void Player::HandleBlockadeActions() {
 	if (currentBlockade != nullptr && IsKeyDown(KEY_E)) {
-		currentBlockade->Heal(10 * GetFrameTime());
+		float healAmount = 10 * GetFrameTime();
+
+		if (currentBlockade->hp < currentBlockade->maxHp) {
+			currentBlockade->Heal(10 * GetFrameTime());
+			repairMoneyAccumulator += healAmount;
+			if (repairMoneyAccumulator >= 10.0f) {
+				int reward = static_cast<int>(repairMoneyAccumulator / 10.0f);
+				money += reward;
+
+				repairMoneyAccumulator -= reward * 10.0f;
+			}
+		}
 	}
 }
 
