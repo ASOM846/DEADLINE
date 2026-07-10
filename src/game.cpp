@@ -90,7 +90,7 @@ void Game::UpdatePlaying() {
 
 	bulletManager.UpdateAll(bullets);
 
-	zombieManager.UpdateAll(zombies, levelMap, effectManager);
+	zombieManager.UpdateAll(zombies, levelMap, effectManager, player.position);
 
 	collisionManager.ResolvePlayerZombie(player, zombies);
 	collisionManager.ResolvePlayerWall(player, levelMap);

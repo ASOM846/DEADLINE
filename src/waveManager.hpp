@@ -54,7 +54,7 @@ class WaveManager {
 	void StartNextWave() {
 		spawnedZombies = 0;
 
-		totalZombiesInWave = 8 + (wave * 4);
+		totalZombiesInWave = 6 + (wave * 4);
 
 		currentZombieHp = 100.0f + (wave - 1) * 4.0f;
 

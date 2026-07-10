@@ -2,6 +2,7 @@
 
 #include "../levelMap.hpp"
 #include "../textureManager.hpp"
+#include "../utils.hpp"
 #include "raylib.h"
 #include <algorithm>
 #include <cmath>
@@ -26,41 +27,45 @@ struct Zombie {
 	float rotation{0.0f};
 	float textureRotation{90.0f};
 
-	void Update(const LevelMap &map) {
+	void Update(const LevelMap &map, Vector2 playerPos) {
 		if (hp <= 0) {
 			alive = false;
 			return;
 		}
 
-		int zX = static_cast<int>(position.x) / map.cellSize;
-		int zY = static_cast<int>(position.y) / map.cellSize;
+		Vector2 targetPos;
 
-		int bestX = zX;
-		int bestY = zY;
+		if (CheckLineOfSight(position, playerPos, map)) {
+			targetPos = playerPos;
+		} else {
+			int zX = static_cast<int>(position.x) / map.cellSize;
+			int zY = static_cast<int>(position.y) / map.cellSize;
 
-		int minDistance = map.INF;
+			int bestX = zX;
+			int bestY = zY;
 
-		int dx[] = {0, 0, -1, 1};
-		int dy[] = {-1, 1, 0, 0};
+			int minDistance = map.INF;
 
-		for (int i = 0; i < 4; i++) {
-			int nx = zX + dx[i];
-			int ny = zY + dy[i];
+			int dx[] = {0, 0, -1, 1};
+			int dy[] = {-1, 1, 0, 0};
 
-			if (nx >= 0 && nx < map.width && ny >= 0 && ny < map.height) {
-				int index = ny * map.width + nx;
-				if (map.distanceMap[index] < minDistance) {
-					minDistance = map.distanceMap[index];
-					bestX = nx;
-					bestY = ny;
+			for (int i = 0; i < 4; i++) {
+				int nx = zX + dx[i];
+				int ny = zY + dy[i];
+
+				if (nx >= 0 && nx < map.width && ny >= 0 && ny < map.height) {
+					int index = ny * map.width + nx;
+					if (map.distanceMap[index] < minDistance) {
+						minDistance = map.distanceMap[index];
+						bestX = nx;
+						bestY = ny;
+					}
 				}
 			}
+
+			targetPos.x = bestX * map.cellSize + map.cellSize / 2;
+			targetPos.y = bestY * map.cellSize + map.cellSize / 2;
 		}
-
-		Vector2 targetPos;
-		targetPos.x = bestX * map.cellSize + map.cellSize / 2;
-		targetPos.y = bestY * map.cellSize + map.cellSize / 2;
-
 		float dirX = targetPos.x - position.x;
 		float dirY = targetPos.y - position.y;
 		float distance = std::sqrt(dirX * dirX + dirY * dirY);
@@ -102,7 +107,7 @@ struct Zombie {
 class ZombieManager {
   public:
 	void UpdateAll(std::vector<Zombie> &zombies, const LevelMap &map,
-				   EffectManager &effectManager) {
+				   EffectManager &effectManager, Vector2 playerPos) {
 		for (auto &z : zombies) {
 			if (z.damageTaken > 0) {
 				effectManager.SpawnText(z.position,
@@ -116,7 +121,7 @@ class ZombieManager {
 					  zombies.end());
 
 		for (auto &z : zombies) {
-			z.Update(map);
+			z.Update(map, playerPos);
 		}
 	}
 
