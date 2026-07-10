@@ -52,7 +52,7 @@ class UI {
 		std::string text = "LOST";
 		int textSize = 30;
 
-		std::string text2 = "Press SPACE to reset";
+		std::string text2 = "Press SPACE to return to MENU";
 		int textSize2 = 20;
 
 		int textW = MeasureText(text.c_str(), textSize);

@@ -124,7 +124,7 @@ void Game::UpdatePlaying() {
 void Game::UpdateLost() {
 	if (IsKeyPressed(KEY_SPACE)) {
 		Init();
-		gameStateManager.SwitchState(GameState::PLAYING);
+		gameStateManager.SwitchState(GameState::RETURN_TO_MENU);
 	}
 }
 

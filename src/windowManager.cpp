@@ -62,6 +62,9 @@ void WindowManager::Update() {
 	switch (currentState) {
 	case WindowState::GAME:
 		game.Update();
+		if (game.gameStateManager.GetCurrentState() ==
+			GameState::RETURN_TO_MENU)
+			SwitchState(WindowState::MENU);
 		break;
 	case WindowState::LEVEL_SELECTION:
 		mapSelection.Update();

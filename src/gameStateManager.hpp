@@ -5,7 +5,8 @@
 enum class GameState {
 	PLAYING,
 	PAUSED,
-	LOST
+	LOST,
+	RETURN_TO_MENU,
 };
 
 class GameStateManager {

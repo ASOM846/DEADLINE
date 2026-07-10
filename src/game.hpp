@@ -66,4 +66,6 @@ class Game {
 	std::vector<Zombie> zombies;
 	std::vector<Bullet> bullets;
 	std::vector<Pickable> pickables;
+
+	friend class WindowManager;
 };
