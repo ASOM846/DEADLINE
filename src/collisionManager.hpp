@@ -49,25 +49,22 @@ class CollisionManager {
 			}
 		}
 	}
+	void ResolveEntityWall(Vector2 &position, float radius, LevelMap &map,
+						   bool isZombie) {
+		int gridX = static_cast<int>(position.x) / map.cellSize;
+		int gridY = static_cast<int>(position.y) / map.cellSize;
 
-	void ResolvePlayerWall(Player &player, LevelMap &map) {
-		player.position.x += player.velocity.x;
-		player.position.y += player.velocity.y;
-
-		int playerGridX = static_cast<int>(player.position.x) / map.cellSize;
-		int playerGridY = static_cast<int>(player.position.y) / map.cellSize;
-
-		int startX = std::max(0, playerGridX - 1);
-		int endX = std::min(map.width - 1, playerGridX + 1);
-		int startY = std::max(0, playerGridY - 1);
-		int endY = std::min(map.height - 1, playerGridY + 1);
+		int startX = std::max(0, gridX - 1);
+		int endX = std::min(map.width - 1, gridX + 1);
+		int startY = std::max(0, gridY - 1);
+		int endY = std::min(map.height - 1, gridY + 1);
 
 		for (int y = startY; y <= endY; y++) {
 			for (int x = startX; x <= endX; x++) {
 				TileType currentTile = map.tiles[y * map.width + x];
 
 				if (currentTile == TileType::WALL ||
-					currentTile == TileType::BLOCKADE ||
+					(!isZombie && currentTile == TileType::BLOCKADE) ||
 					LevelMap::IsDoor(currentTile)) {
 
 					Rectangle wallRec = {static_cast<float>(x * map.cellSize),
@@ -75,21 +72,18 @@ class CollisionManager {
 										 static_cast<float>(map.cellSize),
 										 static_cast<float>(map.cellSize)};
 
-					if (CheckCollisionCircleRec(player.position, player.radius,
-												wallRec)) {
-						float closestX =
-							std::clamp(player.position.x, wallRec.x,
-									   wallRec.x + wallRec.width);
+					if (CheckCollisionCircleRec(position, radius, wallRec)) {
+						float closestX = std::clamp(position.x, wallRec.x,
+													wallRec.x + wallRec.width);
 
-						float closestY =
-							std::clamp(player.position.y, wallRec.y,
-									   wallRec.y + wallRec.height);
+						float closestY = std::clamp(position.y, wallRec.y,
+													wallRec.y + wallRec.height);
 
-						float dirX = player.position.x - closestX;
-						float dirY = player.position.y - closestY;
+						float dirX = position.x - closestX;
+						float dirY = position.y - closestY;
 						float distance = std::sqrt(dirX * dirX + dirY * dirY);
 
-						if (distance < player.radius) {
+						if (distance < radius) {
 							if (distance == 0.0f) {
 								dirX = 0.0f;
 								dirY = -1.0f;
@@ -98,14 +92,29 @@ class CollisionManager {
 
 							dirX /= distance;
 							dirY /= distance;
-							float overlap = player.radius - distance;
+							float overlap = radius - distance;
 
-							player.position.x += dirX * overlap;
-							player.position.y += dirY * overlap;
+							position.x += dirX * overlap;
+							position.y += dirY * overlap;
 						}
 					}
 				}
 			}
+		}
+	}
+
+	void ResolvePlayerWall(Player &player, LevelMap &map) {
+		player.position.x += player.velocity.x;
+		player.position.y += player.velocity.y;
+
+		ResolveEntityWall(player.position, player.radius, map, false);
+	}
+
+	void ResolveZombieWall(std::vector<Zombie> &zombies, LevelMap &map) {
+		for (auto &z : zombies) {
+			if (!z.alive)
+				continue;
+			ResolveEntityWall(z.position, z.radius, map, true);
 		}
 	}
 

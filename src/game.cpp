@@ -107,6 +107,7 @@ void Game::UpdatePlaying() {
 	collisionManager.ResolvePlayerPickable(player, pickables);
 	collisionManager.ResolvePlayerBlockade(player, levelMap);
 
+	collisionManager.ResolveZombieWall(zombies, levelMap);
 	collisionManager.ResolveZombieBlockade(zombies, levelMap);
 
 	if (IsKeyPressed(KEY_X))
