@@ -14,13 +14,13 @@
 struct Player {
 	Vector2 position;
 	const int radius{20};
-	const float visualRadius{23.0f};
+	const float visualRadius{23.0F};
 
 	float speed{4.0F};
 
 	float rotation{0.0F};
 
-	const float textureRotation{90.0f};
+	const float textureRotation{90.0F};
 
 	float maxHp{50};
 	float hp{100};
@@ -29,10 +29,10 @@ struct Player {
 
 	Vector2 velocity{0, 0};
 
-	float ammoVisibliltyTimer = 0.0f;
+	float ammoVisibliltyTimer = 0.0F;
 
-	float knifeCooldownTimer{0.0f};
-	const float knifeCooldownDuration{0.5f};
+	float knifeCooldownTimer{0.0F};
+	const float knifeCooldownDuration{0.5F};
 	float knifeVisualTimer{0.0f};
 	Vector2 knifeDir{0, 0};
 	bool knifeTriggered{false};

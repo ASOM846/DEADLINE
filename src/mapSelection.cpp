@@ -1,4 +1,5 @@
 #include "mapSelection.hpp"
+#include "levelMap.hpp"
 #include <raylib.h>
 
 void MapSelection::Init() {
@@ -6,12 +7,26 @@ void MapSelection::Init() {
 	map1.width = 100;
 	map1.height = 100;
 	map1.cellSize = 40;
-	map1.filename = "assets/map.txt";
-	map1.title = "MAP_1";
+	map1.filename = "assets/map1.txt";
+	map1.title = "MAP_1 - EASY";
 
 	maps.push_back(map1);
-	maps.push_back(map1);
-	maps.push_back(map1);
+
+	LevelMap map2;
+	map2.width = 150;
+	map2.height = 150;
+	map2.cellSize = 40;
+	map2.filename = "assets/map2.txt";
+	map2.title = "MAP_2 - MEDIUM";
+	maps.push_back(map2);
+
+	LevelMap map3;
+	map3.width = 150;
+	map3.height = 150;
+	map3.cellSize = 40;
+	map3.filename = "assets/map3.txt";
+	map3.title = "MAP_3 - HARD";
+	maps.push_back(map3);
 
 	goBackBtn.text = "BACK";
 }

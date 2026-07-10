@@ -203,6 +203,8 @@ struct LevelMap {
 					break;
 				case TileType::FLOOR:
 					id = TextureId::FLOOR;
+				case TileType::PLAYER_SPAWN:
+					id = TextureId::FLOOR;
 					break;
 				case TileType::WALL:
 					id = GetWallTextureId(x, y);

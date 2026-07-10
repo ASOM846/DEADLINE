@@ -35,7 +35,7 @@ class Menu {
 
 	Button startGame;
 	Button mapSelectionBtn;
-	Button settings;
+	// Button settings;
 	Button exit;
 
 	void InitButtons();

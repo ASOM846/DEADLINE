@@ -40,7 +40,7 @@ void Menu::Update(Vector2 mousePos) {
 
 	startGame.Update(mousePos);
 	mapSelectionBtn.Update(mousePos);
-	settings.Update(mousePos);
+	// settings.Update(mousePos);
 	exit.Update(mousePos);
 }
 
@@ -51,14 +51,14 @@ void Menu::Render() {
 
 	startGame.Draw(GetFontDefault());
 	mapSelectionBtn.Draw(GetFontDefault());
-	settings.Draw(GetFontDefault());
+	// settings.Draw(GetFontDefault());
 	exit.Draw(GetFontDefault());
 }
 
 void Menu::InitButtons() {
 	startGame.text = "QUICK START";
 	mapSelectionBtn.text = "MAPS";
-	settings.text = "SETTINGS";
+	// settings.text = "SETTINGS";
 	exit.text = "EXIT";
 }
 
@@ -70,7 +70,7 @@ void Menu::UpdateButtonsPos() {
 
 	auto exitY = static_cast<float>(GetScreenHeight() - offset.y - btnH - 40);
 	auto settingsY = static_cast<float>(exitY - btnH - btnSpacing);
-	auto mapSelectionY = static_cast<float>(settingsY - btnH - btnSpacing);
+	auto mapSelectionY = static_cast<float>(exitY - btnH - btnSpacing);
 	auto startY = static_cast<float>(mapSelectionY - btnH - btnSpacing);
 
 	startGame.rect = {.x = btnX,
@@ -86,11 +86,11 @@ void Menu::UpdateButtonsPos() {
 			MeasureText(mapSelectionBtn.text, mapSelectionBtn.fontSize)),
 		.height = static_cast<float>(mapSelectionBtn.fontSize)};
 
-	settings.rect = {.x = btnX,
-					 .y = settingsY,
-					 .width = static_cast<float>(
-						 MeasureText(settings.text, settings.fontSize)),
-					 .height = static_cast<float>(settings.fontSize)};
+	// settings.rect = {.x = btnX,
+	//				 .y = settingsY,
+	//				 .width = static_cast<float>(
+	//					 MeasureText(settings.text, settings.fontSize)),
+	//				 .height = static_cast<float>(settings.fontSize)};
 
 	exit.rect = {.x = btnX,
 				 .y = exitY,
@@ -142,7 +142,7 @@ void Menu::RenderTitle() {
 }
 
 void Menu::RenderVersion() {
-	const char *versionText = "DEV BUILD (UNFINISHED)";
+	const char *versionText = "DEV BUILD (work in progress)";
 
 	int fontSize = 20;
 	int margin = 40;
