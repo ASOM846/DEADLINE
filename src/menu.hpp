@@ -17,6 +17,9 @@ class Menu {
 	[[nodiscard]] bool ShouldStartGame() const { return shouldStartGame; }
 	[[nodiscard]] bool ShouldExitGame() const { return shouldExit; }
 
+	void RenderBackground();
+	void RenderTitle();
+
   private:
 	float animationTimer{0.0f};
 
@@ -35,7 +38,5 @@ class Menu {
 	void InitButtons();
 	void UpdateButtonsPos();
 
-	void RenderBackground();
-	void RenderTitle();
 	void RenderVersion();
 };

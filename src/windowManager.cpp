@@ -101,10 +101,15 @@ void WindowManager::Render() {
 		game.Render();
 		break;
 	case WindowState::LOADING:
+		menu.RenderBackground();
+		menu.RenderTitle();
 		loadingScreen.Render();
 		break;
 	case WindowState::TRANSITION:
 		if (fadingToBlack) {
+			menu.RenderBackground();
+			menu.RenderTitle();
+
 			loadingScreen.Render();
 		} else {
 			game.Render();
