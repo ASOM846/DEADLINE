@@ -30,15 +30,15 @@ class CameraManager {
 		camera.offset.x += offset.x;
 		camera.offset.y += offset.y;
 
-		if (IsKeyPressed(KEY_UP)) {
-			currentSetting = CameraSetting::TAEGET;
-			camera.zoom = 1.5f;
-		}
-
-		if (IsKeyPressed(KEY_DOWN)) {
-			currentSetting = CameraSetting::FREE;
-			camera.zoom = 0.5f;
-		}
+		// if (IsKeyPressed(KEY_UP)) {
+		// 	currentSetting = CameraSetting::TAEGET;
+		// 	camera.zoom = 1.5f;
+		// }
+		//
+		// if (IsKeyPressed(KEY_DOWN)) {
+		// 	currentSetting = CameraSetting::FREE;
+		// 	camera.zoom = 0.5f;
+		// }
 
 		if (IsWindowResized()) {
 			camera.offset = {static_cast<float>(GetScreenWidth() / 2),
